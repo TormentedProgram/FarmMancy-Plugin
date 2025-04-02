@@ -1,0 +1,5 @@
+items:
+  allow-imbuement: true
+
+global:
+  max-mob-cap: 256

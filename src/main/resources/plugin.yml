@@ -1,0 +1,4 @@
+name: FarmMancy
+version: '1.0.0'
+main: me.tormented.farmmancy.FarmMancy
+api-version: '1.21'
