@@ -12,14 +12,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class BeeAbility extends MobuvertAbility<Bee> implements Hook.EntityInteractedByPlayer{
+public class BeeAbility extends MobuvertAbility<Bee> implements Hook.EntityInteractedByPlayer {
 
     @Override
     public Class<Bee> getEntityClass() {
         return Bee.class;
     }
 
-    protected BeeAbility(@NotNull UUID id, @NotNull UUID owner) {
+    public BeeAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
     }
 

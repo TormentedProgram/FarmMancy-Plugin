@@ -4,6 +4,7 @@ import dev.jorel.commandapi.CommandAPICommand;
 import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancer.TickingCow;
+import me.tormented.farmmancy.abilities.implementations.BeeAbility;
 import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
 import me.tormented.farmmancy.abilities.implementations.CowAbility;
 import me.tormented.farmmancy.abilities.implementations.PigAbility;
@@ -51,6 +52,7 @@ public class MenuCommand {
                                         theMancer.setEquippedAbility(0, new CowAbility(UUID.randomUUID(), menu.getPlayer().getUniqueId()));
                                         theMancer.setEquippedAbility(1, new PigAbility(UUID.randomUUID(), menu.getPlayer().getUniqueId()));
                                         theMancer.setEquippedAbility(2, new ChickenAbility(UUID.randomUUID(), menu.getPlayer().getUniqueId()));
+                                        theMancer.setSpecialEquippedAbility(new BeeAbility(UUID.randomUUID(), menu.getPlayer().getUniqueId()));
                                         theMancer.activateAll(amountToSpawn, isBaby);
                                         menu.getPlayer().playSound(menu.getPlayer(), Sound.BLOCK_ANVIL_USE, 1.0f, 1.0f);
                                         return new ClickResponse.CloseMenu();

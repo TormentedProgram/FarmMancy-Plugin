@@ -10,13 +10,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Bee;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,93 +24,91 @@ public class FarmMancer {
 
     public Player _player;
 
-    private final List<Bee> bees = new ArrayList<>();
-
-
-    private final float pigRadius = 2f;
-
-    private int startTick = 0;
-
     private final Ability[] equippedAbilities = new Ability[3];
     private Ability specialEquippedAbility;
     private final Set<Ability> unlockedAbilities = new HashSet<>();
 
-public void setEquippedAbility(int index, Ability ability) {
-    this.equippedAbilities[index]=ability;
-}
-
-public Ability[] getEquippedAbilities() {
-    return equippedAbilities;
-}
-
-public static ItemStack Cowification(ItemStack item) {
-    ItemMeta itemMeta = item.getItemMeta();
-    String itemName = item.getType().toString();
-    String[] words = itemName.split("_");
-    StringBuilder formattedNameBuilder = new StringBuilder();
-
-    for (String word : words) {
-        formattedNameBuilder.append(word.substring(0, 1).toUpperCase())  // Capitalize first letter
-                .append(word.substring(1).toLowerCase())  // Lowercase the rest
-                .append(" ");
+    public void setEquippedAbility(int index, Ability ability) {
+        this.equippedAbilities[index] = ability;
     }
 
-    String formattedName = formattedNameBuilder.toString().trim();
-
-    if (itemMeta != null) {
-        itemMeta.lore(List.of(
-                Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
-                Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
-
-        itemMeta.setEnchantmentGlintOverride(true);
-
-        Component displayName = itemMeta.displayName(); // Adventure API
-        String funnyName = (displayName != null) ? displayName.toString() : formattedName;
-
-        itemMeta.customName(Component.text("Magical " + funnyName + " of Destruction", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
-
-        itemMeta.getPersistentDataContainer().set(FarmMancer.magic_hoe_key, PersistentDataType.BYTE, (byte) 1);
-
-        item.setItemMeta(itemMeta);
+    public void setSpecialEquippedAbility(Ability ability) {
+        this.specialEquippedAbility = ability;
     }
-    return item;
-}
 
-public FarmMancer(Player player) {
-    _player = player;
+    public static ItemStack Cowification(ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+        String itemName = item.getType().toString();
+        String[] words = itemName.split("_");
+        StringBuilder formattedNameBuilder = new StringBuilder();
 
-    for (ItemStack item : player.getInventory().getContents()) {
-        if (item != null && item.hasItemMeta()) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta.getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE)) {
-                return;
+        for (String word : words) {
+            formattedNameBuilder.append(word.substring(0, 1).toUpperCase())  // Capitalize first letter
+                    .append(word.substring(1).toLowerCase())  // Lowercase the rest
+                    .append(" ");
+        }
+
+        String formattedName = formattedNameBuilder.toString().trim();
+
+        if (itemMeta != null) {
+            itemMeta.lore(List.of(
+                    Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
+                    Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
+
+            itemMeta.setEnchantmentGlintOverride(true);
+
+            Component displayName = itemMeta.displayName(); // Adventure API
+            String funnyName = (displayName != null) ? displayName.toString() : formattedName;
+
+            itemMeta.customName(Component.text("Magical " + funnyName + " of Destruction", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
+
+            itemMeta.getPersistentDataContainer().set(FarmMancer.magic_hoe_key, PersistentDataType.BYTE, (byte) 1);
+
+            item.setItemMeta(itemMeta);
+        }
+        return item;
+    }
+
+    public FarmMancer(Player player) {
+        _player = player;
+
+        for (ItemStack item : player.getInventory().getContents()) {
+            if (item != null && item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+                if (meta.getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE)) {
+                    return;
+                }
             }
+        }
+
+        ItemStack MagicHoe = Cowification(new ItemStack(Material.NETHERITE_HOE, 1));
+
+        player.give(MagicHoe);
+    }
+
+    public void deactivateAll(boolean kill) {
+        for (Ability ability : equippedAbilities)
+            if (ability instanceof Hook.Activation activation) activation.onDeactivate(kill);
+    }
+
+
+    public void activateAll(int amount, boolean isBaby) {
+        for (Ability ability : equippedAbilities) {
+            if (ability instanceof MobAbility<?> mobAbility) {
+                mobAbility.isBaby = isBaby;
+                if (mobAbility instanceof MobunitionAbility<?> mobunitionAbility) {
+                    mobunitionAbility.amount = amount;
+                }
+            }
+            if (ability instanceof Hook.Activation activation) activation.onActivate(true);
         }
     }
 
-    ItemStack MagicHoe = Cowification(new ItemStack(Material.NETHERITE_HOE, 1));
-
-    player.give(MagicHoe);
-}
-
-public void deactivateAll(boolean kill) {
-    for (Ability ability : equippedAbilities)
-        if (ability instanceof Hook.Activation activation) activation.onDeactivate(kill);
-}
-
-
-public void activateAll(int amount, boolean isBaby) {
-    startTick = FarmMancy.getInstance().getServer().getCurrentTick();
-
-    for (Ability ability : equippedAbilities) {
-        if (ability instanceof MobAbility<?> mobAbility) {
-            mobAbility.isBaby = isBaby;
-            if (mobAbility instanceof MobunitionAbility<?> mobunitionAbility) {
-                mobunitionAbility.amount = amount;
-            }
+    public void tickEquippedAbilities() {
+        for (Ability ability : this.equippedAbilities) {
+            if (ability instanceof Hook.Ticking ticking) ticking.onTick(Hook.CallerSource.PLAYER);
         }
-        if (ability instanceof Hook.Activation activation) activation.onActivate(true);
+        if (specialEquippedAbility instanceof Hook.Ticking ticking) ticking.onTick(Hook.CallerSource.PLAYER);
     }
-}
 
 }

@@ -42,6 +42,8 @@ public class TickingCow implements Runnable {
 
     @Override
     public void run() {
-
+        for (FarmMancer farmMancer : farmMancers) {
+            farmMancer.tickEquippedAbilities();
+        }
     }
 }
