@@ -1,11 +1,14 @@
 package me.tormented.farmmancy.abilities.implementations;
 
+import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import org.bukkit.Location;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -20,10 +23,10 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.E
         return Chicken.class;
     }
 
-    protected ChickenAbility(@NotNull UUID id, @NotNull UUID owner) {
+    public ChickenAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
         mobCenterOffset = new Vector(0.0f, 1.0f, 0.0f);
-        modRingRadius = 0f;
+        modRingRadius = 3f;
     }
 
     @Override
@@ -32,19 +35,25 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.E
 
         if (player != getOwnerPlayer()) return;
 
-        Chicken chicken = (Chicken) event.getRightClicked();
-        entities.remove(chicken);
+        ItemStack heldItem = event.getPlayer().getInventory().getItemInMainHand();
+        if (heldItem.getType().isAir() ||
+                !heldItem.hasItemMeta() ||
+                !heldItem.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
 
-        Location loc = player.getLocation();
-        Vector direction = loc.getDirection();
-        Location targetLoc = loc.add(direction.multiply(1));
+            Chicken chicken = (Chicken) event.getRightClicked();
+            entities.remove(chicken);
 
-        chicken.teleport(targetLoc);
-        chicken.setHealth(0);
+            Location loc = player.getLocation();
+            Vector direction = loc.getDirection();
+            Location targetLoc = loc.add(direction.multiply(1));
 
-        Vector velocityVector = player.getVelocity();
-        velocityVector.setY(1.1f);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 80, 1));
-        player.setVelocity(velocityVector);
+            chicken.teleport(targetLoc);
+            chicken.setHealth(0);
+
+            Vector velocityVector = player.getVelocity();
+            velocityVector.setY(1.1f);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 80, 1));
+            player.setVelocity(velocityVector);
+        }
     }
 }

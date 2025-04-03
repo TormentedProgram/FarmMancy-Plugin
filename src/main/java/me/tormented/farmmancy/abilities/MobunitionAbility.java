@@ -1,8 +1,10 @@
 package me.tormented.farmmancy.abilities;
 
 import me.tormented.farmmancy.FarmMancy;
-import org.bukkit.entity.*;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
             } else {
                 entity.remove();
             }
+            EventDistributor.getInstance().entityMobunitionAbilityMap.remove(entity);
         }
         entities.clear();
     }
@@ -57,6 +60,17 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
         }
     }
 
+    public boolean addMob(Entity entity) {
+        EventDistributor.getInstance().entityMobunitionAbilityMap.put(entity, this);
+        if (getEntityClass().isInstance(entity)) {
+            EntityType specialEntity = (EntityType) entity;
+            amount += 1;
+            entities.add(specialEntity);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void onActivate(boolean visual) {
         super.onActivate(visual);
@@ -70,7 +84,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
                     ageable.setBaby();
                 }
 
-                specialEntity.setMetadata("FarmMancy_OwnedMob", new FixedMetadataValue(FarmMancy.getInstance(), this));
+                EventDistributor.getInstance().entityMobunitionAbilityMap.put(specialEntity, this);
 
                 entities.add(specialEntity);
             }

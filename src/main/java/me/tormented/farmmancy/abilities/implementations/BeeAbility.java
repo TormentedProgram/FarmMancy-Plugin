@@ -37,3 +37,4 @@ public class BeeAbility extends MobuvertAbility<Bee> implements Hook.EntityInter
         player.setVelocity(velocityVector);
     }
 }
+

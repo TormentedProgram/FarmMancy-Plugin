@@ -10,7 +10,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Bee;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -36,75 +37,82 @@ public class FarmMancer {
     private Ability specialEquippedAbility;
     private final Set<Ability> unlockedAbilities = new HashSet<>();
 
-    public static ItemStack Cowification(ItemStack item) {
-        ItemMeta itemMeta = item.getItemMeta();
-        String itemName = item.getType().toString();
-        String[] words = itemName.split("_");
-        StringBuilder formattedNameBuilder = new StringBuilder();
+public void setEquippedAbility(int index, Ability ability) {
+    this.equippedAbilities[index]=ability;
+}
 
-        for (String word : words) {
-            formattedNameBuilder.append(word.substring(0, 1).toUpperCase())  // Capitalize first letter
-                    .append(word.substring(1).toLowerCase())  // Lowercase the rest
-                    .append(" ");
-        }
+public Ability[] getEquippedAbilities() {
+    return equippedAbilities;
+}
 
-        String formattedName = formattedNameBuilder.toString().trim();
+public static ItemStack Cowification(ItemStack item) {
+    ItemMeta itemMeta = item.getItemMeta();
+    String itemName = item.getType().toString();
+    String[] words = itemName.split("_");
+    StringBuilder formattedNameBuilder = new StringBuilder();
 
-        if (itemMeta != null) {
-            itemMeta.lore(List.of(
-                    Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
-                    Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
-
-            itemMeta.setEnchantmentGlintOverride(true);
-
-            Component displayName = itemMeta.displayName(); // Adventure API
-            String funnyName = (displayName != null) ? displayName.toString() : formattedName;
-
-            itemMeta.customName(Component.text("Magical " + funnyName + " of Destruction", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
-
-            itemMeta.getPersistentDataContainer().set(FarmMancer.magic_hoe_key, PersistentDataType.BYTE, (byte) 1);
-
-            item.setItemMeta(itemMeta);
-        }
-        return item;
+    for (String word : words) {
+        formattedNameBuilder.append(word.substring(0, 1).toUpperCase())  // Capitalize first letter
+                .append(word.substring(1).toLowerCase())  // Lowercase the rest
+                .append(" ");
     }
 
-    public FarmMancer(Player player) {
-        _player = player;
+    String formattedName = formattedNameBuilder.toString().trim();
 
-        for (ItemStack item : player.getInventory().getContents()) {
-            if (item != null && item.hasItemMeta()) {
-                ItemMeta meta = item.getItemMeta();
-                if (meta.getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE)) {
-                    return;
-                }
+    if (itemMeta != null) {
+        itemMeta.lore(List.of(
+                Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
+
+        itemMeta.setEnchantmentGlintOverride(true);
+
+        Component displayName = itemMeta.displayName(); // Adventure API
+        String funnyName = (displayName != null) ? displayName.toString() : formattedName;
+
+        itemMeta.customName(Component.text("Magical " + funnyName + " of Destruction", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
+
+        itemMeta.getPersistentDataContainer().set(FarmMancer.magic_hoe_key, PersistentDataType.BYTE, (byte) 1);
+
+        item.setItemMeta(itemMeta);
+    }
+    return item;
+}
+
+public FarmMancer(Player player) {
+    _player = player;
+
+    for (ItemStack item : player.getInventory().getContents()) {
+        if (item != null && item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta.getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE)) {
+                return;
             }
         }
-
-        ItemStack MagicHoe = Cowification(new ItemStack(Material.NETHERITE_HOE, 1));
-
-        player.give(MagicHoe);
     }
 
-    public void deactivateAll(boolean kill) {
-        for (Ability ability : equippedAbilities)
-            if (ability instanceof Hook.Activation activation) activation.onDeactivate(kill);
-    }
+    ItemStack MagicHoe = Cowification(new ItemStack(Material.NETHERITE_HOE, 1));
+
+    player.give(MagicHoe);
+}
+
+public void deactivateAll(boolean kill) {
+    for (Ability ability : equippedAbilities)
+        if (ability instanceof Hook.Activation activation) activation.onDeactivate(kill);
+}
 
 
+public void activateAll(int amount, boolean isBaby) {
+    startTick = FarmMancy.getInstance().getServer().getCurrentTick();
 
-    public void activateAll(int amount, boolean isBaby) {
-        startTick = FarmMancy.getInstance().getServer().getCurrentTick();
-
-        for (Ability ability : equippedAbilities) {
-            if (ability instanceof MobAbility<?> mobAbility) {
-                mobAbility.isBaby = isBaby;
-                if (mobAbility instanceof MobunitionAbility<?> mobunitionAbility) {
-                    mobunitionAbility.amount = amount;
-                }
+    for (Ability ability : equippedAbilities) {
+        if (ability instanceof MobAbility<?> mobAbility) {
+            mobAbility.isBaby = isBaby;
+            if (mobAbility instanceof MobunitionAbility<?> mobunitionAbility) {
+                mobunitionAbility.amount = amount;
             }
-            if (ability instanceof Hook.Activation activation) activation.onActivate(true);
         }
+        if (ability instanceof Hook.Activation activation) activation.onActivate(true);
     }
+}
 
 }

@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.FarmMancer;
 
+import me.tormented.farmmancy.abilities.EventDistributor;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -25,6 +26,7 @@ public class TickingCow implements Runnable {
             }
         }
         FarmMancer farmMancer = new FarmMancer(player);
+        EventDistributor.getInstance().playerAbilityMap.put(player.getUniqueId(), farmMancer);
         farmMancers.add(farmMancer);
         return farmMancer;
     }
@@ -38,11 +40,8 @@ public class TickingCow implements Runnable {
         }
     }
 
-
     @Override
     public void run() {
-        for (FarmMancer farmMancer : farmMancers) {
-            farmMancer.tick();
-        }
+
     }
 }

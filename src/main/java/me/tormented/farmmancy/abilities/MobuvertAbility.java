@@ -24,6 +24,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         } else {
             entity.remove();
         }
+        EventDistributor.getInstance().entityMobunitionAbilityMap.remove(entity);
     }
 
     @Override
@@ -44,7 +45,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         if (getOwnerPlayer() instanceof Player player) {
             entity = player.getLocation().getWorld().spawn(player.getLocation(), getEntityClass());
             entity.setMetadata("FarmMancy_OwnedMob", new FixedMetadataValue(FarmMancy.getInstance(), this));
+            EventDistributor.getInstance().entityMobunitionAbilityMap.put(entity, this);
         }
-
     }
 }
