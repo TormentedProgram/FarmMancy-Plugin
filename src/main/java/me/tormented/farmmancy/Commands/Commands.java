@@ -11,7 +11,7 @@ public class Commands {
     public imbueCowCommand imbueCowCommand;
     public SetFarmMancerCommand setFarmMancerCommand;
 
-    public Commands() {}
+    private Commands() {}
 
     public void load() {
         menuCommand = new MenuCommand();
