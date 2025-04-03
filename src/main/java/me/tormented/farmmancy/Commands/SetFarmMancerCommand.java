@@ -5,9 +5,9 @@ import dev.jorel.commandapi.arguments.BooleanArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
-import me.tormented.farmmancy.CowMancer.CowMancer;
-import me.tormented.farmmancy.CowMancer.TickingCow;
 import me.tormented.farmmancy.FarmConfig;
+import me.tormented.farmmancy.FarmMancer.FarmMancer;
+import me.tormented.farmmancy.FarmMancer.TickingCow;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -36,12 +36,12 @@ public class SetFarmMancerCommand {
                     if (Objects.equals(doing, "set")) {
                         if (Players != null) {
                             for (Player player : Players) {
-                                CowMancer cowmancer = TickingCow.getInstance().setCowMancer(player);
+                                FarmMancer cowmancer = TickingCow.getInstance().setCowMancer(player);
                                 cowmancer.createAll(amountToSpawn, isBaby);
                             }
                             sender.sendMessage(Component.text("Granted FarmMancy to " + Players.size() + " player(s) successfully.", NamedTextColor.GREEN));
                         }
-                    } else if (Objects.equals(doing, "remove")){
+                    } else if (Objects.equals(doing, "remove")) {
                         if (Players != null) {
                             for (Player player : Players) {
                                 TickingCow.getInstance().removeCowMancer(player);

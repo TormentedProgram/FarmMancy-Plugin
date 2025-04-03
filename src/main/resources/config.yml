@@ -1,5 +1,10 @@
+global:
+  max-mob-cap: 256
+
 items:
   allow-imbuement: true
 
-global:
-  max-mob-cap: 256
+mobs:
+  cow:
+    explosion-radius: 4
+    shoot-velocity: 1

@@ -1,8 +1,8 @@
 package me.tormented.farmmancy.Commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import me.tormented.farmmancy.CowMancer.CowMancer;
 import me.tormented.farmmancy.FarmConfig;
+import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -14,7 +14,7 @@ public class imbueCowCommand {
                 .withPermission("CommandPermission.OP")
                 .executesPlayer((player, args) -> {
                     if (enabled) {
-                        CowMancer.Cowification(player.getInventory().getItemInMainHand());
+                        FarmMancer.Cowification(player.getInventory().getItemInMainHand());
                     } else {
                         player.sendMessage(Component.text("Sorry, this has been disabled in the config.", NamedTextColor.RED));
                     }

@@ -3,8 +3,8 @@ package me.tormented.farmmancy;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import me.tormented.farmmancy.Commands.Commands;
-import me.tormented.farmmancy.CowMancer.CowMancer;
-import me.tormented.farmmancy.CowMancer.TickingCow;
+import me.tormented.farmmancy.FarmMancer.FarmMancer;
+import me.tormented.farmmancy.FarmMancer.TickingCow;
 import me.tormented.farmmancy.inventoryMenu.GuiListener;
 import me.tormented.farmmancy.inventoryMenu.Ticking;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,7 +50,7 @@ public final class FarmMancy extends JavaPlugin {
         if (taskMenuTick != null && !taskMenuTick.isCancelled())
             taskMenuTick.cancel();
 
-        for (CowMancer cowMancer : TickingCow.getInstance().CowMancers) {
+        for (FarmMancer cowMancer : TickingCow.getInstance().CowMancers) {
             cowMancer.cleanup(false);
             TickingCow.getInstance().CowMancers.remove(cowMancer);
         }

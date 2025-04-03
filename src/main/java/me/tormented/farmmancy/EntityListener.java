@@ -1,8 +1,8 @@
 package me.tormented.farmmancy;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import me.tormented.farmmancy.CowMancer.CowMancer;
-import me.tormented.farmmancy.CowMancer.TickingCow;
+import me.tormented.farmmancy.FarmMancer.FarmMancer;
+import me.tormented.farmmancy.FarmMancer.TickingCow;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,7 +39,7 @@ public class EntityListener implements Listener {
     }
 
     @EventHandler
-    public void playerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
         if (attribute != null) {
@@ -48,18 +48,18 @@ public class EntityListener implements Listener {
     }
 
     @EventHandler
-    public void rightClickEntity(PlayerInteractEntityEvent event) {
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         if (event.getRightClicked() instanceof Bee bee && bee.hasMetadata("FarmMancy_OwnedMob")) {
             Player player = event.getPlayer();
-            for (CowMancer cowMancer : TickingCow.getInstance().CowMancers) {
+            for (FarmMancer cowMancer : TickingCow.getInstance().CowMancers) {
                 if (cowMancer._player == player) {
-                    cowMancer.levitation(event);
+                    cowMancer.beeAbility(event);
                 }
             }
         }
         if (event.getRightClicked() instanceof Cow cow) {
             Player player = event.getPlayer();
-            for (CowMancer cowMancer : TickingCow.getInstance().CowMancers) {
+            for (FarmMancer cowMancer : TickingCow.getInstance().CowMancers) {
                 if (cowMancer._player == player) {
                     if (!cow.hasMetadata("FarmMancy_OwnedMob") && !cow.hasMetadata("FarmMancy_Projectile")) {
                         cow.remove();
@@ -69,18 +69,30 @@ public class EntityListener implements Listener {
                 }
             }
         }
+        if (event.getRightClicked() instanceof Strider strider) {
+            Player player = event.getPlayer();
+            for (FarmMancer cowMancer : TickingCow.getInstance().CowMancers) {
+                if (cowMancer._player == player) {
+                    if (!strider.hasMetadata("FarmMancy_OwnedMob") && !strider.hasMetadata("FarmMancy_Projectile")) {
+                        strider.remove();
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);
+                        //cowMancer.createStrider(1, !strider.isAdult());
+                    }
+                }
+            }
+        }
         if (event.getRightClicked() instanceof Pig pig) {
             Player player = event.getPlayer();
-            for (CowMancer cowMancer : TickingCow.getInstance().CowMancers) {
+            for (FarmMancer cowMancer : TickingCow.getInstance().CowMancers) {
                 if (cowMancer._player == player) {
                     if (pig.hasMetadata("FarmMancy_OwnedMob")) {
                         ItemStack heldItem = player.getInventory().getItemInMainHand();
 
                         if (heldItem.getType().isAir() ||
                                 !heldItem.hasItemMeta() ||
-                                !heldItem.getItemMeta().getPersistentDataContainer().has(CowMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+                                !heldItem.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
 
-                            cowMancer.healPig(event);
+                            cowMancer.pigAbility(event);
                         }
                     } else {
                         pig.remove();
@@ -92,16 +104,16 @@ public class EntityListener implements Listener {
         }
         if (event.getRightClicked() instanceof Chicken chicken) {
             Player player = event.getPlayer();
-            for (CowMancer cowMancer : TickingCow.getInstance().CowMancers) {
+            for (FarmMancer cowMancer : TickingCow.getInstance().CowMancers) {
                 if (cowMancer._player == player) {
                     if (chicken.hasMetadata("FarmMancy_OwnedMob")) {
                         ItemStack heldItem = player.getInventory().getItemInMainHand();
 
                         if (heldItem.getType().isAir() ||
                                 !heldItem.hasItemMeta() ||
-                                !heldItem.getItemMeta().getPersistentDataContainer().has(CowMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+                                !heldItem.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
 
-                            cowMancer.megaJumpChicken(event);
+                            cowMancer.chickenAbility(event);
                         }
                     } else {
                         chicken.remove();
@@ -114,15 +126,15 @@ public class EntityListener implements Listener {
     }
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
-            for (CowMancer cowMancer : TickingCow.getInstance().CowMancers) {
+            for (FarmMancer cowMancer : TickingCow.getInstance().CowMancers) {
                 if (cowMancer._player == player) {
                     ItemStack heldItem = player.getInventory().getItemInMainHand();
                     if (heldItem.getItemMeta() != null) {
-                        if (heldItem.getItemMeta().getPersistentDataContainer().has(CowMancer.magic_hoe_key, PersistentDataType.BYTE)) {
-                            cowMancer.flingCow(event);
+                        if (heldItem.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+                            cowMancer.cowAbility(event);
                         }
                     }
                 }
@@ -140,10 +152,10 @@ public class EntityListener implements Listener {
                     for (int z = -1; z <= 1; z++) {
                         if (x == 0 && y == 0 && z == 0) continue;
                         Block block = currentBlock.getRelative(x, y, z);
-                        if (block.getType() != Material.AIR) {
+                        if (block.getType() != Material.AIR && block.getType() != Material.CAVE_AIR) {
                             Location location = cow.getLocation();
                             World world = location.getWorld();
-                            world.createExplosion(location, 4.0F);
+                            world.createExplosion(location, FarmConfig.getInstance().getCowExplosionRadius());
                             return;
                         }
                     }
@@ -162,7 +174,7 @@ public class EntityListener implements Listener {
             List<MetadataValue> metadata = event.getEntity().getMetadata("FarmMancy_OwnedMob");
             if (!metadata.isEmpty() && event.getDamageSource().getDamageType() != DamageType.GENERIC) {
                 MetadataValue value = metadata.getFirst();
-                CowMancer cowMancer = (CowMancer) value.value();
+                FarmMancer cowMancer = (FarmMancer) value.value();
                 if (cowMancer != null && cowMancer._player != null) {
                     cowMancer._player.sendMessage(Component.text("One of your farm animals has passed..."));
                 }
