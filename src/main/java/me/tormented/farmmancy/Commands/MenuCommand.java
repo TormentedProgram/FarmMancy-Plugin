@@ -1,9 +1,9 @@
 package me.tormented.farmmancy.Commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancer.TickingCow;
+import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.inventoryMenu.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -44,7 +44,7 @@ public class MenuCommand {
                                 public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
                                     if (event.getClick() == ClickType.LEFT) {
                                         FarmMancer theMancer = TickingCow.getInstance().setCowMancer(menuInstance.getPlayer());
-                                        theMancer.createAll(amountToSpawn, isBaby);
+                                        theMancer.activateAll(amountToSpawn, isBaby);
                                         menu.getPlayer().playSound(menu.getPlayer(), Sound.BLOCK_ANVIL_USE, 1.0f, 1.0f);
                                         return new ClickResponse.CloseMenu();
                                     }

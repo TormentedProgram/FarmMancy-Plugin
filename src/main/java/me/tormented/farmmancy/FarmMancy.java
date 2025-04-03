@@ -5,6 +5,8 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import me.tormented.farmmancy.Commands.Commands;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancer.TickingCow;
+import me.tormented.farmmancy.abilities.EventDistributor;
+import me.tormented.farmmancy.abilities.TickingTask;
 import me.tormented.farmmancy.inventoryMenu.GuiListener;
 import me.tormented.farmmancy.inventoryMenu.Ticking;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +17,7 @@ public final class FarmMancy extends JavaPlugin {
 
     private BukkitTask taskMenuTick;
     private BukkitTask CowTick;
+    private BukkitTask abilityTick;
 
     public static @NotNull FarmMancy getInstance() {
         return getPlugin(FarmMancy.class);
@@ -35,9 +38,12 @@ public final class FarmMancy extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
+        getServer().getPluginManager().registerEvents(EventDistributor.getInstance(), this);
+
 
         taskMenuTick = getServer().getScheduler().runTaskTimer(this, Ticking.getInstance(), 0, 1);
         CowTick = getServer().getScheduler().runTaskTimer(this, TickingCow.getInstance(), 0, 1);
+        abilityTick = getServer().getScheduler().runTaskTimer(this, TickingTask.getInstance(), 0, 1);
     }
 
     @Override
@@ -50,9 +56,12 @@ public final class FarmMancy extends JavaPlugin {
         if (taskMenuTick != null && !taskMenuTick.isCancelled())
             taskMenuTick.cancel();
 
-        for (FarmMancer cowMancer : TickingCow.getInstance().CowMancers) {
-            cowMancer.cleanup(false);
-            TickingCow.getInstance().CowMancers.remove(cowMancer);
+        if (abilityTick != null && !abilityTick.isCancelled())
+            abilityTick.cancel();
+
+        for (FarmMancer farmMancer : TickingCow.getInstance().farmMancers) {
+            farmMancer.deactivateAll(false);
+            TickingCow.getInstance().farmMancers.remove(farmMancer);
         }
     }
 }

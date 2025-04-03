@@ -13,28 +13,27 @@ public class TickingCow implements Runnable {
         return instance;
     }
 
-    public Set<FarmMancer> CowMancers = new HashSet<>();
+    public Set<FarmMancer> farmMancers = new HashSet<>();
 
 
-    private TickingCow() {
-    }
+    private TickingCow() {}
 
     public FarmMancer setCowMancer(Player player) {
-        for (FarmMancer cowMancer : CowMancers) {
-            if (cowMancer._player == player) {
-                return cowMancer;
+        for (FarmMancer farmMancer : farmMancers) {
+            if (farmMancer._player == player) {
+                return farmMancer;
             }
         }
-        FarmMancer cowMancer = new FarmMancer(player);
-        CowMancers.add(cowMancer);
-        return cowMancer;
+        FarmMancer farmMancer = new FarmMancer(player);
+        farmMancers.add(farmMancer);
+        return farmMancer;
     }
 
     public void removeCowMancer(Player player) {
-        for (FarmMancer cowMancer : CowMancers) {
-            if (cowMancer._player == player) {
-                cowMancer.cleanup(true);
-                CowMancers.remove(cowMancer);
+        for (FarmMancer farmMancer : farmMancers) {
+            if (farmMancer._player == player) {
+                farmMancer.deactivateAll(true);
+                farmMancers.remove(farmMancer);
             }
         }
     }
@@ -42,8 +41,8 @@ public class TickingCow implements Runnable {
 
     @Override
     public void run() {
-        for (FarmMancer cowMancer : CowMancers) {
-            cowMancer.tick();
+        for (FarmMancer farmMancer : farmMancers) {
+            farmMancer.tick();
         }
     }
 }
