@@ -13,12 +13,7 @@ public class Commands {
     public ReloadConfigCommand reloadConfigCommand;
     public ChangeMenuCommand changeMenuCommand;
 
-<<<<<<< Updated upstream
     private Commands() {}
-=======
-    private Commands() {
-    }
->>>>>>> Stashed changes
 
     public void load() {
         menuCommand = new MenuCommand();
