@@ -30,10 +30,18 @@ public class FarmMancer {
 
     public void setEquippedAbility(int index, Ability ability) {
         this.equippedAbilities[index] = ability;
+        ability.slot = index;
     }
 
     public void setSpecialEquippedAbility(Ability ability) {
         this.specialEquippedAbility = ability;
+    }
+
+    public Ability[] getEquippedAbilities() {
+        Ability[] newEquippedAbilities = new Ability[equippedAbilities.length + 1];
+        System.arraycopy(equippedAbilities, 0, newEquippedAbilities, 0, equippedAbilities.length);
+        newEquippedAbilities[equippedAbilities.length] = specialEquippedAbility;
+        return newEquippedAbilities;
     }
 
     public static ItemStack Cowification(ItemStack item) {

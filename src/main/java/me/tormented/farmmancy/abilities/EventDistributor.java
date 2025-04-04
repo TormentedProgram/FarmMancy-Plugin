@@ -60,6 +60,7 @@ public class EventDistributor implements Listener {
     @EventHandler
     public void onPlayerInteraction(PlayerInteractEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
+        if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {
             if (ability != null) {
                 if (ability instanceof Hook.PlayerInteraction playerInteraction)
@@ -71,6 +72,7 @@ public class EventDistributor implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
+        if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {
             if (ability != null) {
                 if (ability instanceof Hook.PlayerJoining playerJoining) playerJoining.processPlayerJoin(event);

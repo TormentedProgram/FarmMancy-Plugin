@@ -5,12 +5,13 @@ import me.tormented.farmmancy.FarmMancy;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public abstract class MobAbility<EntityType extends Entity> extends Ability implements Hook.Activation, Hook.Ticking, Hook.EntityDamaged {
+public abstract class MobAbility<EntityType extends Entity> extends Ability implements Hook.Activation, Hook.Ticking, Hook.EntityDamaged, Hook.EntityDeath {
 
     public static final NamespacedKey MobunitionEntityKey = new NamespacedKey(FarmMancy.getInstance(), "mobunition_entity");
 
@@ -27,6 +28,7 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
 
     @Override
     public void processEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity().hasMetadata("FarmMancy_Projectile")) return;
         if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
                 && event.getCause() != EntityDamageEvent.DamageCause.KILL) {
             event.setCancelled(true);
@@ -43,4 +45,9 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
 
     @Override
     public abstract void onTick(CallerSource callerSource);
+
+    @Override
+    public void processEntityDeath(EntityDeathEvent event) {
+        event.getDrops().clear();
+    }
 }

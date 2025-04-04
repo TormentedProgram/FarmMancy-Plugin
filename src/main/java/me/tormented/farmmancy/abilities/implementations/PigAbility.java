@@ -27,7 +27,6 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.EntityInt
 
     public PigAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
-        mobCenterOffset = new Vector(0.0f, 3.0f, 0.0f);
         modRingRadius = 3f;
     }
 

@@ -25,7 +25,6 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.E
 
     public ChickenAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
-        mobCenterOffset = new Vector(0.0f, 1.0f, 0.0f);
         modRingRadius = 3f;
     }
 

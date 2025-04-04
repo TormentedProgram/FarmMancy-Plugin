@@ -32,7 +32,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
 
             float rotation = player.getLocation().getYaw();
-            if (entity.isDead()) return;
+            if (entity == null || entity.isDead()) return;
 
             entity.teleport(player.getLocation().setRotation((float) Math.toDegrees(rotation), 0f));
         }

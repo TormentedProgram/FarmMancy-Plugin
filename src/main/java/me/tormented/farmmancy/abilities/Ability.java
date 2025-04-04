@@ -24,8 +24,12 @@ public abstract class Ability {
         abilities.remove(uuid);
     }
 
+    protected static final float[] slotPositions = {0f, 1f, 3f};
+
     public final @NotNull UUID id;
     public final @NotNull UUID owner;
+
+    public int slot;
 
     protected Ability(@NotNull UUID id, @NotNull UUID owner) {
         this.owner = owner;
