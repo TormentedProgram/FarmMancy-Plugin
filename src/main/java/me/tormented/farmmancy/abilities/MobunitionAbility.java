@@ -1,10 +1,10 @@
 package me.tormented.farmmancy.abilities;
 
 import me.tormented.farmmancy.FarmMancy;
-import org.bukkit.Material;
-import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -80,22 +80,13 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
         if (getOwnerPlayer() instanceof Player player) {
 
             for (int i = 0; i < amount; i++) {
-                EntityType specialEntity = player.getLocation().getWorld().spawn(player.getLocation(), getEntityClass());
+                EntityType specialEntity = spawnEntity(player.getLocation());
 
                 if (isBaby && specialEntity instanceof Ageable ageable) {
                     ageable.setBaby();
                 }
 
                 mobCenterOffset = new Vector(0.0f, slotPositions[slot] - (specialEntity.getHeight() / 2), 0.0f);
-
-                if (specialEntity instanceof ItemDisplay itemDisplay) {
-                    ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-                    SkullMeta meta = (SkullMeta) head.getItemMeta();
-                    meta.setPlayerProfile(itemDisplay.getProfile()); // Set the owning player of the head to the player profile
-                    head.setItemMeta(meta);
-
-                    itemDisplay.setItemStack(head);
-                }
 
                 EventDistributor.getInstance().entityMobunitionAbilityMap.put(specialEntity, this);
 

@@ -95,13 +95,13 @@ public class FarmMancer {
     }
 
     public void deactivateAll(boolean kill) {
-        for (Ability ability : equippedAbilities)
+        for (Ability ability : getEquippedAbilities())
             if (ability instanceof Hook.Activation activation) activation.onDeactivate(kill);
     }
 
 
     public void activateAll(int amount, boolean isBaby) {
-        for (Ability ability : equippedAbilities) {
+        for (Ability ability : getEquippedAbilities()) {
             if (ability instanceof MobAbility<?> mobAbility) {
                 mobAbility.isBaby = isBaby;
                 if (mobAbility instanceof MobunitionAbility<?> mobunitionAbility) {
@@ -113,10 +113,9 @@ public class FarmMancer {
     }
 
     public void tickEquippedAbilities() {
-        for (Ability ability : this.equippedAbilities) {
+        for (Ability ability : getEquippedAbilities()) {
             if (ability instanceof Hook.Ticking ticking) ticking.onTick(Hook.CallerSource.PLAYER);
         }
-        if (specialEquippedAbility instanceof Hook.Ticking ticking) ticking.onTick(Hook.CallerSource.PLAYER);
     }
 
 }

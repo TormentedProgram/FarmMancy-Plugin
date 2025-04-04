@@ -2,6 +2,7 @@ package me.tormented.farmmancy.abilities;
 
 
 import me.tormented.farmmancy.FarmMancy;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -50,4 +51,9 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
     public void processEntityDeath(EntityDeathEvent event) {
         event.getDrops().clear();
     }
+
+    public EntityType spawnEntity(Location location) {
+        return location.getWorld().spawn(location, getEntityClass());
+    }
+
 }

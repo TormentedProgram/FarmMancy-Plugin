@@ -34,7 +34,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
             float rotation = player.getLocation().getYaw();
             if (entity == null || entity.isDead()) return;
 
-            entity.teleport(player.getLocation().setRotation((float) Math.toDegrees(rotation), 0f));
+            entity.teleport(player.getLocation().add(0.0, 3.0, 0.0).setRotation(rotation, 0f));
         }
     }
 
@@ -43,7 +43,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         super.onActivate(visual);
 
         if (getOwnerPlayer() instanceof Player player) {
-            entity = player.getLocation().getWorld().spawn(player.getLocation(), getEntityClass());
+            entity = spawnEntity(player.getLocation());
             entity.setMetadata("FarmMancy_OwnedMob", new FixedMetadataValue(FarmMancy.getInstance(), this));
             EventDistributor.getInstance().entityMobunitionAbilityMap.put(entity, this);
         }

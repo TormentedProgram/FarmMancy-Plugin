@@ -92,11 +92,15 @@ public class EventDistributor implements Listener {
 
     @EventHandler
     public void onPlayerInteractWithEntity(PlayerInteractEntityEvent event) {
+
+        if (entityMobunitionAbilityMap.get(event.getRightClicked()) instanceof MobAbility<? extends Entity> mobAbility && mobAbility instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer ) {
+            entityInteractedByPlayer.processPlayerInteractEntity(event);
+        }
+
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         for (Ability ability : farmMancer.getEquippedAbilities()) {
             if (ability != null) {
-                if (ability instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer)
-                    entityInteractedByPlayer.processPlayerInteractEntity(event);
+
                 if (event.getRightClicked() instanceof LivingEntity entity) {
                     Player player = event.getPlayer();
                     if (farmMancer._player == player) {
