@@ -7,8 +7,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -55,5 +57,10 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
     public EntityType spawnEntity(Location location) {
         return location.getWorld().spawn(location, getEntityClass());
     }
+
+    public abstract @NotNull ItemStack getHeadItem(@Nullable EntityType entity);
+
+
+
 
 }

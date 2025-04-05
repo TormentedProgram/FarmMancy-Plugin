@@ -40,7 +40,7 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.E
                 !heldItem.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
 
             Chicken chicken = (Chicken) event.getRightClicked();
-            entities.remove(chicken);
+            headDisplays.remove(chicken);
 
             Location loc = player.getLocation();
             Vector direction = loc.getDirection();

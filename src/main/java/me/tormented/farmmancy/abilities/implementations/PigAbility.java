@@ -57,7 +57,7 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.EntityInt
                         !heldItem.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
 
                     Pig pig = (Pig) event.getRightClicked();
-                    entities.remove(pig);
+                    headDisplays.remove(pig);
                     Location loc = player.getLocation();
                     Vector direction = loc.getDirection();
                     Location targetLoc = loc.add(direction.multiply(1));
@@ -76,7 +76,7 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.EntityInt
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
             AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
             if (attribute != null) {
-                attribute.setBaseValue(attribute.getDefaultValue() + (entities.size() * 2.5));
+                attribute.setBaseValue(attribute.getDefaultValue() + (headDisplays.size() * 2.5));
             }
         }
     }

@@ -31,6 +31,9 @@ public abstract class Ability {
 
     public int slot;
 
+    private boolean active = false;
+    public boolean isActive() { return active; }
+
     protected Ability(@NotNull UUID id, @NotNull UUID owner) {
         this.owner = owner;
         this.id = id;

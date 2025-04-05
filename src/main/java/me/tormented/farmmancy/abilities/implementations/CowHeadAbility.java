@@ -40,13 +40,13 @@ public class CowHeadAbility extends MobunitionAbility<ItemDisplay> implements Ho
 
             if (player != getOwnerPlayer()) return;
 
-            if (entities.isEmpty()) {
+            if (headDisplays.isEmpty()) {
                 return;
             }
 
-            ItemDisplay flingingCow = entities.getLast();
+            ItemDisplay flingingCow = headDisplays.getLast();
 
-            entities.remove(flingingCow);
+            headDisplays.remove(flingingCow);
 
             Location loc = player.getLocation();
             Vector direction = loc.getDirection();

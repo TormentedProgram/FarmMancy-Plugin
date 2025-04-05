@@ -5,6 +5,7 @@ import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
+import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -33,6 +34,13 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
         modRingRadius = 3f;
     }
 
+    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/63d621100fea5883922e78bb448056448c983e3f97841948a2da747d6b08b8ab");
+
+    @Override
+    public ItemStack getHeadItem(Cow entity) {
+        return headProvider.getHeadItem();
+    }
+
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
         ItemStack heldItem = event.getPlayer().getInventory().getItemInMainHand();
@@ -41,25 +49,27 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
 
             if (player != getOwnerPlayer()) return;
 
-            if (entities.isEmpty()) {
+            if (headDisplays.isEmpty()) {
                 return;
             }
 
-            Cow flingingCow = entities.getLast();
+            Cow flingingCow = pullAndSummonMob(player.getLocation());
 
+            if (flingingCow != null) {
+                Location loc = player.getLocation();
+                Vector direction = loc.getDirection();
+                Location targetLoc = loc.add(direction.multiply(modRingRadius));
 
-            entities.remove(flingingCow);
+                flingingCow.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
+                flingingCow.teleport(targetLoc);
 
-            Location loc = player.getLocation();
-            Vector direction = loc.getDirection();
-            Location targetLoc = loc.add(direction.multiply(modRingRadius));
+                Vector velocity = direction.multiply(1.0);
 
-            flingingCow.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
-            flingingCow.teleport(targetLoc);
+                flingingCow.setVelocity(velocity);
+            } else {
+                // Not enough ammo
+            }
 
-            Vector velocity = direction.multiply(1.0);
-
-            flingingCow.setVelocity(velocity);
         }
     }
 
