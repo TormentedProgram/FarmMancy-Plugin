@@ -1,10 +1,7 @@
 package me.tormented.farmmancy.FarmMancer;
 
 import me.tormented.farmmancy.FarmMancy;
-import me.tormented.farmmancy.abilities.Ability;
-import me.tormented.farmmancy.abilities.Hook;
-import me.tormented.farmmancy.abilities.MobAbility;
-import me.tormented.farmmancy.abilities.MobunitionAbility;
+import me.tormented.farmmancy.abilities.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -105,7 +102,11 @@ public class FarmMancer {
             if (ability instanceof MobAbility<?> mobAbility) {
                 mobAbility.isBaby = isBaby;
                 if (mobAbility instanceof MobunitionAbility<?> mobunitionAbility) {
-                    mobunitionAbility.amount = amount;
+                    for (int i = 0; i < amount; i++) {
+                        mobunitionAbility.addMob(null);
+                    }
+                } else if (mobAbility instanceof MobuvertAbility<?> mobuvertAbility) {
+                    mobuvertAbility.setMob(null);
                 }
             }
             if (ability instanceof Hook.Activation activation) activation.onActivate(true);

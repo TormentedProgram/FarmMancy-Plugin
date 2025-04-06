@@ -20,7 +20,7 @@ public sealed interface Hook {
     }
 
     non-sealed interface EntityInteractedByPlayer extends Hook {
-        void processPlayerInteractEntity(PlayerInteractEntityEvent event);
+        void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource);
     }
 
     non-sealed interface PlayerInteraction extends Hook {
@@ -47,6 +47,7 @@ public sealed interface Hook {
     non-sealed interface Activation extends Hook {
         void onActivate(boolean visual);
         void onDeactivate(boolean visual);
+        boolean isActive();
     }
 
 

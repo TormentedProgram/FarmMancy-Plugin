@@ -2,10 +2,7 @@ package me.tormented.farmmancy.abilities;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -94,24 +91,13 @@ public class EventDistributor implements Listener {
     public void onPlayerInteractWithEntity(PlayerInteractEntityEvent event) {
 
         if (entityMobunitionAbilityMap.get(event.getRightClicked()) instanceof MobAbility<? extends Entity> mobAbility && mobAbility instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer ) {
-            entityInteractedByPlayer.processPlayerInteractEntity(event);
+            entityInteractedByPlayer.processPlayerInteractEntity(event, Hook.CallerSource.TRACKED_ENTITY);
         }
 
-        FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
-        for (Ability ability : farmMancer.getEquippedAbilities()) {
-            if (ability != null) {
-
-                if (event.getRightClicked() instanceof LivingEntity entity) {
-                    Player player = event.getPlayer();
-                    if (farmMancer._player == player) {
-                        if (!EventDistributor.getInstance().entityMobunitionAbilityMap.containsKey(entity)) {
-                            entity.remove();
-                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);
-                            if (entity instanceof MobunitionAbility<?> mobunitionAbility) {
-                                mobunitionAbility.addMob(entity);
-                            }
-                        }
-                    }
+        if (playerAbilityMap.get(event.getPlayer().getUniqueId()) instanceof FarmMancer farmMancer) {
+            for (Ability ability : farmMancer.getEquippedAbilities()) {
+                if (ability instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer) {
+                    entityInteractedByPlayer.processPlayerInteractEntity(event, Hook.CallerSource.PLAYER);
                 }
             }
         }

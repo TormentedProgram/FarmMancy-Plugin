@@ -1,17 +1,17 @@
 package me.tormented.farmmancy.abilities;
 
-import me.tormented.farmmancy.FarmMancy;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbility<EntityType> {
 
-    protected EntityType entity;
+    protected AbilityHeadDisplay headDisplay;
 
     protected MobuvertAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
@@ -19,12 +19,10 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
 
     @Override
     public void onDeactivate(boolean visual) {
-        if (visual && entity instanceof LivingEntity livingEntity) {
-            livingEntity.setHealth(0f);
-        } else {
-            entity.remove();
-        }
-        EventDistributor.getInstance().entityMobunitionAbilityMap.remove(entity);
+        super.onDeactivate(visual);
+
+        headDisplay.remove();
+        mobCenterOffset = new Vector(0.0f, 3.0f, 0.0f);
     }
 
     @Override
@@ -32,9 +30,8 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
 
             float rotation = player.getLocation().getYaw();
-            if (entity == null || entity.isDead()) return;
 
-            entity.teleport(player.getLocation().add(0.0, 3.0, 0.0).setRotation(rotation, 0f));
+            headDisplay.setLocation(player.getLocation().add(0.0, 3.0, 0.0).setRotation(rotation + 180.0f, 0f));
         }
     }
 
@@ -43,9 +40,34 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         super.onActivate(visual);
 
         if (getOwnerPlayer() instanceof Player player) {
-            entity = spawnEntity(player.getLocation());
-            entity.setMetadata("FarmMancy_OwnedMob", new FixedMetadataValue(FarmMancy.getInstance(), this));
-            EventDistributor.getInstance().entityMobunitionAbilityMap.put(entity, this);
+            headDisplay.spawn(player.getLocation());
         }
     }
+
+    public boolean setMob(@Nullable Entity entity) {
+        if (registerAddedEntity(entity) instanceof AbilityHeadDisplay addedHeadDisplay) {
+            headDisplay = addedHeadDisplay;
+            return true;
+        }
+        return false;
+    }
+
+    public @Nullable EntityType removeAndSummonMob(@NotNull Location location) {
+        if (removeMob() instanceof AbilityHeadDisplay removingHeadDisplay) {
+
+            EntityType entity = spawnEntity(location) ;
+            applySpawnVariant(entity, removingHeadDisplay);
+            headDisplay.remove();
+            return entity;
+
+        }
+        return null;
+    }
+
+    public @Nullable AbilityHeadDisplay removeMob() {
+        AbilityHeadDisplay removingHeadDisplay = headDisplay;
+        headDisplay = null;
+        return removingHeadDisplay;
+    }
+
 }

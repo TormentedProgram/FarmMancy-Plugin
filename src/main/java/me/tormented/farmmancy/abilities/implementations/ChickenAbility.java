@@ -1,18 +1,13 @@
 package me.tormented.farmmancy.abilities.implementations;
 
-import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
-import org.bukkit.Location;
+import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -28,8 +23,23 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.E
         modRingRadius = 3f;
     }
 
+    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/42af6e5847eea099e1b0ab8c20a9e5f3c7190158bda54e28133d9b271ec0cb4b");
+
     @Override
-    public void processPlayerInteractEntity(PlayerInteractEntityEvent event) {
+    public @NotNull ItemStack getHeadItem(@Nullable Chicken entity) {
+        return headProvider.getHeadItem();
+    }
+
+    @Override
+    public void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource) {
+        super.processPlayerInteractEntity(event, callerSource);
+
+        switch (callerSource) {
+            case PLAYER -> {}
+            case TRACKED_ENTITY -> {}
+        }
+
+        /* No longer implemented as the ring no longer uses tracked entities
         Player player = event.getPlayer();
 
         if (player != getOwnerPlayer()) return;
@@ -54,5 +64,6 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.E
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 80, 1));
             player.setVelocity(velocityVector);
         }
+        */
     }
 }

@@ -1,18 +1,16 @@
 package me.tormented.farmmancy.abilities.implementations;
 
-import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
+import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.entity.Bee;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class BeeAbility extends MobuvertAbility<Bee> implements Hook.EntityInteractedByPlayer {
+public class BeeAbility extends MobuvertAbility<Bee> {
 
     @Override
     public Class<Bee> getEntityClass() {
@@ -23,8 +21,17 @@ public class BeeAbility extends MobuvertAbility<Bee> implements Hook.EntityInter
         super(id, owner);
     }
 
+    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/59ac16f296b461d05ea0785d477033e527358b4f30c266aa02f020157ffca736");
+
     @Override
-    public void processPlayerInteractEntity(PlayerInteractEntityEvent event) {
+    public @NotNull ItemStack getHeadItem(@Nullable Bee entity) {
+        return headProvider.getHeadItem();
+    }
+
+    public void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource) {
+
+
+        /* No longer implemented here since the ring no longer contains tracked entities
         Player player = event.getPlayer();
 
         if (player != getOwnerPlayer()) return;
@@ -35,6 +42,7 @@ public class BeeAbility extends MobuvertAbility<Bee> implements Hook.EntityInter
         velocityVector.setY(2f);
         player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 240, 1));
         player.setVelocity(velocityVector);
+        */
     }
 }
 

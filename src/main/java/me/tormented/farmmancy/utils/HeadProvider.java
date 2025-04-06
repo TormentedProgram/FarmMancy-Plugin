@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.UUID;
 
-public record HeadProvider(String texture) {
+public record HeadProvider(String textureUrl) {
 
     public static PlayerProfile getProfile(String texture) {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
@@ -37,7 +37,7 @@ public record HeadProvider(String texture) {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta meta = (SkullMeta) head.getItemMeta();
-        meta.setPlayerProfile(getProfile(texture)); // Set the owning player of the head to the player profile
+        meta.setPlayerProfile(getProfile(textureUrl)); // Set the owning player of the head to the player profile
         head.setItemMeta(meta);
 
         return head;

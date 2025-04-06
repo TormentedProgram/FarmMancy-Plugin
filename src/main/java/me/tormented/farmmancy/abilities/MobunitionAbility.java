@@ -2,8 +2,11 @@ package me.tormented.farmmancy.abilities;
 
 import me.tormented.farmmancy.FarmMancy;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> {
+public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.EntityInteractedByPlayer {
 
     protected final List<AbilityHeadDisplay> headDisplays = new ArrayList<>();
 
@@ -24,11 +27,11 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
 
     @Override
     public void onDeactivate(boolean visual) {
+        super.onDeactivate(visual);
+
         for (AbilityHeadDisplay headDisplay : headDisplays) {
             headDisplay.remove();
-            //EventDistributor.getInstance().entityMobunitionAbilityMap.remove(entity);
         }
-        headDisplays.clear();
     }
 
     @Override
@@ -39,51 +42,31 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
 
             for (int i = 0; i < headDisplays.size(); i++) {
                 float rotation = -(float) (((double) i / headDisplays.size()) * Math.TAU + lifetime);
+
+
                 AbilityHeadDisplay headDisplay = headDisplays.get(i);
 
+                if (slot % 2 == 1) {
+                    headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(-rotation) + 180.0f, 0f).add(
+                            Math.cos(rotation) * modRingRadius + mobCenterOffset.getX(),
+                            mobCenterOffset.getY() + slotPositions[slot],
+                            Math.sin(-rotation) * modRingRadius + mobCenterOffset.getZ()
+                    ));
+                } else {
+                    headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(rotation), 0f).add(
+                            Math.cos(rotation) * modRingRadius + mobCenterOffset.getX(),
+                            mobCenterOffset.getY() + slotPositions[slot],
+                            Math.sin(rotation) * modRingRadius + mobCenterOffset.getZ()
+                    ));
+                }
 
-                headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(rotation), 0f).add(
-                        Math.cos(rotation) * modRingRadius + mobCenterOffset.getX(),
-                        mobCenterOffset.getY(),
-                        Math.sin(rotation) * modRingRadius + mobCenterOffset.getZ()
-                ));
             }
         }
     }
 
     public boolean addMob(@Nullable Entity entity) {
-        // EventDistributor.getInstance().entityMobunitionAbilityMap.put(entity, this);
-
-        AbilityHeadDisplay headDisplay = null;
-
-        if (entity == null) {
-            headDisplay = new AbilityHeadDisplay(getHeadItem(null));
-        } else if (getEntityClass().isInstance(entity)) {
-            try {
-                headDisplay = new AbilityHeadDisplay(getHeadItem((EntityType) entity));
-
-                entity.remove();
-            } catch (ClassCastException ignored) {}
-        }
-
-        if (headDisplay != null) {
-            headDisplays.add(headDisplay);
-
-            if (isActive()) {
-                Location headLocation = null;
-
-                if (entity != null) {
-                    headLocation = entity.getLocation();
-                } else if (getOwnerPlayer() instanceof Player player) {
-                    headLocation = player.getLocation();
-                }
-
-                if (headLocation != null)
-                    headDisplay.spawn(headLocation);
-                else
-                    FarmMancy.getInstance().getLogger().warning("Failed to spawn mob head because the ability is in an illegal state");
-            }
-
+        if (registerAddedEntity(entity) instanceof AbilityHeadDisplay addedHeadDisplay){
+            headDisplays.add(addedHeadDisplay);
             return true;
         }
         return false;
@@ -94,13 +77,11 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
 
             EntityType entity = spawnEntity(location) ;
             applySpawnVariant(entity, headDisplay);
+            headDisplay.remove();
             return entity;
 
         }
         return null;
-    }
-
-    public void applySpawnVariant(EntityType entity, AbilityHeadDisplay headDisplay) {
     }
 
     public @Nullable AbilityHeadDisplay pullMob() {
@@ -119,6 +100,18 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
 
             for (AbilityHeadDisplay headDisplay : headDisplays) {
                 headDisplay.spawn(player.getLocation());
+            }
+        }
+    }
+
+    @Override
+    public void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource) {
+        if (callerSource == CallerSource.PLAYER) {
+            if (event.getRightClicked() instanceof LivingEntity entity) {
+                Player player = event.getPlayer();
+                if (addMob(entity)) {
+                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);
+                }
             }
         }
 
