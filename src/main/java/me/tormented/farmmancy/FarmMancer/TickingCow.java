@@ -1,6 +1,11 @@
 package me.tormented.farmmancy.FarmMancer;
 
+import me.tormented.farmmancy.abilities.AbilityRegistry;
 import me.tormented.farmmancy.abilities.EventDistributor;
+import me.tormented.farmmancy.abilities.implementations.BeeAbility;
+import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
+import me.tormented.farmmancy.abilities.implementations.CowAbility;
+import me.tormented.farmmancy.abilities.implementations.PigAbility;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -8,6 +13,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TickingCow implements Runnable {
+
+    public static AbilityRegistry abilityRegistry = new AbilityRegistry();
+
+    static {
+        abilityRegistry.register("cow", CowAbility::new);
+        abilityRegistry.register("pig", PigAbility::new);
+        abilityRegistry.register("chicken", ChickenAbility::new);
+        abilityRegistry.register("bee", BeeAbility::new);
+    }
 
     private static final TickingCow instance = new TickingCow();
 
