@@ -8,12 +8,17 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancer.TickingCow;
 import me.tormented.farmmancy.FarmConfig;
+import me.tormented.farmmancy.abilities.implementations.BeeAbility;
+import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
+import me.tormented.farmmancy.abilities.implementations.CowAbility;
+import me.tormented.farmmancy.abilities.implementations.PigAbility;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 
 public class SetFarmMancerCommand {
     private static final int maxMobCap = FarmConfig.getInstance().getMaxMobCap();
@@ -36,8 +41,12 @@ public class SetFarmMancerCommand {
                     if (Objects.equals(doing, "set")) {
                         if (Players != null) {
                             for (Player player : Players) {
-                                FarmMancer cowmancer = TickingCow.getInstance().setCowMancer(player);
-                                cowmancer.activateAll(amountToSpawn, isBaby);
+                                FarmMancer theMancer = TickingCow.getInstance().setCowMancer(player);
+                                theMancer.setEquippedAbility(0, new CowAbility(UUID.randomUUID(), player.getUniqueId()));
+                                theMancer.setEquippedAbility(1, new PigAbility(UUID.randomUUID(), player.getUniqueId()));
+                                theMancer.setEquippedAbility(2, new ChickenAbility(UUID.randomUUID(), player.getUniqueId()));
+                                theMancer.setSpecialEquippedAbility(new BeeAbility(UUID.randomUUID(), player.getUniqueId()));
+                                theMancer.activateAll(amountToSpawn, isBaby);
                             }
                             sender.sendMessage(Component.text("Granted FarmMancy to " + Players.size() + " player(s) successfully.", NamedTextColor.GREEN));
                         }

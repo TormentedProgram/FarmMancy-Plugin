@@ -3,10 +3,7 @@ package me.tormented.farmmancy.abilities;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 public sealed interface Hook {
 
@@ -15,7 +12,7 @@ public sealed interface Hook {
         PLAYER
     }
 
-     non-sealed interface EntityDamaged extends Hook {
+    non-sealed interface EntityDamaged extends Hook {
         void processEntityDamage(EntityDamageEvent event);
     }
 
@@ -27,8 +24,17 @@ public sealed interface Hook {
         void processPlayerInteract(PlayerInteractEvent event);
     }
 
+    non-sealed interface PlayerSneak extends Hook {
+        void processSneakToggle(PlayerToggleSneakEvent event);
+    }
+
+    non-sealed interface PlayerSwapItem extends Hook {
+        void processSwapItem(PlayerItemHeldEvent event);
+    }
+
     non-sealed interface PlayerJoining extends Hook {
         void processPlayerJoin(PlayerJoinEvent event);
+
         void processPlayerQuit(PlayerQuitEvent event);
     }
 
@@ -46,7 +52,9 @@ public sealed interface Hook {
 
     non-sealed interface Activation extends Hook {
         void onActivate(boolean visual);
+
         void onDeactivate(boolean visual);
+
         boolean isActive();
     }
 
@@ -60,6 +68,7 @@ public sealed interface Hook {
          * Called when the ability is assigned from the ability menu.
          */
         void onAssign();
+
         /**
          * Called when the ability is unassigned from the ability menu.
          */
@@ -70,10 +79,13 @@ public sealed interface Hook {
      * Hooks into when the ability is being registered into the ability registry.
      */
     non-sealed interface MemoryRegister extends Hook {
-        /** Called when the ability is being added to the registry. This will be called regardless if it's equipped or not.
+        /**
+         * Called when the ability is being added to the registry. This will be called regardless if it's equipped or not.
          */
         void onRegister();
-        /** Called when the ability is being marked for unloading (No longer present in the registry). This will be called regardless if it's equipped or not.
+
+        /**
+         * Called when the ability is being marked for unloading (No longer present in the registry). This will be called regardless if it's equipped or not.
          */
         void onDeregister();
     }

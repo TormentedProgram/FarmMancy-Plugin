@@ -3,6 +3,7 @@ package me.tormented.farmmancy.FarmMancer;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,8 +17,10 @@ public class TickingCow implements Runnable {
 
     public Set<FarmMancer> farmMancers = new HashSet<>();
 
+    public HashMap<Player, FarmMancer> farmMancerMap = new HashMap<>();
 
-    private TickingCow() {}
+    private TickingCow() {
+    }
 
     public FarmMancer setCowMancer(Player player) {
         for (FarmMancer farmMancer : farmMancers) {
@@ -28,6 +31,7 @@ public class TickingCow implements Runnable {
         FarmMancer farmMancer = new FarmMancer(player);
         EventDistributor.getInstance().playerAbilityMap.put(player.getUniqueId(), farmMancer);
         farmMancers.add(farmMancer);
+        farmMancerMap.put(player, farmMancer);
         return farmMancer;
     }
 

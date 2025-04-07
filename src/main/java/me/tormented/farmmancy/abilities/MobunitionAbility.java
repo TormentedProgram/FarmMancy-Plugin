@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.abilities;
 
+import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancy;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -7,6 +8,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.EntityInteractedByPlayer {
+import static me.tormented.farmmancy.abilities.utils.WandUtils.heldCowWand;
+
+public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.EntityInteractedByPlayer, Hook.PlayerSneak, Hook.PlayerSwapItem {
 
     protected final List<AbilityHeadDisplay> headDisplays = new ArrayList<>();
 
@@ -31,6 +39,38 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
 
         for (AbilityHeadDisplay headDisplay : headDisplays) {
             headDisplay.remove();
+        }
+    }
+
+    @Override
+    public void processSneakToggle(PlayerToggleSneakEvent event) {
+        Player player = event.getPlayer();
+        if (event.isSneaking()) {
+            for (AbilityHeadDisplay headDisplay : headDisplays) {
+                headDisplay.remove();
+            }
+        } else {
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (heldCowWand(player)) {
+                for (AbilityHeadDisplay headDisplay : headDisplays) {
+                    headDisplay.spawn(player.getLocation());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void processSwapItem(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        if (player.isSneaking()) return;
+        if (player.getInventory().getItem(event.getNewSlot()) instanceof ItemStack item && item.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+            for (AbilityHeadDisplay headDisplay : headDisplays) {
+                headDisplay.spawn(player.getLocation());
+            }
+        } else {
+            for (AbilityHeadDisplay headDisplay : headDisplays) {
+                headDisplay.remove();
+            }
         }
     }
 
@@ -65,7 +105,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     }
 
     public boolean addMob(@Nullable Entity entity) {
-        if (registerAddedEntity(entity) instanceof AbilityHeadDisplay addedHeadDisplay){
+        if (registerAddedEntity(entity) instanceof AbilityHeadDisplay addedHeadDisplay) {
             headDisplays.add(addedHeadDisplay);
             return true;
         }
@@ -75,7 +115,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     public @Nullable EntityType pullAndSummonMob(@NotNull Location location) {
         if (pullMob() instanceof AbilityHeadDisplay headDisplay) {
 
-            EntityType entity = spawnEntity(location) ;
+            EntityType entity = spawnEntity(location);
             applySpawnVariant(entity, headDisplay);
             headDisplay.remove();
             return entity;
@@ -97,9 +137,12 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
         super.onActivate(visual);
 
         if (getOwnerPlayer() instanceof Player player) {
-
-            for (AbilityHeadDisplay headDisplay : headDisplays) {
-                headDisplay.spawn(player.getLocation());
+            ItemStack item = player.getInventory().getItemInMainHand();
+            ItemMeta meta = item.getItemMeta();
+            if (heldCowWand(player)) {
+                for (AbilityHeadDisplay headDisplay : headDisplays) {
+                    headDisplay.spawn(player.getLocation());
+                }
             }
         }
     }

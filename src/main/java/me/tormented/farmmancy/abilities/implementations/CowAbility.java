@@ -8,7 +8,6 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Cow;
@@ -87,8 +86,9 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
                 for (int z = -1; z <= 1; z++) {
                     if (x == 0 && y == 0 && z == 0) continue;
                     Block block = currentBlock.getRelative(x, y, z);
-                    if (block.getType() != Material.AIR) {
+                    if (!block.isSolid()) {
                         explodeEntity(event.getEntity());
+                        return;
                     }
                 }
             }

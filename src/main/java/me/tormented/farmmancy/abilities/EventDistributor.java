@@ -7,10 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +40,28 @@ public class EventDistributor implements Listener {
         MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
         if (mobAbility != null) {
             if (mobAbility instanceof Hook.EntityDeath entityDeath) entityDeath.processEntityDeath(event);
+        }
+    }
+
+    @EventHandler
+    public void onSneak(PlayerToggleSneakEvent event) {
+        FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
+        if (farmMancer == null) return;
+        for (Ability ability : farmMancer.getEquippedAbilities()) {
+            if (ability != null) {
+                if (ability instanceof Hook.PlayerSneak playerSneak) playerSneak.processSneakToggle(event);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onSwapItem(PlayerItemHeldEvent event) {
+        FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
+        if (farmMancer == null) return;
+        for (Ability ability : farmMancer.getEquippedAbilities()) {
+            if (ability != null) {
+                if (ability instanceof Hook.PlayerSwapItem playerSwap) playerSwap.processSwapItem(event);
+            }
         }
     }
 
@@ -90,7 +109,7 @@ public class EventDistributor implements Listener {
     @EventHandler
     public void onPlayerInteractWithEntity(PlayerInteractEntityEvent event) {
 
-        if (entityMobunitionAbilityMap.get(event.getRightClicked()) instanceof MobAbility<? extends Entity> mobAbility && mobAbility instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer ) {
+        if (entityMobunitionAbilityMap.get(event.getRightClicked()) instanceof MobAbility<? extends Entity> mobAbility && mobAbility instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer) {
             entityInteractedByPlayer.processPlayerInteractEntity(event, Hook.CallerSource.TRACKED_ENTITY);
         }
 

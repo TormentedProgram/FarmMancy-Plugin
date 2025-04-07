@@ -1,15 +1,21 @@
 package me.tormented.farmmancy.abilities;
 
+import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbility<EntityType> {
+public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.PlayerSneak, Hook.PlayerSwapItem {
 
     protected AbilityHeadDisplay headDisplay;
 
@@ -21,8 +27,31 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
     public void onDeactivate(boolean visual) {
         super.onDeactivate(visual);
 
-        headDisplay.remove();
+        if (headDisplay != null) headDisplay.remove();
         mobCenterOffset = new Vector(0.0f, 3.0f, 0.0f);
+    }
+
+    @Override
+    public void processSneakToggle(PlayerToggleSneakEvent event) {
+        Player player = event.getPlayer();
+        if (headDisplay == null) return;
+        if (event.isSneaking()) {
+            headDisplay.remove();
+        } else {
+            headDisplay.spawn(player.getLocation());
+        }
+    }
+
+    @Override
+    public void processSwapItem(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        if (headDisplay == null) return;
+        if (player.isSneaking()) return;
+        if (player.getInventory().getItem(event.getNewSlot()) instanceof ItemStack item && item.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+            headDisplay.spawn(player.getLocation());
+        }else{
+            headDisplay.remove();
+        }
     }
 
     @Override
@@ -31,7 +60,9 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
 
             float rotation = player.getLocation().getYaw();
 
-            headDisplay.setLocation(player.getLocation().add(0.0, 3.0, 0.0).setRotation(rotation + 180.0f, 0f));
+            if (headDisplay != null) {
+                headDisplay.setLocation(player.getLocation().add(0.0, 3.0, 0.0).setRotation(rotation + 180.0f, 0f));
+            }
         }
     }
 
@@ -40,7 +71,11 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         super.onActivate(visual);
 
         if (getOwnerPlayer() instanceof Player player) {
-            headDisplay.spawn(player.getLocation());
+            ItemStack item = player.getInventory().getItemInMainHand();
+            ItemMeta meta = item.getItemMeta();
+            if (meta.getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+                headDisplay.spawn(player.getLocation());
+            }
         }
     }
 
@@ -55,7 +90,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
     public @Nullable EntityType removeAndSummonMob(@NotNull Location location) {
         if (removeMob() instanceof AbilityHeadDisplay removingHeadDisplay) {
 
-            EntityType entity = spawnEntity(location) ;
+            EntityType entity = spawnEntity(location);
             applySpawnVariant(entity, removingHeadDisplay);
             headDisplay.remove();
             return entity;

@@ -15,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+import static me.tormented.farmmancy.abilities.utils.WandUtils.heldCowWand;
+
 public abstract class MobAbility<EntityType extends Entity> extends Ability implements Hook.Activation, Hook.Ticking, Hook.EntityDamaged, Hook.EntityDeath {
 
     public static final NamespacedKey MobunitionEntityKey = new NamespacedKey(FarmMancy.getInstance(), "mobunition_entity");
@@ -84,11 +86,17 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
                 headDisplay = new AbilityHeadDisplay(getHeadItem((EntityType) entity));
 
                 entity.remove();
-            } catch (ClassCastException ignored) {}
+            } catch (ClassCastException ignored) {
+            }
+        }
+
+        if (getOwnerPlayer() instanceof Player player) {
+            if (!heldCowWand(player)) {
+                return headDisplay;
+            }
         }
 
         if (headDisplay != null) {
-
             if (isActive()) {
                 Location headLocation = null;
 
