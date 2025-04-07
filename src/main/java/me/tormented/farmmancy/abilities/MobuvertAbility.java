@@ -1,6 +1,6 @@
 package me.tormented.farmmancy.abilities;
 
-import me.tormented.farmmancy.FarmMancer.FarmMancer;
+import me.tormented.farmmancy.abilities.utils.WandUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -8,12 +8,13 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+
+import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
 
 public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.PlayerSneak, Hook.PlayerSwapItem {
 
@@ -38,7 +39,9 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         if (event.isSneaking()) {
             headDisplay.remove();
         } else {
-            headDisplay.spawn(player.getLocation());
+            if (isActive() && isHoldingCowWand(player)) {
+                headDisplay.spawn(player.getLocation());
+            }
         }
     }
 
@@ -47,7 +50,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         Player player = event.getPlayer();
         if (headDisplay == null) return;
         if (player.isSneaking()) return;
-        if (player.getInventory().getItem(event.getNewSlot()) instanceof ItemStack item && item.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+        if (isActive() && WandUtils.isHoldingCowWand(player, event.getNewSlot())) {
             headDisplay.spawn(player.getLocation());
         }else{
             headDisplay.remove();
@@ -73,7 +76,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         if (getOwnerPlayer() instanceof Player player) {
             ItemStack item = player.getInventory().getItemInMainHand();
             ItemMeta meta = item.getItemMeta();
-            if (meta.getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+            if (isActive() && isHoldingCowWand(player)) {
                 headDisplay.spawn(player.getLocation());
             }
         }

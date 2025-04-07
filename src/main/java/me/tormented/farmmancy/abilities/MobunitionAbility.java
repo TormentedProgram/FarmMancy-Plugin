@@ -1,7 +1,7 @@
 package me.tormented.farmmancy.abilities;
 
-import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.utils.WandUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static me.tormented.farmmancy.abilities.utils.WandUtils.heldCowWand;
+import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
 
 public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.EntityInteractedByPlayer, Hook.PlayerSneak, Hook.PlayerSwapItem {
 
@@ -51,7 +50,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
             }
         } else {
             ItemStack item = player.getInventory().getItemInMainHand();
-            if (heldCowWand(player)) {
+            if (isActive() && isHoldingCowWand(player)) {
                 for (AbilityHeadDisplay headDisplay : headDisplays) {
                     headDisplay.spawn(player.getLocation());
                 }
@@ -63,7 +62,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     public void processSwapItem(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         if (player.isSneaking()) return;
-        if (player.getInventory().getItem(event.getNewSlot()) instanceof ItemStack item && item.getItemMeta().getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+        if (isActive() && WandUtils.isHoldingCowWand(player, event.getNewSlot())) {
             for (AbilityHeadDisplay headDisplay : headDisplays) {
                 headDisplay.spawn(player.getLocation());
             }
@@ -139,7 +138,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
         if (getOwnerPlayer() instanceof Player player) {
             ItemStack item = player.getInventory().getItemInMainHand();
             ItemMeta meta = item.getItemMeta();
-            if (heldCowWand(player)) {
+            if (isActive() && isHoldingCowWand(player)) {
                 for (AbilityHeadDisplay headDisplay : headDisplays) {
                     headDisplay.spawn(player.getLocation());
                 }

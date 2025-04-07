@@ -18,7 +18,7 @@ public class AbilityHeadDisplay {
 
     public void spawn(@NotNull Location location) {
 
-        this.location = location;
+        setLocation(location);
 
         if (itemDisplay == null) {
             itemDisplay = location.getWorld().spawn(this.location, ItemDisplay.class);

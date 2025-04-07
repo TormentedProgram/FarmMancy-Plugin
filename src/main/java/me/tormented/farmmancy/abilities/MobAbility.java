@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-import static me.tormented.farmmancy.abilities.utils.WandUtils.heldCowWand;
+import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
 
 public abstract class MobAbility<EntityType extends Entity> extends Ability implements Hook.Activation, Hook.Ticking, Hook.EntityDamaged, Hook.EntityDeath {
 
@@ -91,7 +91,7 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
         }
 
         if (getOwnerPlayer() instanceof Player player) {
-            if (!heldCowWand(player)) {
+            if (!isHoldingCowWand(player)) {
                 return headDisplay;
             }
         }
