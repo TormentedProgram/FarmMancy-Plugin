@@ -39,6 +39,8 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
         return headProvider.getHeadItem();
     }
 
+    private boolean isTimeStopped = false;
+
 
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
@@ -47,12 +49,11 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
 
             if (god != getOwnerPlayer()) return;
 
-            long originalTime = god.getLocation().getWorld().getTime();
-
             Bukkit.broadcast(Component.text("ZA WARUDO!!!", NamedTextColor.YELLOW, TextDecoration.BOLD));
             Bukkit.broadcast(Component.text("A player cast TIME-STOP globally...", NamedTextColor.GREEN));
-            god.getLocation().getWorld().setTime(0);
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick freeze");
+
+            isTimeStopped = true;
 
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 1, true, true)); // 20 ticks = 1 second
@@ -73,10 +74,10 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
                         player.removePotionEffect(PotionEffectType.JUMP_BOOST);
                         player.playSound(player, Sound.ENTITY_ALLAY_DEATH, 1f, 0.8f);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 1, true, true)); // 20 ticks = 1 second
-                        god.getLocation().getWorld().setTime(originalTime);
                     }
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick unfreeze");
                     Bukkit.broadcast(Component.text("Time resumes...", NamedTextColor.GREEN));
+                    isTimeStopped = false;
                 }
             }.runTaskLater(FarmMancy.getInstance(), 220); //11 seconds
         }
