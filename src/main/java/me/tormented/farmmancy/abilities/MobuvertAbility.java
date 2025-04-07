@@ -58,10 +58,9 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
                 if (isActive() && WandUtils.isHoldingCowWand(player)) {
                     headDisplay.spawn(player.getLocation());
                 } else {
-                    headDisplay.remove();
+                    if (headDisplay != null) headDisplay.remove();
                 }
             }
-
 
             float rotation = player.getLocation().getYaw();
 

@@ -4,10 +4,7 @@ import dev.jorel.commandapi.CommandAPICommand;
 import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancer.TickingCow;
-import me.tormented.farmmancy.abilities.implementations.BeeAbility;
-import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
-import me.tormented.farmmancy.abilities.implementations.CowAbility;
-import me.tormented.farmmancy.abilities.implementations.PigAbility;
+import me.tormented.farmmancy.abilities.utils.WandUtils;
 import me.tormented.farmmancy.inventoryMenu.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -20,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.UUID;
 
 public class MenuCommand {
     private final MenuFactory menuFactory;
@@ -48,15 +44,15 @@ public class MenuCommand {
                                 @Override
                                 public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
                                     if (event.getClick() == ClickType.LEFT) {
+                                        FarmMancer theMancer;
                                         if (TickingCow.getInstance().farmMancerMap.containsKey(menu.getPlayer())) {
-                                            TickingCow.getInstance().removeCowMancer(menu.getPlayer());
+                                            theMancer = TickingCow.getInstance().farmMancerMap.get(menu.getPlayer());
+                                            theMancer.deactivateAll(true);
+                                        } else {
+                                            theMancer = TickingCow.getInstance().setCowMancer(menuInstance.getPlayer());
                                         }
-                                        FarmMancer theMancer = TickingCow.getInstance().setCowMancer(menuInstance.getPlayer());
-                                        theMancer.setEquippedAbility(0, new CowAbility(UUID.randomUUID(), menu.getPlayer().getUniqueId()));
-                                        theMancer.setEquippedAbility(1, new PigAbility(UUID.randomUUID(), menu.getPlayer().getUniqueId()));
-                                        theMancer.setEquippedAbility(2, new ChickenAbility(UUID.randomUUID(), menu.getPlayer().getUniqueId()));
-                                        theMancer.setSpecialEquippedAbility(new BeeAbility(UUID.randomUUID(), menu.getPlayer().getUniqueId()));
                                         theMancer.activateAll(amountToSpawn, isBaby);
+                                        WandUtils.giveCowWand(menu.getPlayer());
                                         menu.getPlayer().playSound(menu.getPlayer(), Sound.BLOCK_ANVIL_USE, 1.0f, 1.0f);
                                         return new ClickResponse.CloseMenu();
                                     }
@@ -204,8 +200,12 @@ public class MenuCommand {
                         .setClickHandler(new ClickHandler() {
                             @Override
                             public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
-                                TickingCow.getInstance().removeCowMancer(menuInstance.getPlayer());
-                                menu.getPlayer().playSound(menu.getPlayer(), Sound.BLOCK_ANVIL_USE, 1.0f, 0.7f);
+                                for (FarmMancer farmMancer : TickingCow.getInstance().farmMancers) {
+                                    if (farmMancer._player == menu.getPlayer()) {
+                                        farmMancer.deactivateAll(true);
+                                        menu.getPlayer().playSound(menu.getPlayer(), Sound.BLOCK_ANVIL_USE, 1.0f, 0.7f);
+                                    }
+                                }
                                 return new ClickResponse.Nothing();
                             }
                         });
@@ -215,7 +215,7 @@ public class MenuCommand {
             }
         });
 
-        new CommandAPICommand("farmMenu")
+        new CommandAPICommand("farmmenu")
                 .withPermission("CommandPermission.OP")
                 .executesPlayer((player, args) -> {
                     menuFactory.sendToPlayer(player);

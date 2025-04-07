@@ -2,10 +2,7 @@ package me.tormented.farmmancy.FarmMancer;
 
 import me.tormented.farmmancy.abilities.AbilityRegistry;
 import me.tormented.farmmancy.abilities.EventDistributor;
-import me.tormented.farmmancy.abilities.implementations.BeeAbility;
-import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
-import me.tormented.farmmancy.abilities.implementations.CowAbility;
-import me.tormented.farmmancy.abilities.implementations.PigAbility;
+import me.tormented.farmmancy.abilities.implementations.*;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -21,6 +18,7 @@ public class TickingCow implements Runnable {
         abilityRegistry.register("pig", PigAbility::new);
         abilityRegistry.register("chicken", ChickenAbility::new);
         abilityRegistry.register("bee", BeeAbility::new);
+        abilityRegistry.register("strider", StriderAbility::new);
     }
 
     private static final TickingCow instance = new TickingCow();
@@ -53,6 +51,7 @@ public class TickingCow implements Runnable {
         for (FarmMancer farmMancer : farmMancers) {
             if (farmMancer._player == player) {
                 farmMancer.deactivateAll(true);
+                farmMancerMap.remove(player);
                 farmMancers.remove(farmMancer);
             }
         }

@@ -1,21 +1,39 @@
 package me.tormented.farmmancy.utils;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+import me.tormented.farmmancy.FarmMancy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerTextures;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Base64;
 import java.util.UUID;
 
 public record HeadProvider(String textureUrl) {
 
     public static PlayerProfile getProfile(String texture) {
+        if (isBase64(texture)) {
+            byte[] decodedBytes = Base64.getDecoder().decode(texture);
+            String jsonString = new String(decodedBytes);
+            JSONParser parser = new JSONParser();
+            try {
+                JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+                JSONObject textures = (JSONObject) jsonObject.get("textures");
+                JSONObject skin = (JSONObject) textures.get("SKIN");
+                texture = (String) skin.get("url");
+            } catch (ParseException error) {
+                FarmMancy.getInstance().getLogger().warning("Failed to parse base64 texture: " + error.getMessage());
+            }
+        }
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) head.getItemMeta();
 
@@ -43,4 +61,13 @@ public record HeadProvider(String textureUrl) {
         return head;
     }
 
+    public static boolean isBase64(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        if (str.length() % 4 != 0) {
+            return false;
+        }
+        return str.matches("^[A-Za-z0-9+/]*={0,2}$");
+    }
 }

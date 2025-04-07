@@ -6,9 +6,9 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.Location;
-import org.bukkit.entity.Chicken;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Strider;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -20,21 +20,21 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.PlayerInteraction {
+public class StriderAbility extends MobunitionAbility<Strider> implements Hook.PlayerInteraction {
 
     @Override
-    public Class<Chicken> getEntityClass() {
-        return Chicken.class;
+    public Class<Strider> getEntityClass() {
+        return Strider.class;
     }
 
-    public ChickenAbility(@NotNull UUID id, @NotNull UUID owner) {
+    public StriderAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
     }
 
-    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/42af6e5847eea099e1b0ab8c20a9e5f3c7190158bda54e28133d9b271ec0cb4b");
+    public static final HeadProvider headProvider = new HeadProvider("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWM0MGZhZDFjMTFkZTllNjQyMmI0MDU0MjZlOWI5NzkwN2YzNWJjZTM0NWUzNzU4NjA0ZDNlN2JlN2RmODg0In19fQ==");
 
     @Override
-    public @NotNull ItemStack getHeadItem(@Nullable Chicken entity) {
+    public @NotNull ItemStack getHeadItem(@Nullable Strider entity) {
         return headProvider.getHeadItem();
     }
 
@@ -52,10 +52,7 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.P
                 livingEntity.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
                 livingEntity.setHealth(0f);
 
-                Vector velocityVector = player.getVelocity();
-                velocityVector.setY(0.6f);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 80, 1));
-                player.setVelocity(velocityVector);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 200, 1));
             }
         }
     }

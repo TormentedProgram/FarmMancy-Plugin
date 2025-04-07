@@ -1,12 +1,14 @@
 package me.tormented.farmmancy.FarmMancer;
 
-import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.*;
+import me.tormented.farmmancy.abilities.implementations.BeeAbility;
+import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
+import me.tormented.farmmancy.abilities.implementations.CowAbility;
+import me.tormented.farmmancy.abilities.implementations.PigAbility;
+import me.tormented.farmmancy.abilities.utils.WandUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,10 +17,9 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class FarmMancer {
-    public static NamespacedKey magic_hoe_key = new NamespacedKey(FarmMancy.getInstance(), "magical_hoe");
-
     public Player _player;
 
     private final Ability[] equippedAbilities = new Ability[3];
@@ -67,7 +68,7 @@ public class FarmMancer {
 
             itemMeta.customName(Component.text("Magical " + funnyName + " of Destruction", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
 
-            itemMeta.getPersistentDataContainer().set(FarmMancer.magic_hoe_key, PersistentDataType.BYTE, (byte) 1);
+            itemMeta.getPersistentDataContainer().set(WandUtils.magic_hoe_key, PersistentDataType.BYTE, (byte) 1);
 
             item.setItemMeta(itemMeta);
         }
@@ -76,19 +77,6 @@ public class FarmMancer {
 
     public FarmMancer(Player player) {
         _player = player;
-
-        for (ItemStack item : player.getInventory().getContents()) {
-            if (item != null && item.hasItemMeta()) {
-                ItemMeta meta = item.getItemMeta();
-                if (meta.getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE)) {
-                    return;
-                }
-            }
-        }
-
-        ItemStack MagicHoe = Cowification(new ItemStack(Material.NETHERITE_HOE, 1));
-
-        player.give(MagicHoe);
     }
 
     public void deactivateAll(boolean kill) {
@@ -98,6 +86,13 @@ public class FarmMancer {
 
 
     public void activateAll(int amount, boolean isBaby) {
+        if (getEquippedAbilities().length == 0) {
+            _player.sendMessage(Component.text("You have no abilities equipped. (EQUIPPING DEFAULTS)", NamedTextColor.RED));
+            setEquippedAbility(0, new ChickenAbility(UUID.randomUUID(), _player.getUniqueId()));
+            setEquippedAbility(1, new CowAbility(UUID.randomUUID(), _player.getUniqueId()));
+            setEquippedAbility(2, new PigAbility(UUID.randomUUID(), _player.getUniqueId()));
+            setSpecialEquippedAbility(new BeeAbility(UUID.randomUUID(), _player.getUniqueId()));
+        }
         for (Ability ability : getEquippedAbilities()) {
             if (ability instanceof MobAbility<?> mobAbility) {
                 mobAbility.isBaby = isBaby;

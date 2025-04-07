@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
@@ -40,6 +41,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
         for (AbilityHeadDisplay headDisplay : headDisplays) {
             headDisplay.remove();
         }
+        headDisplays.clear();
     }
 
     @Override
@@ -117,7 +119,6 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
                             Math.sin(rotation) * slotRadii[slot] + mobCenterOffset.getZ()
                     ));
                 }
-
             }
         }
     }
@@ -168,6 +169,8 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     @Override
     public void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER) {
+            if (WandUtils.isHoldingCowWand(Objects.requireNonNull(getOwnerPlayer()))) return;
+            if (event.getRightClicked().hasMetadata("FarmMancy_Projectile")) return;
             if (event.getRightClicked() instanceof LivingEntity entity) {
                 Player player = event.getPlayer();
                 if (addMob(entity)) {
