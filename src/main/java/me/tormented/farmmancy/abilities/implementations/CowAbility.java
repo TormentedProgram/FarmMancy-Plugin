@@ -1,11 +1,11 @@
 package me.tormented.farmmancy.abilities.implementations;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
+import me.tormented.farmmancy.abilities.utils.WandUtils;
 import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -15,9 +15,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +31,6 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
 
     public CowAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
-        modRingRadius = 3f;
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/63d621100fea5883922e78bb448056448c983e3f97841948a2da747d6b08b8ab");
@@ -45,8 +42,7 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
 
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
-        ItemStack heldItem = event.getPlayer().getInventory().getItemInMainHand();
-        if (heldItem.getItemMeta() instanceof ItemMeta itemMeta && itemMeta.getPersistentDataContainer().has(FarmMancer.magic_hoe_key, PersistentDataType.BYTE)) {
+        if (WandUtils.isHoldingCowWand(event.getPlayer())) {
             Player player = event.getPlayer();
 
             if (player != getOwnerPlayer()) return;
@@ -55,9 +51,11 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
                 return;
             }
 
+            if (event.getAction().isRightClick()) return;
+
             Location loc = player.getLocation();
             Vector direction = loc.getDirection();
-            Location targetLoc = loc.add(direction.multiply(modRingRadius));
+            Location targetLoc = loc.add(direction.multiply(slotRadii[slot]));
 
             Cow flingingCow = pullAndSummonMob(targetLoc);
 
@@ -86,7 +84,7 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
                 for (int z = -1; z <= 1; z++) {
                     if (x == 0 && y == 0 && z == 0) continue;
                     Block block = currentBlock.getRelative(x, y, z);
-                    if (!block.isSolid()) {
+                    if (block.isSolid()) {
                         explodeEntity(event.getEntity());
                         return;
                     }

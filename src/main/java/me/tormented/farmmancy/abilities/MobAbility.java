@@ -59,6 +59,8 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
         return active;
     }
 
+    public abstract boolean isHeadRingVisible();
+
     @Override
     public abstract void onTick(CallerSource callerSource);
 
@@ -116,5 +118,6 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
         return headDisplay;
     }
 
+    public abstract boolean isBeingLookedAt();
 
 }

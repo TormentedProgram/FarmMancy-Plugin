@@ -5,6 +5,7 @@ import me.tormented.farmmancy.abilities.utils.WandUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -23,11 +24,13 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
 
     protected final List<AbilityHeadDisplay> headDisplays = new ArrayList<>();
 
-    public float modRingRadius;
+    protected static final float[] slotPositions = {0.5f, 1.75f, 3f};
+    protected static final float[] slotRadii = {2.3f, 3.0f, 2.3f};
+    protected static final float headBoxRadius = 0.25f;
+    protected static final float headVerticalCenterOffset = -0.25f;
 
     protected MobunitionAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
-        modRingRadius = 0;
     }
 
     @Override
@@ -40,6 +43,28 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     }
 
     @Override
+    public boolean isBeingLookedAt() {
+
+        if (isHeadRingVisible() && getOwnerPlayer() instanceof Player player) {
+
+            double eyeHeight = player.getEyeHeight();
+
+            double tanPitch = Math.tan(Math.toRadians(-player.getPitch()));
+            double heightOffset = eyeHeight - slotPositions[slot] - headVerticalCenterOffset;
+            double gInner = tanPitch * (slotRadii[slot] - headBoxRadius) + heightOffset;
+            double gOuter = tanPitch * (slotRadii[slot] + headBoxRadius) + heightOffset;
+
+            return (-headBoxRadius < gInner && gInner < headBoxRadius) || (-headBoxRadius < gOuter && gOuter < headBoxRadius);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isHeadRingVisible() {
+        return !headDisplays.isEmpty() && headDisplays.getFirst().isSpawned();
+    }
+
+    @Override
     public void onTick(CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
             if (player.isSneaking()) {
@@ -49,8 +74,12 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
             } else {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (isActive() && isHoldingCowWand(player)) {
+                    boolean beingLookedAt = isBeingLookedAt();
                     for (AbilityHeadDisplay headDisplay : headDisplays) {
                         headDisplay.spawn(player.getLocation());
+                        if (headDisplay.getItemDisplay() instanceof ItemDisplay itemDisplay) {
+                            itemDisplay.setGlowing(beingLookedAt);
+                        }
                     }
                 }
             }
@@ -77,15 +106,15 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
 
                 if (slot % 2 == 1) {
                     headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(-rotation) + 180.0f, 0f).add(
-                            Math.cos(rotation) * modRingRadius + mobCenterOffset.getX(),
+                            Math.cos(rotation) * slotRadii[slot] + mobCenterOffset.getX(),
                             mobCenterOffset.getY() + slotPositions[slot],
-                            Math.sin(-rotation) * modRingRadius + mobCenterOffset.getZ()
+                            Math.sin(-rotation) * slotRadii[slot] + mobCenterOffset.getZ()
                     ));
                 } else {
                     headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(rotation), 0f).add(
-                            Math.cos(rotation) * modRingRadius + mobCenterOffset.getX(),
+                            Math.cos(rotation) * slotRadii[slot] + mobCenterOffset.getX(),
                             mobCenterOffset.getY() + slotPositions[slot],
-                            Math.sin(rotation) * modRingRadius + mobCenterOffset.getZ()
+                            Math.sin(rotation) * slotRadii[slot] + mobCenterOffset.getZ()
                     ));
                 }
 

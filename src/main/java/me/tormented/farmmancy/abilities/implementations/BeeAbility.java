@@ -1,16 +1,21 @@
 package me.tormented.farmmancy.abilities.implementations;
 
+import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.entity.Bee;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class BeeAbility extends MobuvertAbility<Bee> {
+public class BeeAbility extends MobuvertAbility<Bee> implements Hook.PlayerInteraction {
 
     @Override
     public Class<Bee> getEntityClass() {
@@ -28,21 +33,21 @@ public class BeeAbility extends MobuvertAbility<Bee> {
         return headProvider.getHeadItem();
     }
 
-    public void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource) {
 
+    @Override
+    public void processPlayerInteract(PlayerInteractEvent event) {
+        if (event.getAction().isRightClick() && isBeingLookedAt()) {
+            Player player = event.getPlayer();
 
-        /* No longer implemented here since the ring no longer contains tracked entities
-        Player player = event.getPlayer();
+            if (player != getOwnerPlayer()) return;
 
-        if (player != getOwnerPlayer()) return;
+            player.setHealth(player.getHealth() - 8f);
 
-        player.setHealth(player.getHealth() - 8f);
-
-        Vector velocityVector = player.getVelocity();
-        velocityVector.setY(2f);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 240, 1));
-        player.setVelocity(velocityVector);
-        */
+            Vector velocityVector = player.getVelocity();
+            velocityVector.setY(2f);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 240, 1));
+            player.setVelocity(velocityVector);
+        }
     }
 }
 

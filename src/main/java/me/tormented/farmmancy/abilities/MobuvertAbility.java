@@ -3,6 +3,7 @@ package me.tormented.farmmancy.abilities;
 import me.tormented.farmmancy.abilities.utils.WandUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,6 +32,15 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
     }
 
     @Override
+    public boolean isBeingLookedAt() {
+        return isHeadRingVisible() && getOwnerPlayer() instanceof Player player && player.getPitch() <= -74.0f;
+    }
+
+    public boolean isHeadRingVisible() {
+        return headDisplay != null && headDisplay.isSpawned();
+    }
+
+    @Override
     public void onTick(CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
             if (player.isSneaking()) {
@@ -39,6 +49,9 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (isActive() && isHoldingCowWand(player)) {
                     headDisplay.spawn(player.getLocation());
+                    if (headDisplay.getItemDisplay() instanceof ItemDisplay itemDisplay) {
+                        itemDisplay.setGlowing(isBeingLookedAt());
+                    }
                 }
             }
             if (!player.isSneaking()) {

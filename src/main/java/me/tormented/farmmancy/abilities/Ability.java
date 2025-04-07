@@ -24,8 +24,6 @@ public abstract class Ability {
         abilities.remove(uuid);
     }
 
-    protected static final float[] slotPositions = {0.5f, 1.75f, 3f};
-
     public final @NotNull UUID id;
     public final @NotNull UUID owner;
 

@@ -49,4 +49,7 @@ public class AbilityHeadDisplay {
         return false;
     }
 
+    public @Nullable ItemDisplay getItemDisplay() {
+        return itemDisplay;
+    }
 }
