@@ -4,8 +4,6 @@ import me.tormented.farmmancy.abilities.utils.WandUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
@@ -16,7 +14,7 @@ import java.util.UUID;
 
 import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
 
-public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.PlayerSneak, Hook.PlayerSwapItem {
+public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbility<EntityType> {
 
     protected AbilityHeadDisplay headDisplay;
 
@@ -33,33 +31,24 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
     }
 
     @Override
-    public void processSneakToggle(PlayerToggleSneakEvent event) {
-        Player player = event.getPlayer();
-        if (headDisplay == null) return;
-        if (event.isSneaking()) {
-            headDisplay.remove();
-        } else {
-            if (isActive() && isHoldingCowWand(player)) {
-                headDisplay.spawn(player.getLocation());
-            }
-        }
-    }
-
-    @Override
-    public void processSwapItem(PlayerItemHeldEvent event) {
-        Player player = event.getPlayer();
-        if (headDisplay == null) return;
-        if (player.isSneaking()) return;
-        if (isActive() && WandUtils.isHoldingCowWand(player, event.getNewSlot())) {
-            headDisplay.spawn(player.getLocation());
-        }else{
-            headDisplay.remove();
-        }
-    }
-
-    @Override
     public void onTick(CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
+            if (player.isSneaking()) {
+                headDisplay.remove();
+            } else {
+                ItemStack item = player.getInventory().getItemInMainHand();
+                if (isActive() && isHoldingCowWand(player)) {
+                    headDisplay.spawn(player.getLocation());
+                }
+            }
+            if (!player.isSneaking()) {
+                if (isActive() && WandUtils.isHoldingCowWand(player)) {
+                    headDisplay.spawn(player.getLocation());
+                } else {
+                    headDisplay.remove();
+                }
+            }
+
 
             float rotation = player.getLocation().getYaw();
 

@@ -8,8 +8,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +19,7 @@ import java.util.UUID;
 
 import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
 
-public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.EntityInteractedByPlayer, Hook.PlayerSneak, Hook.PlayerSwapItem {
+public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.EntityInteractedByPlayer {
 
     protected final List<AbilityHeadDisplay> headDisplays = new ArrayList<>();
 
@@ -42,40 +40,32 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     }
 
     @Override
-    public void processSneakToggle(PlayerToggleSneakEvent event) {
-        Player player = event.getPlayer();
-        if (event.isSneaking()) {
-            for (AbilityHeadDisplay headDisplay : headDisplays) {
-                headDisplay.remove();
-            }
-        } else {
-            ItemStack item = player.getInventory().getItemInMainHand();
-            if (isActive() && isHoldingCowWand(player)) {
-                for (AbilityHeadDisplay headDisplay : headDisplays) {
-                    headDisplay.spawn(player.getLocation());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void processSwapItem(PlayerItemHeldEvent event) {
-        Player player = event.getPlayer();
-        if (player.isSneaking()) return;
-        if (isActive() && WandUtils.isHoldingCowWand(player, event.getNewSlot())) {
-            for (AbilityHeadDisplay headDisplay : headDisplays) {
-                headDisplay.spawn(player.getLocation());
-            }
-        } else {
-            for (AbilityHeadDisplay headDisplay : headDisplays) {
-                headDisplay.remove();
-            }
-        }
-    }
-
-    @Override
     public void onTick(CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
+            if (player.isSneaking()) {
+                for (AbilityHeadDisplay headDisplay : headDisplays) {
+                    headDisplay.remove();
+                }
+            } else {
+                ItemStack item = player.getInventory().getItemInMainHand();
+                if (isActive() && isHoldingCowWand(player)) {
+                    for (AbilityHeadDisplay headDisplay : headDisplays) {
+                        headDisplay.spawn(player.getLocation());
+                    }
+                }
+            }
+            if (!player.isSneaking()) {
+                if (isActive() && WandUtils.isHoldingCowWand(player)) {
+                    for (AbilityHeadDisplay headDisplay : headDisplays) {
+                        headDisplay.spawn(player.getLocation());
+                    }
+                } else {
+                    for (AbilityHeadDisplay headDisplay : headDisplays) {
+                        headDisplay.remove();
+                    }
+                }
+            }
+
             float lifetime = FarmMancy.getInstance().getServer().getCurrentTick() - startTick;
             lifetime = (lifetime / 8);
 
