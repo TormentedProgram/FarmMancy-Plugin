@@ -4,8 +4,9 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import me.tormented.farmmancy.Commands.Commands;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
-import me.tormented.farmmancy.FarmMancer.TickingCow;
+import me.tormented.farmmancy.FarmMancer.FarmMancerManager;
 import me.tormented.farmmancy.abilities.EventDistributor;
+import me.tormented.farmmancy.abilities.TickingAbilities;
 import me.tormented.farmmancy.abilities.TickingTask;
 import me.tormented.farmmancy.inventoryMenu.GuiListener;
 import me.tormented.farmmancy.inventoryMenu.Ticking;
@@ -14,7 +15,6 @@ import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 public final class FarmMancy extends JavaPlugin {
-
     private BukkitTask taskMenuTick;
     private BukkitTask CowTick;
     private BukkitTask abilityTick;
@@ -25,13 +25,14 @@ public final class FarmMancy extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
     }
 
     @Override
     public void onEnable() {
-        getLogger().info("@ FarmMancy Enabled");
+        getLogger().info("--= FarmMancy Enabled =-- ");
         CommandAPI.onEnable();
+        getLogger().info("--= FarmMancy CommandAPI Enabled =-- ");
 
         FarmConfig.getInstance().load();
         Commands.getInstance().load();
@@ -42,13 +43,15 @@ public final class FarmMancy extends JavaPlugin {
 
 
         taskMenuTick = getServer().getScheduler().runTaskTimer(this, Ticking.getInstance(), 0, 1);
-        CowTick = getServer().getScheduler().runTaskTimer(this, TickingCow.getInstance(), 0, 1);
+        CowTick = getServer().getScheduler().runTaskTimer(this, TickingAbilities.getInstance(), 0, 1);
         abilityTick = getServer().getScheduler().runTaskTimer(this, TickingTask.getInstance(), 0, 1);
     }
 
     @Override
     public void onDisable() {
+        getLogger().info("--= FarmMancy Disabled =-- ");
         CommandAPI.onDisable();
+        getLogger().info("--= FarmMancy CommandAPI Disabled =-- ");
 
         if (CowTick != null && !CowTick.isCancelled())
             CowTick.cancel();
@@ -59,9 +62,9 @@ public final class FarmMancy extends JavaPlugin {
         if (abilityTick != null && !abilityTick.isCancelled())
             abilityTick.cancel();
 
-        for (FarmMancer farmMancer : TickingCow.getInstance().farmMancers) {
+        for (FarmMancer farmMancer : FarmMancerManager.getInstance().farmMancers) {
             farmMancer.deactivateAll(false);
-            TickingCow.getInstance().farmMancers.remove(farmMancer);
+            FarmMancerManager.getInstance().farmMancers.remove(farmMancer);
         }
     }
 }

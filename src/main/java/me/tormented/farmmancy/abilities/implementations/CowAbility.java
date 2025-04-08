@@ -50,7 +50,7 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
                 for (int z = -1; z <= 1; z++) {
                     if (x == 0 && y == 0 && z == 0) continue;
                     Block block = currentBlock.getRelative(x, y, z);
-                    if (block.isSolid()) {
+                    if (block.isSolid() || block.isLiquid()) {
                         explodeEntity(event.getEntity());
                         return;
                     }

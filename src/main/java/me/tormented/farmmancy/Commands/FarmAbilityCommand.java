@@ -5,7 +5,8 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
-import me.tormented.farmmancy.FarmMancer.TickingCow;
+import me.tormented.farmmancy.FarmMancer.FarmMancerManager;
+import me.tormented.farmmancy.Registries;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class FarmAbilityCommand {
                 .withPermission("CommandPermission.OP")
                 .withArguments(new MultiLiteralArgument("doing", "set"))
                 .withArguments(new EntitySelectorArgument.ManyPlayers("Players", false))
-                .withArguments(new MultiLiteralArgument("abilityType", TickingCow.abilityRegistry.getAllKeys().toArray(new String[0])))
+                .withArguments(new MultiLiteralArgument("abilityType", Registries.abilityRegistry.getAllKeys().toArray(new String[0])))
                 .withArguments(new IntegerArgument("slot", 1, 4))
                 .executes((sender, args) -> {
                     String doing = (String) args.get("doing");
@@ -33,12 +34,12 @@ public class FarmAbilityCommand {
                         case "set" -> {
                             if (players != null && slotObject instanceof Integer slot) {
                                 for (Player player : players) {
-                                    FarmMancer theMancer = TickingCow.getInstance().setCowMancer(player);
+                                    FarmMancer theMancer = FarmMancerManager.getInstance().setFarmMancer(player);
                                     assert abilityType != null;
                                     if (slot == 4) {
-                                        theMancer.setSpecialEquippedAbility(TickingCow.abilityRegistry.getAbility(abilityType, UUID.randomUUID(), player.getUniqueId()));
+                                        theMancer.setSpecialEquippedAbility(Registries.abilityRegistry.getAbility(abilityType, UUID.randomUUID(), player.getUniqueId()));
                                     } else {
-                                        theMancer.setEquippedAbility(slot - 1, Objects.requireNonNull(TickingCow.abilityRegistry.getAbility(abilityType, UUID.randomUUID(), player.getUniqueId())));
+                                        theMancer.setEquippedAbility(slot - 1, Objects.requireNonNull(Registries.abilityRegistry.getAbility(abilityType, UUID.randomUUID(), player.getUniqueId())));
                                     }
                                     player.sendMessage(Component.text("Set " + abilityType.toUpperCase() + " in slot " + slot, NamedTextColor.GREEN));
                                 }

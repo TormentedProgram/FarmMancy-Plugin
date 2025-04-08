@@ -3,7 +3,7 @@ package me.tormented.farmmancy.Commands;
 import dev.jorel.commandapi.CommandAPICommand;
 import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
-import me.tormented.farmmancy.FarmMancer.TickingCow;
+import me.tormented.farmmancy.FarmMancer.FarmMancerManager;
 import me.tormented.farmmancy.abilities.utils.WandUtils;
 import me.tormented.farmmancy.inventoryMenu.*;
 import net.kyori.adventure.text.Component;
@@ -45,11 +45,11 @@ public class MenuCommand {
                                 public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
                                     if (event.getClick() == ClickType.LEFT) {
                                         FarmMancer theMancer;
-                                        if (TickingCow.getInstance().farmMancerMap.containsKey(menu.getPlayer())) {
-                                            theMancer = TickingCow.getInstance().farmMancerMap.get(menu.getPlayer());
+                                        if (FarmMancerManager.getInstance().farmMancerMap.containsKey(menu.getPlayer())) {
+                                            theMancer = FarmMancerManager.getInstance().farmMancerMap.get(menu.getPlayer());
                                             theMancer.deactivateAll(true);
                                         } else {
-                                            theMancer = TickingCow.getInstance().setCowMancer(menuInstance.getPlayer());
+                                            theMancer = FarmMancerManager.getInstance().setFarmMancer(menuInstance.getPlayer());
                                         }
                                         theMancer.activateAll(amountToSpawn, isBaby);
                                         WandUtils.giveCowWand(menu.getPlayer());
@@ -200,7 +200,7 @@ public class MenuCommand {
                         .setClickHandler(new ClickHandler() {
                             @Override
                             public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
-                                for (FarmMancer farmMancer : TickingCow.getInstance().farmMancers) {
+                                for (FarmMancer farmMancer : FarmMancerManager.getInstance().farmMancers) {
                                     if (farmMancer._player == menu.getPlayer()) {
                                         farmMancer.deactivateAll(true);
                                         menu.getPlayer().playSound(menu.getPlayer(), Sound.BLOCK_ANVIL_USE, 1.0f, 0.7f);

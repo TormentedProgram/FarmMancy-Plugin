@@ -80,21 +80,31 @@ public class ReisenAbility extends MobunitionAbility<Entity> {
             @Override
             public void run() {
                 if (count < 75) {
-                    entity.setVelocity(getFungusVector(entity).multiply(0.3));
-                    entity.setRotation(new Random().nextFloat() * 360, new Random().nextFloat() * 360);
+                    entity.setVelocity(getFungusVector(entity).multiply(0.2));
+                    Random random = new Random();
+                    float rotationX = random.nextFloat() * 360;
+                    float rotationY = -90 + random.nextFloat() * 180;
+                    entity.setRotation(rotationX, rotationY);
 
-                    entity.swingMainHand();
-                    entity.setRemainingAir(0);
-                    entity.setJumping(true);
+                    int jumpChance = random.nextInt(100);
+                    int hitChance = random.nextInt(100);
+
+                    if (jumpChance < 10) {
+                        entity.setJumping(true);
+                    }
+                    if (hitChance < 25) {
+                        entity.swingMainHand();
+                    }
 
                     if (entity instanceof Player plyer) {
-                        plyer.sendMessage(Component.text("AXBBABCBABIIIBAABCBABABEIAAABBABCBABIIIBAABCBABABEIAABBABCAB", NamedTextColor.WHITE, TextDecoration.OBFUSCATED));
+                        plyer.sendMessage(Component.text("AXBBABCBABIBEIAAIIBAEIAAAABCBABABEIAAABBBEIAAABCB", NamedTextColor.WHITE, TextDecoration.OBFUSCATED));
                     }
 
                     entity.getWorld().spawnParticle(Particle.DUST, entity.getLocation().add(0.0, 1.0, 0.0), 8, 1.0, 1.0, 1.0, new Particle.DustOptions(Color.RED, 0.75f));
                     entity.getWorld().spawnParticle(Particle.DUST, entity.getLocation().add(0.0, 1.0, 0.0), 8, 1.0, 1.0, 1.0, new Particle.DustOptions(Color.BLUE, 0.75f));
+                    entity.getWorld().spawnParticle(Particle.DUST, entity.getLocation().add(0.0, 1.0, 0.0), 2, 1.0, 1.0, 1.0, new Particle.DustOptions(Color.GREEN, 0.75f));
 
-                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 10, 1, true, false));
+                    entity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 1, true, false));
 
                     count++;
                 } else {
