@@ -44,6 +44,8 @@ public class DioAbility extends MobuvertAbility<Entity> implements Hook.PlayerIn
 
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
+        super.processPlayerInteract(event);
+
         if (event.getAction().isRightClick() && isBeingLookedAt()) {
             timeStopper = event.getPlayer();
 

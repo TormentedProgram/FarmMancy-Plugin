@@ -5,7 +5,7 @@ import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
-import me.tormented.farmmancy.abilities.utils.WandUtils;
+import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInteraction, Hook.EntityMoved {
+public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMoved, Hook.WandSelectable {
 
 
     @Override
@@ -38,40 +38,6 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
     @Override
     public @NotNull ItemStack getHeadItem(Cow entity) {
         return headProvider.getHeadItem();
-    }
-
-    @Override
-    public void processPlayerInteract(PlayerInteractEvent event) {
-        if (WandUtils.isHoldingCowWand(event.getPlayer())) {
-            Player player = event.getPlayer();
-
-            if (player != getOwnerPlayer()) return;
-
-            if (headDisplays.isEmpty()) {
-                return;
-            }
-
-            if (event.getAction().isRightClick()) return;
-
-            Location loc = player.getLocation();
-            Vector direction = loc.getDirection();
-            Location targetLoc = loc.add(direction.multiply(slotRadii[slot]));
-
-            Cow flingingCow = pullAndSummonMob(targetLoc);
-
-            if (flingingCow != null) {
-
-                flingingCow.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
-                EventDistributor.getInstance().entityMobunitionAbilityMap.put(flingingCow, this);
-
-                Vector velocity = direction.multiply(1.0);
-
-                flingingCow.setVelocity(velocity);
-            } else {
-                // Not enough ammo
-            }
-
-        }
     }
 
     @Override
@@ -99,5 +65,38 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.PlayerInt
         world.createExplosion(location, 4.0F);
         entity.setHealth(0);
         EventDistributor.getInstance().entityMobunitionAbilityMap.remove(entity);
+    }
+
+    @Override
+    public void onSelected(Wand wand) {
+    }
+
+    @Override
+    public void onDeselected(Wand wand) {
+    }
+
+    @Override
+    public void onWandUse(Wand wand, PlayerInteractEvent event) {
+        if (event.getAction().isLeftClick() && getOwnerPlayer() instanceof Player player && !headDisplays.isEmpty()) {
+            Location loc = player.getLocation();
+            Vector direction = loc.getDirection();
+            Location targetLoc = loc.add(direction.multiply(slotRadii[slot]));
+
+            Cow flingingCow = pullAndSummonMob(targetLoc);
+
+            if (flingingCow != null) {
+
+                flingingCow.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
+                EventDistributor.getInstance().entityMobunitionAbilityMap.put(flingingCow, this);
+
+                Vector velocity = direction.multiply(1.0);
+
+                flingingCow.setVelocity(velocity);
+            } else {
+                // Not enough ammo
+            }
+        }
+
+
     }
 }

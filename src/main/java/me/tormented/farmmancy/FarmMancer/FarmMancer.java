@@ -5,17 +5,13 @@ import me.tormented.farmmancy.abilities.implementations.BeeAbility;
 import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
 import me.tormented.farmmancy.abilities.implementations.CowAbility;
 import me.tormented.farmmancy.abilities.implementations.PigAbility;
-import me.tormented.farmmancy.abilities.utils.WandUtils;
+import me.tormented.farmmancy.abilities.utils.Wand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,7 +38,9 @@ public class FarmMancer {
         return newEquippedAbilities;
     }
 
+    @Deprecated
     public static ItemStack Cowification(ItemStack item) {
+        /*
         ItemMeta itemMeta = item.getItemMeta();
         String itemName = item.getType().toString();
         String[] words = itemName.split("_");
@@ -73,6 +71,10 @@ public class FarmMancer {
             item.setItemMeta(itemMeta);
         }
         return item;
+         */
+        Wand wand = new Wand(item);
+        wand.convert();
+        return wand.getItem();
     }
 
     public FarmMancer(Player player) {

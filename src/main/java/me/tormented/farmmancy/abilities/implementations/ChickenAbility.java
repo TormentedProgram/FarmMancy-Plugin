@@ -40,6 +40,8 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.P
 
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
+        super.processPlayerInteract(event);
+
         if (event.getAction().isRightClick() && isBeingLookedAt()) {
             Player player = event.getPlayer();
 

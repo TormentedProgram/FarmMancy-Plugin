@@ -59,6 +59,8 @@ public class StriderAbility extends MobunitionAbility<Strider> implements Hook.P
 
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
+        super.processPlayerInteract(event);
+
         if (event.getAction().isRightClick() && isBeingLookedAt()) {
             Player player = event.getPlayer();
 

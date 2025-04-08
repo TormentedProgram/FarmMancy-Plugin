@@ -16,13 +16,15 @@ public class WandUtils {
     public static boolean isHoldingCowWand(@NotNull Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getItemMeta() == null) return false;
-        return item.getItemMeta().getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE);
+        //return item.getItemMeta().getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE);
+        return Wand.isWand(item);
     }
 
     public static boolean isHoldingCowWand(@NotNull Player player, int slotIndex) {
         ItemStack item = player.getInventory().getItem(slotIndex);
         if (item == null || item.getItemMeta() == null) return false;
-        return item.getItemMeta().getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE);
+        //return item.getItemMeta().getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE);
+        return Wand.isWand(item);
     }
 
     public static void giveCowWand(Player player) {

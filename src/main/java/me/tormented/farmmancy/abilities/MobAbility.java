@@ -2,12 +2,14 @@ package me.tormented.farmmancy.abilities;
 
 
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.utils.Wand;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +19,7 @@ import java.util.UUID;
 
 import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
 
-public abstract class MobAbility<EntityType extends Entity> extends Ability implements Hook.Activation, Hook.Ticking, Hook.EntityDamaged, Hook.EntityDeath {
+public abstract class MobAbility<EntityType extends Entity> extends Ability implements Hook.Activation, Hook.Ticking, Hook.EntityDamaged, Hook.EntityDeath, Hook.PlayerInteraction {
 
     public static final NamespacedKey MobunitionEntityKey = new NamespacedKey(FarmMancy.getInstance(), "mobunition_entity");
 
@@ -120,4 +122,19 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
 
     public abstract boolean isBeingLookedAt();
 
+    @Override
+    public void processPlayerInteract(PlayerInteractEvent event) {
+        if (this instanceof Hook.WandSelectable wandSelectable && event.getItem() != null) {
+            Wand checkingWand = new Wand(event.getItem());
+            if (checkingWand.isWand()) {
+                Ability checkingAbility = checkingWand.getBoundAbility();
+                if (isBeingLookedAt() && checkingAbility == null) {
+                    checkingWand.setBoundAbility(this);
+                } else if (checkingAbility == this) {
+                    wandSelectable.onWandUse(checkingWand, event);
+                }
+            }
+        }
+
+    }
 }

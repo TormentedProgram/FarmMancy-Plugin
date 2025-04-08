@@ -1,6 +1,7 @@
 package me.tormented.farmmancy.abilities;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import me.tormented.farmmancy.abilities.utils.Wand;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -67,6 +68,10 @@ public sealed interface Hook {
         boolean isActive();
     }
 
+    non-sealed interface PlayerDroppingItem extends Hook {
+        void processPlayerDropItem(PlayerDropItemEvent event);
+    }
+
 
     /**
      * Hooks into when the ability is being assigned in the ability menu.
@@ -97,6 +102,15 @@ public sealed interface Hook {
          * Called when the ability is being marked for unloading (No longer present in the registry). This will be called regardless if it's equipped or not.
          */
         void onDeregister();
+    }
+
+    non-sealed interface WandSelectable extends Hook {
+
+        void onSelected(Wand wand);
+        void onDeselected(Wand wand);
+
+        void onWandUse(Wand wand, PlayerInteractEvent event);
+
     }
 
 

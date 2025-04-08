@@ -2,6 +2,7 @@ package me.tormented.farmmancy.abilities;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.tormented.farmmancy.FarmMancer.FarmMancer;
+import me.tormented.farmmancy.abilities.utils.Wand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -119,9 +120,11 @@ public class EventDistributor implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
-        for (Ability ability : farmMancer.getEquippedAbilities()) {
-            if (ability != null) {
-                if (ability instanceof Hook.PlayerJoining playerJoining) playerJoining.processPlayerQuit(event);
+        if (farmMancer != null) {
+            for (Ability ability : farmMancer.getEquippedAbilities()) {
+                if (ability != null) {
+                    if (ability instanceof Hook.PlayerJoining playerJoining) playerJoining.processPlayerQuit(event);
+                }
             }
         }
     }
@@ -140,6 +143,22 @@ public class EventDistributor implements Listener {
                     entityInteractedByPlayer.processPlayerInteractEntity(event, Hook.CallerSource.PLAYER);
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (playerAbilityMap.get(event.getPlayer().getUniqueId()) instanceof FarmMancer farmMancer) {
+            for (Ability ability : farmMancer.getEquippedAbilities()) {
+                if (ability instanceof Hook.PlayerDroppingItem playerDroppingItem) {
+                    playerDroppingItem.processPlayerDropItem(event);
+                }
+            }
+        }
+
+        Wand checkingWand = new Wand(event.getItemDrop().getItemStack());
+        if (checkingWand.isWand() && checkingWand.clearBoundAbility()) {
+            event.setCancelled(true);
         }
     }
 

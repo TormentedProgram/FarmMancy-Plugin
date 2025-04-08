@@ -81,6 +81,7 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInt
 
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
+        super.processPlayerInteract(event);
 
         if (event.getAction().isRightClick() && isBeingLookedAt()) {
             Player player = event.getPlayer();

@@ -14,7 +14,7 @@ public abstract class Ability {
 
     private static final Map<UUID, Ability> abilities = new HashMap<>();
 
-    public static @Nullable Ability getAbilityInstance(UUID id) {
+    public static @Nullable Ability getAbilityInstance(@NotNull UUID id) {
         return abilities.get(id);
     }
 
@@ -22,7 +22,7 @@ public abstract class Ability {
         return abilities.values().iterator();
     }
 
-    public static void unloadAbility(UUID uuid) {
+    public static void unloadAbility(@NotNull UUID uuid) {
         if (getAbilityInstance(uuid) instanceof Hook.MemoryRegister memoryLoad) memoryLoad.onDeregister();
         abilities.remove(uuid);
     }
