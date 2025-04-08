@@ -12,6 +12,7 @@ public class Registries {
         abilityRegistry.register("pig", PigAbility::new);
         abilityRegistry.register("chicken", ChickenAbility::new);
         abilityRegistry.register("bee", BeeAbility::new);
+        abilityRegistry.register("blaze", BlazeAbility::new);
         abilityRegistry.register("strider", StriderAbility::new);
         abilityRegistry.register("custom/dio", DioAbility::new);
         abilityRegistry.register("custom/yuyuko", YuyukoAbility::new);
