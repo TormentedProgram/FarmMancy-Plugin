@@ -5,11 +5,9 @@ import me.tormented.farmmancy.abilities.implementations.BeeAbility;
 import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
 import me.tormented.farmmancy.abilities.implementations.CowAbility;
 import me.tormented.farmmancy.abilities.implementations.PigAbility;
-import me.tormented.farmmancy.abilities.utils.Wand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,45 +34,6 @@ public class FarmMancer {
         System.arraycopy(equippedAbilities, 0, newEquippedAbilities, 0, equippedAbilities.length);
         newEquippedAbilities[equippedAbilities.length] = specialEquippedAbility;
         return newEquippedAbilities;
-    }
-
-    @Deprecated
-    public static ItemStack Cowification(ItemStack item) {
-        /*
-        ItemMeta itemMeta = item.getItemMeta();
-        String itemName = item.getType().toString();
-        String[] words = itemName.split("_");
-        StringBuilder formattedNameBuilder = new StringBuilder();
-
-        for (String word : words) {
-            formattedNameBuilder.append(word.substring(0, 1).toUpperCase())  // Capitalize first letter
-                    .append(word.substring(1).toLowerCase())  // Lowercase the rest
-                    .append(" ");
-        }
-
-        String formattedName = formattedNameBuilder.toString().trim();
-
-        if (itemMeta != null) {
-            itemMeta.lore(List.of(
-                    Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
-                    Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
-
-            itemMeta.setEnchantmentGlintOverride(true);
-
-            Component displayName = itemMeta.displayName(); // Adventure API
-            String funnyName = (displayName != null) ? displayName.toString() : formattedName;
-
-            itemMeta.customName(Component.text("Magical " + funnyName + " of Destruction", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
-
-            itemMeta.getPersistentDataContainer().set(WandUtils.magic_hoe_key, PersistentDataType.BYTE, (byte) 1);
-
-            item.setItemMeta(itemMeta);
-        }
-        return item;
-         */
-        Wand wand = new Wand(item);
-        wand.convert();
-        return wand.getItem();
     }
 
     public FarmMancer(Player player) {

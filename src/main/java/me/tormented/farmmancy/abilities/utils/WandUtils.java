@@ -1,7 +1,6 @@
 package me.tormented.farmmancy.abilities.utils;
 
 import me.tormented.farmmancy.FarmMancy;
-import me.tormented.farmmancy.farmmancer.FarmMancer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -16,14 +15,12 @@ public class WandUtils {
     public static boolean isHoldingCowWand(@NotNull Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getItemMeta() == null) return false;
-        //return item.getItemMeta().getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE);
         return Wand.isWand(item);
     }
 
     public static boolean isHoldingCowWand(@NotNull Player player, int slotIndex) {
         ItemStack item = player.getInventory().getItem(slotIndex);
         if (item == null || item.getItemMeta() == null) return false;
-        //return item.getItemMeta().getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE);
         return Wand.isWand(item);
     }
 
@@ -37,7 +34,8 @@ public class WandUtils {
             }
         }
 
-        ItemStack MagicHoe = FarmMancer.Cowification(new ItemStack(Material.NETHERITE_HOE, 1));
-        player.give(MagicHoe);
+        Wand wand = new Wand(new ItemStack(Material.NETHERITE_HOE, 1));
+        wand.convert();
+        player.give(wand.getItem());
     }
 }
