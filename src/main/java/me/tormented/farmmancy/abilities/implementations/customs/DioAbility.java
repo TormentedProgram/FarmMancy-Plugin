@@ -9,7 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.entity.Bee;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,11 +21,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInteraction {
+public class DioAbility extends MobuvertAbility<Entity> implements Hook.PlayerInteraction {
 
     @Override
-    public Class<Bee> getEntityClass() {
-        return Bee.class;
+    public Class<Entity> getEntityClass() {
+        return null;
     }
 
     public DioAbility(@NotNull UUID id, @NotNull UUID owner) {
@@ -35,7 +35,7 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/dbca394b91aae7960a3e5ebb121dcb88ab1058b5518000988801756c2b2e091c");
 
     @Override
-    public @NotNull ItemStack getHeadItem(@Nullable Bee entity) {
+    public @NotNull ItemStack getHeadItem(@Nullable Entity entity) {
         return headProvider.getHeadItem();
     }
 
@@ -44,14 +44,10 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
 
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
-        if (isTimeStopped && event.getPlayer() != timeStopper) {
-            event.setCancelled(true);
-        }
         if (event.getAction().isRightClick() && isBeingLookedAt()) {
-            Player god = event.getPlayer();
-            timeStopper = god;
+            timeStopper = event.getPlayer();
 
-            if (god != getOwnerPlayer()) return;
+            if (timeStopper != getOwnerPlayer()) return;
 
             Bukkit.broadcast(Component.text("ZA WARUDO!!!", NamedTextColor.YELLOW, TextDecoration.BOLD));
             Bukkit.broadcast(Component.text("A player cast TIME-STOP globally...", NamedTextColor.GREEN));
@@ -67,8 +63,8 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
             }
 
 
-            god.removePotionEffect(PotionEffectType.SLOWNESS);
-            god.removePotionEffect(PotionEffectType.JUMP_BOOST);
+            timeStopper.removePotionEffect(PotionEffectType.SLOWNESS);
+            timeStopper.removePotionEffect(PotionEffectType.JUMP_BOOST);
 
             new BukkitRunnable() {
                 @Override

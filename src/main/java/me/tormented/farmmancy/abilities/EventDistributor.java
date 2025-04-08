@@ -75,6 +75,7 @@ public class EventDistributor implements Listener {
 
     @EventHandler
     public void onPlayerInteraction(PlayerInteractEvent event) {
+        if (event.isCancelled()) return;
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {
@@ -108,6 +109,7 @@ public class EventDistributor implements Listener {
 
     @EventHandler
     public void onPlayerInteractWithEntity(PlayerInteractEntityEvent event) {
+        if (event.isCancelled()) return;
 
         if (entityMobunitionAbilityMap.get(event.getRightClicked()) instanceof MobAbility<? extends Entity> mobAbility && mobAbility instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer) {
             entityInteractedByPlayer.processPlayerInteractEntity(event, Hook.CallerSource.TRACKED_ENTITY);
