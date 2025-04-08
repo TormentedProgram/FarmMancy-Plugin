@@ -1,6 +1,7 @@
 package me.tormented.farmmancy.abilities.implementations;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
@@ -22,7 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMoved, Hook.WandSelectable {
-
+    private final float CowExplosionRadius = FarmConfig.getInstance().getCowExplosionRadius();
+    private final float CowShootVelocity = FarmConfig.getInstance().getCowShootVelocity();
 
     @Override
     public Class<Cow> getEntityClass() {
@@ -62,7 +64,7 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
     private void explodeEntity(LivingEntity entity) {
         Location location = entity.getLocation();
         World world = location.getWorld();
-        world.createExplosion(location, 4.0F);
+        world.createExplosion(location, CowExplosionRadius);
         entity.setHealth(0);
         EventDistributor.getInstance().entityMobunitionAbilityMap.remove(entity);
     }
@@ -89,7 +91,7 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
                 flingingCow.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
                 EventDistributor.getInstance().entityMobunitionAbilityMap.put(flingingCow, this);
 
-                Vector velocity = direction.multiply(1.0);
+                Vector velocity = direction.multiply(CowShootVelocity);
 
                 flingingCow.setVelocity(velocity);
             } else {

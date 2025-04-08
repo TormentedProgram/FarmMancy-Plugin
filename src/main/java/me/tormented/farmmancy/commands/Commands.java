@@ -8,7 +8,7 @@ public class Commands {
     }
 
     public MenuCommand menuCommand;
-    public imbueCowCommand imbueCowCommand;
+    public ImbueCowCommand imbueCowCommand;
     public FarmMancerCommand farmMancerCommand;
     public ReloadConfigCommand reloadConfigCommand;
     public ChangeMenuCommand changeMenuCommand;
@@ -19,7 +19,7 @@ public class Commands {
 
     public void load() {
         menuCommand = new MenuCommand();
-        imbueCowCommand = new imbueCowCommand();
+        imbueCowCommand = new ImbueCowCommand();
         farmMancerCommand = new FarmMancerCommand();
         reloadConfigCommand = new ReloadConfigCommand();
         changeMenuCommand = new ChangeMenuCommand();

@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.abilities.implementations;
 
+import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
@@ -33,7 +34,7 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInt
         super(id, owner);
     }
 
-    private static final float healingValue = 5f;
+    private final float healingValue = FarmConfig.getInstance().getPigHealingAmount();
 
     @Override
     public void onDeactivate(boolean visual) {

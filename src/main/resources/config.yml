@@ -8,3 +8,6 @@ mobs:
   cow:
     explosion-radius: 4
     shoot-velocity: 1
+
+  pig:
+    healing-amount: 5

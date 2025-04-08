@@ -6,10 +6,10 @@ import me.tormented.farmmancy.farmmancer.FarmMancer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-public class imbueCowCommand {
+public class ImbueCowCommand {
     private final boolean enabled = FarmConfig.getInstance().getAllowedImbuement();
 
-    public imbueCowCommand() {
+    public ImbueCowCommand() {
         new CommandAPICommand("imbueCowMagic")
                 .withPermission("CommandPermission.OP")
                 .executesPlayer((player, args) -> {

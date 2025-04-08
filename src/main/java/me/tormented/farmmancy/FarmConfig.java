@@ -13,8 +13,12 @@ public class FarmConfig {
     private boolean allow_imbuement;
     private int max_mob_cap;
 
+    //cow
     private float cow_explosion_radius;
     private float cow_shoot_velocity;
+
+    //pig
+    private float pig_healing_amount;
 
     private FarmConfig() {
     }
@@ -41,6 +45,7 @@ public class FarmConfig {
 
         cow_explosion_radius = (float) config.getInt("mobs.cow.explosion-radius");
         cow_shoot_velocity = (float) config.getInt("mobs.cow.shoot-velocity");
+        pig_healing_amount = (float) config.getInt("mobs.pig.healing-amount");
     }
 
     public void save() {
@@ -71,6 +76,10 @@ public class FarmConfig {
 
     public int getMaxMobCap() {
         return max_mob_cap;
+    }
+
+    public float getPigHealingAmount() {
+        return pig_healing_amount;
     }
 
     @SuppressWarnings("unused")
