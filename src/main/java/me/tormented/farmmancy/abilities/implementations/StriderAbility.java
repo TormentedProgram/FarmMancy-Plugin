@@ -6,10 +6,13 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Strider;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
@@ -20,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class StriderAbility extends MobunitionAbility<Strider> implements Hook.PlayerInteraction {
+public class StriderAbility extends MobunitionAbility<Strider> implements Hook.PlayerInteraction, Hook.playerMove {
 
     @Override
     public Class<Strider> getEntityClass() {
@@ -36,6 +39,22 @@ public class StriderAbility extends MobunitionAbility<Strider> implements Hook.P
     @Override
     public @NotNull ItemStack getHeadItem(@Nullable Strider entity) {
         return headProvider.getHeadItem();
+    }
+
+    @Override
+    public void processPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        Location loc = player.getLocation();
+        Block blockUnder = loc.clone().subtract(0.0D, 0.5D, 0.0D).getBlock();
+        if (blockUnder.getType() == Material.LAVA) {
+            Vector velocity = player.getVelocity();
+            if (velocity.getY() < 0.0D) {
+                velocity.setY(0.2D);
+                player.setVelocity(velocity);
+            }
+            player.setFireTicks(20);
+            player.setFallDistance(0.0F);
+        }
     }
 
     @Override
@@ -56,5 +75,4 @@ public class StriderAbility extends MobunitionAbility<Strider> implements Hook.P
             }
         }
     }
-
 }

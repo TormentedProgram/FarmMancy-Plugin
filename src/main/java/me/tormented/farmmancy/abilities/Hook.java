@@ -1,6 +1,7 @@
 package me.tormented.farmmancy.abilities;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
@@ -14,6 +15,14 @@ public sealed interface Hook {
 
     non-sealed interface EntityDamaged extends Hook {
         void processEntityDamage(EntityDamageEvent event);
+    }
+
+    non-sealed interface EntityDamagedByEntity extends Hook {
+        void processEntityDamagedByEntity(EntityDamageByEntityEvent event);
+    }
+
+    non-sealed interface playerMove extends Hook {
+        void processPlayerMove(PlayerMoveEvent event);
     }
 
     non-sealed interface EntityInteractedByPlayer extends Hook {

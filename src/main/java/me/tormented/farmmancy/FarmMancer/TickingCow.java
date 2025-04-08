@@ -21,8 +21,8 @@ public class TickingCow implements Runnable {
         abilityRegistry.register("chicken", ChickenAbility::new);
         abilityRegistry.register("bee", BeeAbility::new);
         abilityRegistry.register("strider", StriderAbility::new);
-        abilityRegistry.register("dio", DioAbility::new);
-        abilityRegistry.register("yuyuko", YuyukoAbility::new);
+        abilityRegistry.register("custom/dio", DioAbility::new);
+        abilityRegistry.register("custom/yuyuko", YuyukoAbility::new);
     }
 
     private static final TickingCow instance = new TickingCow();

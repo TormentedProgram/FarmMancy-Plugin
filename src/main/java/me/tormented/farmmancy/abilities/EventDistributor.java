@@ -5,6 +5,7 @@ import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
@@ -32,6 +33,25 @@ public class EventDistributor implements Listener {
         MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
         if (mobAbility != null) {
             if (mobAbility instanceof Hook.EntityDamaged entityDamaged) entityDamaged.processEntityDamage(event);
+        }
+    }
+
+    @EventHandler
+    public void playerMove(PlayerMoveEvent event) {
+        FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
+        if (farmMancer == null) return;
+        for (Ability ability : farmMancer.getEquippedAbilities()) {
+            if (ability != null) {
+                if (ability instanceof Hook.playerMove playerSneak) playerSneak.processPlayerMove(event);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onEntityDamagedByEntity(EntityDamageByEntityEvent event) {
+        MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
+        if (mobAbility != null) {
+            if (mobAbility instanceof Hook.EntityDamagedByEntity entityDamaged) entityDamaged.processEntityDamagedByEntity(event);
         }
     }
 
