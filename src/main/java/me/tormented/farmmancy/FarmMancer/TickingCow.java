@@ -5,6 +5,7 @@ import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.implementations.*;
 import me.tormented.farmmancy.abilities.implementations.customs.DioAbility;
 import me.tormented.farmmancy.abilities.implementations.customs.YuyukoAbility;
+import me.tormented.farmmancy.abilities.implementations.customs.ReisenAbility;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -23,6 +24,7 @@ public class TickingCow implements Runnable {
         abilityRegistry.register("strider", StriderAbility::new);
         abilityRegistry.register("custom/dio", DioAbility::new);
         abilityRegistry.register("custom/yuyuko", YuyukoAbility::new);
+        abilityRegistry.register("custom/reisen", ReisenAbility::new);
     }
 
     private static final TickingCow instance = new TickingCow();
