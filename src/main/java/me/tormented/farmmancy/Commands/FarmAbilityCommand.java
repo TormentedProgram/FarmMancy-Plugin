@@ -18,7 +18,7 @@ public class FarmAbilityCommand {
     public FarmAbilityCommand() {
         new CommandAPICommand("farmability")
                 .withPermission("CommandPermission.OP")
-                .withArguments(new MultiLiteralArgument("doing", "set", "remove"))
+                .withArguments(new MultiLiteralArgument("doing", "set"))
                 .withArguments(new EntitySelectorArgument.ManyPlayers("Players", false))
                 .withArguments(new MultiLiteralArgument("abilityType", TickingCow.abilityRegistry.getAllKeys().toArray(new String[0])))
                 .withArguments(new IntegerArgument("slot", 1, 4))

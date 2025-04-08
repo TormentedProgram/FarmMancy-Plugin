@@ -40,12 +40,16 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
     }
 
     private boolean isTimeStopped = false;
-
+    private Player timeStopper;
 
     @Override
     public void processPlayerInteract(PlayerInteractEvent event) {
+        if (isTimeStopped && event.getPlayer() != timeStopper) {
+            event.setCancelled(true);
+        }
         if (event.getAction().isRightClick() && isBeingLookedAt()) {
             Player god = event.getPlayer();
+            timeStopper = god;
 
             if (god != getOwnerPlayer()) return;
 
