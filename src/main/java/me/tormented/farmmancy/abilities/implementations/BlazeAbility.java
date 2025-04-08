@@ -1,6 +1,5 @@
 package me.tormented.farmmancy.abilities.implementations;
 
-import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -18,9 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class BlazeAbility extends MobunitionAbility<Blaze> implements Hook.WandSelectable {
-    private final float CowExplosionRadius = FarmConfig.getInstance().getCowExplosionRadius();
-    private final float CowShootVelocity = FarmConfig.getInstance().getCowShootVelocity();
-
     @Override
     public Class<Blaze> getEntityClass() {
         return Blaze.class;
