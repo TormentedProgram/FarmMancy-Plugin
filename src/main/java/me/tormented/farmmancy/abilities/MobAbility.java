@@ -83,7 +83,7 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
 
         if (entity == null) {
             headDisplay = new AbilityHeadDisplay(getHeadItem(null));
-        } else if (getEntityClass().isInstance(entity)) {
+        } else if (getEntityClass() instanceof Class<?> clazz && clazz.isInstance(entity)) {
             try {
                 headDisplay = new AbilityHeadDisplay(getHeadItem((EntityType) entity));
 
