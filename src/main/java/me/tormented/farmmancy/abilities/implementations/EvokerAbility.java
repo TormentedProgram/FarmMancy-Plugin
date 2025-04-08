@@ -6,13 +6,11 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Warden;
+import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,20 +19,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class WardenAbility extends MobunitionAbility<Warden> implements Hook.WandSelectable {
+public class EvokerAbility extends MobunitionAbility<Evoker> implements Hook.WandSelectable {
     @Override
-    public Class<Warden> getEntityClass() {
-        return Warden.class;
+    public Class<Evoker> getEntityClass() {
+        return Evoker.class;
     }
 
-    public WardenAbility(@NotNull UUID id, @NotNull UUID owner) {
+    public EvokerAbility(@NotNull UUID id, @NotNull UUID owner) {
         super(id, owner);
     }
 
-    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/f8c211d66c803aac15ab86f79c7edfd6c3b2034d23355a92f6bd42e835260be0");
+    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/630ce775edb65db8c2741bdfae84f3c0d0285aba93afadc74900d55dfd9504a5");
 
     @Override
-    public @NotNull ItemStack getHeadItem(Warden entity) {
+    public @NotNull ItemStack getHeadItem(Evoker entity) {
         return headProvider.getHeadItem();
     }
 
@@ -55,17 +53,16 @@ public class WardenAbility extends MobunitionAbility<Warden> implements Hook.Wan
 
             if (pullMob() instanceof AbilityHeadDisplay headDisplay) {
                 headDisplay.remove();
-                createSonicBoom(player);
+                createFangs(player);
             }
         }
     }
 
-    public void createSonicBoom(Player player) {
+    public void createFangs(Player player) {
         Location location = player.getLocation();
         double distance = 20.0;
-        double damage = 20;
 
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WARDEN_SONIC_BOOM, 1.0f, 1.0f);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_EVOKER_CAST_SPELL, 1.0f, 1.0f);
 
         new BukkitRunnable() {
             double traveled = 0;
@@ -78,12 +75,12 @@ public class WardenAbility extends MobunitionAbility<Warden> implements Hook.Wan
                 }
 
                 Location particleLocation = location.clone().add(location.getDirection().multiply(traveled)).add(0.0, 1.0, 0.0);
-                player.getWorld().spawnParticle(Particle.SONIC_BOOM, particleLocation, 1);
+                player.getWorld().spawnParticle(Particle.DUST, particleLocation, 1, 0.0, 0.0, 0.0, new Particle.DustOptions(Color.GREEN, 1.0f));
 
                 for (Entity entity : player.getWorld().getEntities()) {
                     if (entity instanceof LivingEntity mob) {
                         if (mob.getLocation().distance(particleLocation) < 3.0 && !mob.equals(player)) {
-                            mob.damage(damage);
+                            EvokerFangs fangs = player.getWorld().spawn(mob.getLocation(), EvokerFangs.class);
                             cancel();
                         }
                     }

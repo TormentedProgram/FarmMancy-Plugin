@@ -18,6 +18,7 @@ public class Registries {
         abilityRegistry.register("strider", StriderAbility::new);
         abilityRegistry.register("custom/dio", DioAbility::new);
         abilityRegistry.register("enderman", EndermanAbility::new);
+        abilityRegistry.register("evoker", EvokerAbility::new);
         abilityRegistry.register("custom/yuyuko", YuyukoAbility::new);
         abilityRegistry.register("custom/reisen", ReisenAbility::new);
     }
