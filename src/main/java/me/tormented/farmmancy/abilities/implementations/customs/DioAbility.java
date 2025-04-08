@@ -55,7 +55,7 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
 
             Bukkit.broadcast(Component.text("ZA WARUDO!!!", NamedTextColor.YELLOW, TextDecoration.BOLD));
             Bukkit.broadcast(Component.text("A player cast TIME-STOP globally...", NamedTextColor.GREEN));
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick freeze");
+            FarmMancy.getInstance().getServer().getServerTickManager().setFrozen(true);
 
             isTimeStopped = true;
 
@@ -79,7 +79,7 @@ public class DioAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
                         player.playSound(player, Sound.ENTITY_ALLAY_DEATH, 1f, 0.8f);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20, 1, true, true)); // 20 ticks = 1 second
                     }
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tick unfreeze");
+                    FarmMancy.getInstance().getServer().getServerTickManager().setFrozen(false);
                     Bukkit.broadcast(Component.text("Time resumes...", NamedTextColor.GREEN));
                     isTimeStopped = false;
                 }
