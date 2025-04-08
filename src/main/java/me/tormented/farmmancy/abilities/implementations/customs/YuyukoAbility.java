@@ -8,7 +8,7 @@ import org.bukkit.Particle;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -38,10 +38,10 @@ public class YuyukoAbility extends MobunitionAbility<Entity> {
         super.processPlayerInteractEntity(event, callerSource);
 
         if (callerSource == CallerSource.PLAYER && WandUtils.isHoldingCowWand(event.getPlayer())) {
-            if (event.getRightClicked() instanceof Player targetPlayer && !targetPlayer.isDead() && targetPlayer.getNoDamageTicks() <= 0 && pullMob() instanceof AbilityHeadDisplay headDisplay) {
+            if (event.getRightClicked() instanceof LivingEntity targetEntity && !targetEntity.isDead() && targetEntity.getNoDamageTicks() <= 0 && pullMob() instanceof AbilityHeadDisplay headDisplay) {
                 headDisplay.remove();
-                targetPlayer.getWorld().spawnParticle(Particle.CHERRY_LEAVES, targetPlayer.getLocation().add(0.0, 1.0, 0.0), 100, 1.0, 1.0, 1.0, null);
-                targetPlayer.damage(Float.MAX_VALUE, DamageSource.builder(DamageType.PLAYER_ATTACK)
+                targetEntity.getWorld().spawnParticle(Particle.CHERRY_LEAVES, targetEntity.getLocation().add(0.0, 1.0, 0.0), 100, 1.0, 1.0, 1.0, null);
+                targetEntity.damage(Float.MAX_VALUE, DamageSource.builder(DamageType.PLAYER_ATTACK)
                         .withCausingEntity(event.getPlayer())
                         .withDirectEntity(event.getPlayer())
                         .build()

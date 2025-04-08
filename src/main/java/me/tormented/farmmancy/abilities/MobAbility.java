@@ -8,7 +8,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -40,14 +39,6 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
                 && event.getCause() != EntityDamageEvent.DamageCause.KILL) {
             event.setCancelled(true);
         }
-    }
-
-    @Override
-    public void processEntityDamagedByEntity(EntityDamageEvent event) {
-    }
-
-    @Override
-    public void processPlayerMove(PlayerMoveEvent event) {
     }
 
     @Override

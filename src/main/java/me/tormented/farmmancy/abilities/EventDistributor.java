@@ -95,7 +95,6 @@ public class EventDistributor implements Listener {
 
     @EventHandler
     public void onPlayerInteraction(PlayerInteractEvent event) {
-        if (event.isCancelled()) return;
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {

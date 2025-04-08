@@ -2,8 +2,6 @@ package me.tormented.farmmancy.abilities;
 
 import me.tormented.farmmancy.FarmMancy;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +52,4 @@ public abstract class Ability {
         return getOwnerPlayer(false);
     }
 
-    public abstract void processEntityDamagedByEntity(EntityDamageEvent event);
-
-    public abstract void processPlayerMove(PlayerMoveEvent event);
 }
