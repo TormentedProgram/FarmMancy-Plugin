@@ -2,9 +2,9 @@ package me.tormented.farmmancy;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import me.tormented.farmmancy.Commands.Commands;
-import me.tormented.farmmancy.FarmMancer.FarmMancer;
-import me.tormented.farmmancy.FarmMancer.FarmMancerManager;
+import me.tormented.farmmancy.commands.Commands;
+import me.tormented.farmmancy.farmmancer.FarmMancer;
+import me.tormented.farmmancy.farmmancer.FarmMancerManager;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.TickingAbilities;
 import me.tormented.farmmancy.abilities.TickingTask;
@@ -38,9 +38,7 @@ public final class FarmMancy extends JavaPlugin {
         Commands.getInstance().load();
 
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
-        getServer().getPluginManager().registerEvents(new EntityListener(), this);
         getServer().getPluginManager().registerEvents(EventDistributor.getInstance(), this);
-
 
         taskMenuTick = getServer().getScheduler().runTaskTimer(this, Ticking.getInstance(), 0, 1);
         CowTick = getServer().getScheduler().runTaskTimer(this, TickingAbilities.getInstance(), 0, 1);

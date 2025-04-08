@@ -1,4 +1,4 @@
-package me.tormented.farmmancy.Commands;
+package me.tormented.farmmancy.commands;
 
 public class Commands {
     private final static Commands instance = new Commands();

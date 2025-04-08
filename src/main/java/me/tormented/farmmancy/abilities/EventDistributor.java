@@ -1,8 +1,8 @@
 package me.tormented.farmmancy.abilities;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.abilities.utils.Wand;
+import me.tormented.farmmancy.farmmancer.FarmMancer;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,7 +52,8 @@ public class EventDistributor implements Listener {
     public void onEntityDamagedByEntity(EntityDamageByEntityEvent event) {
         MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
         if (mobAbility != null) {
-            if (mobAbility instanceof Hook.EntityDamagedByEntity entityDamaged) entityDamaged.processEntityDamagedByEntity(event);
+            if (mobAbility instanceof Hook.EntityDamagedByEntity entityDamaged)
+                entityDamaged.processEntityDamagedByEntity(event);
         }
     }
 

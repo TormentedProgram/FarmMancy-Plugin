@@ -1,4 +1,4 @@
-package me.tormented.farmmancy.FarmMancer;
+package me.tormented.farmmancy.farmmancer;
 
 import me.tormented.farmmancy.abilities.*;
 import me.tormented.farmmancy.abilities.implementations.BeeAbility;

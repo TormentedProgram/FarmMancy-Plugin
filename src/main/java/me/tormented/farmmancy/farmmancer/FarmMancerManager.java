@@ -1,4 +1,4 @@
-package me.tormented.farmmancy.FarmMancer;
+package me.tormented.farmmancy.farmmancer;
 
 import me.tormented.farmmancy.abilities.EventDistributor;
 import org.bukkit.entity.Player;
@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class FarmMancerManager {
     private static final FarmMancerManager instance = new FarmMancerManager();
+
     public static FarmMancerManager getInstance() {
         return instance;
     }

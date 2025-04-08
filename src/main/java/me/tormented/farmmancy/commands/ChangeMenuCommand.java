@@ -1,4 +1,4 @@
-package me.tormented.farmmancy.Commands;
+package me.tormented.farmmancy.commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import me.tormented.farmmancy.inventoryMenu.*;

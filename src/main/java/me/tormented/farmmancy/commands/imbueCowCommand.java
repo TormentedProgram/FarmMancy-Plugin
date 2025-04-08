@@ -1,8 +1,8 @@
-package me.tormented.farmmancy.Commands;
+package me.tormented.farmmancy.commands;
 
 import dev.jorel.commandapi.CommandAPICommand;
-import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmConfig;
+import me.tormented.farmmancy.farmmancer.FarmMancer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

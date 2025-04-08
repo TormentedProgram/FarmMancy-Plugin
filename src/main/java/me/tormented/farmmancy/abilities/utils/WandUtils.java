@@ -1,7 +1,7 @@
 package me.tormented.farmmancy.abilities.utils;
 
-import me.tormented.farmmancy.FarmMancer.FarmMancer;
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.farmmancer.FarmMancer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
