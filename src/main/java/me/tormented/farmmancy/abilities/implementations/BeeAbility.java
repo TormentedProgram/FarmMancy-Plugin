@@ -3,6 +3,8 @@ package me.tormented.farmmancy.abilities.implementations;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -43,6 +45,10 @@ public class BeeAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
 
             if (player != getOwnerPlayer()) return;
 
+            if (player.getHealth() <= 8f) {
+                player.sendMessage(Component.text("You do not have enough health to use this ability!", NamedTextColor.RED));
+                return;
+            }
             player.setHealth(player.getHealth() - 8f);
 
             Vector velocityVector = player.getVelocity();
