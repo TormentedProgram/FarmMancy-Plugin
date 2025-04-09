@@ -1,6 +1,7 @@
 package me.tormented.farmmancy.abilities.implementations;
 
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -29,8 +30,8 @@ public class EvokerAbility extends MobunitionAbility<Evoker> implements Hook.Wan
         return Evoker.class;
     }
 
-    public EvokerAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public EvokerAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/630ce775edb65db8c2741bdfae84f3c0d0285aba93afadc74900d55dfd9504a5");

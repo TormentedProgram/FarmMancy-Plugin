@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.abilities.implementations;
 
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -26,8 +27,8 @@ public class EndermanAbility extends MobunitionAbility<Enderman> implements Hook
         return Enderman.class;
     }
 
-    public EndermanAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public EndermanAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/9689c200980e4c54adcfbbdad492c1d2edbd92366aabf89724ed19930cb5b6e2");

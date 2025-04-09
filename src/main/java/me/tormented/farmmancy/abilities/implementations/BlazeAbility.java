@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.abilities.implementations;
 
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -22,8 +23,8 @@ public class BlazeAbility extends MobunitionAbility<Blaze> implements Hook.WandS
         return Blaze.class;
     }
 
-    public BlazeAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public BlazeAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/b20657e24b56e1b2f8fc219da1de788c0c24f36388b1a409d0cd2d8dba44aa3b");

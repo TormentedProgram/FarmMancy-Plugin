@@ -1,18 +1,11 @@
 package me.tormented.farmmancy.farmmancer;
 
 import me.tormented.farmmancy.abilities.*;
-import me.tormented.farmmancy.abilities.implementations.BeeAbility;
-import me.tormented.farmmancy.abilities.implementations.ChickenAbility;
-import me.tormented.farmmancy.abilities.implementations.CowAbility;
-import me.tormented.farmmancy.abilities.implementations.PigAbility;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 public class FarmMancer {
     public final Player _player;
@@ -49,13 +42,6 @@ public class FarmMancer {
 
 
     public void activateAll(int amount, boolean isBaby) {
-        if (getEquippedAbilities().length == 0) {
-            _player.sendMessage(Component.text("You have no abilities equipped. (EQUIPPING DEFAULTS)", NamedTextColor.RED));
-            setEquippedAbility(0, new ChickenAbility(UUID.randomUUID(), _player.getUniqueId()));
-            setEquippedAbility(1, new CowAbility(UUID.randomUUID(), _player.getUniqueId()));
-            setEquippedAbility(2, new PigAbility(UUID.randomUUID(), _player.getUniqueId()));
-            setSpecialEquippedAbility(new BeeAbility(UUID.randomUUID(), _player.getUniqueId()));
-        }
         for (Ability ability : getEquippedAbilities()) {
             if (ability instanceof MobAbility<?> mobAbility) {
                 mobAbility.isBaby = isBaby;

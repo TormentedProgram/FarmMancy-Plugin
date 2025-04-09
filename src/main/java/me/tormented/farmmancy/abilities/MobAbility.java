@@ -28,8 +28,8 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
     protected int startTick;
     public boolean isBaby = false;
 
-    protected MobAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    protected MobAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
         mobCenterOffset = new Vector(0.0f, 0.0f, 0.0f);
     }
 

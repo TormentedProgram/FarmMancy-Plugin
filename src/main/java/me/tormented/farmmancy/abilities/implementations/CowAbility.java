@@ -3,6 +3,7 @@ package me.tormented.farmmancy.abilities.implementations;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -42,8 +43,8 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
         return Cow.class;
     }
 
-    public CowAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public CowAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/63d621100fea5883922e78bb448056448c983e3f97841948a2da747d6b08b8ab");

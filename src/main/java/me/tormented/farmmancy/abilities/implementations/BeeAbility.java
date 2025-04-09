@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.abilities.implementations;
 
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
@@ -24,8 +25,8 @@ public class BeeAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
         return Bee.class;
     }
 
-    public BeeAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public BeeAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/59ac16f296b461d05ea0785d477033e527358b4f30c266aa02f020157ffca736");

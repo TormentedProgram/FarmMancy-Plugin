@@ -1,6 +1,7 @@
 package me.tormented.farmmancy.abilities.implementations;
 
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -30,8 +31,8 @@ public class StriderAbility extends MobunitionAbility<Strider> implements Hook.P
         return Strider.class;
     }
 
-    public StriderAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public StriderAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOWM0MGZhZDFjMTFkZTllNjQyMmI0MDU0MjZlOWI5NzkwN2YzNWJjZTM0NWUzNzU4NjA0ZDNlN2JlN2RmODg0In19fQ==");

@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.abilities.implementations;
 
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
@@ -23,8 +24,8 @@ public class SquidAbility extends MobuvertAbility<Squid> implements Hook.PlayerI
         return Squid.class;
     }
 
-    public SquidAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public SquidAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/49c2c9ce67eb5971cc5958463e6c9abab8e599adc295f4d4249936b0095769dd");

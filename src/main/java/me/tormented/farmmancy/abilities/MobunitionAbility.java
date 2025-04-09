@@ -28,8 +28,8 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     protected static final float headBoxRadius = 0.25f;
     protected static final float headVerticalCenterOffset = -0.25f;
 
-    protected MobunitionAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    protected MobunitionAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     @Override

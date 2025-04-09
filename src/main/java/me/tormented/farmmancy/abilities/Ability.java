@@ -42,7 +42,11 @@ public abstract class Ability {
 
     public int slot;
 
-    protected Ability(@NotNull UUID id, @NotNull UUID owner) {
+    private final @NotNull AbilityFactory abilityFactory;
+    public @NotNull AbilityFactory getAbilityFactory() { return abilityFactory; }
+
+    protected Ability(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        this.abilityFactory = abilityFactory;
         this.owner = owner;
         this.id = id;
 

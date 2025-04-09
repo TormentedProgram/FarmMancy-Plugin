@@ -1,6 +1,7 @@
 package me.tormented.farmmancy.abilities.implementations;
 
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -31,8 +32,8 @@ public class WardenAbility extends MobunitionAbility<Warden> implements Hook.Wan
         return Warden.class;
     }
 
-    public WardenAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public WardenAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/f8c211d66c803aac15ab86f79c7edfd6c3b2034d23355a92f6bd42e835260be0");

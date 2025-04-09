@@ -1,6 +1,7 @@
 package me.tormented.farmmancy.abilities.implementations;
 
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -27,8 +28,8 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.P
         return Chicken.class;
     }
 
-    public ChickenAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public ChickenAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/42af6e5847eea099e1b0ab8c20a9e5f3c7190158bda54e28133d9b271ec0cb4b");

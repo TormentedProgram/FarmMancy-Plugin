@@ -1,6 +1,7 @@
 package me.tormented.farmmancy.abilities.implementations.customs;
 
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
@@ -28,8 +29,8 @@ public class DioAbility extends MobuvertAbility<Entity> implements Hook.PlayerIn
         return null;
     }
 
-    public DioAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public DioAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/dbca394b91aae7960a3e5ebb121dcb88ab1058b5518000988801756c2b2e091c");

@@ -5,6 +5,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import me.tormented.farmmancy.Registries;
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.farmmancer.FarmMancer;
 import me.tormented.farmmancy.farmmancer.FarmMancerManager;
 import net.kyori.adventure.text.Component;
@@ -12,7 +13,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.UUID;
 
 public class FarmAbilityCommand {
@@ -32,14 +32,13 @@ public class FarmAbilityCommand {
 
                     switch (doing) {
                         case "set" -> {
-                            if (players != null && slotObject instanceof Integer slot) {
+                            if (players != null && slotObject instanceof Integer slot && abilityType != null && Registries.abilityRegistry.getFactory(abilityType) instanceof AbilityFactory abilityFactory) {
                                 for (Player player : players) {
                                     FarmMancer theMancer = FarmMancerManager.getInstance().setFarmMancer(player);
-                                    assert abilityType != null;
                                     if (slot == 4) {
-                                        theMancer.setSpecialEquippedAbility(Registries.abilityRegistry.getAbility(abilityType, UUID.randomUUID(), player.getUniqueId()));
+                                        theMancer.setSpecialEquippedAbility(abilityFactory.createAbility(UUID.randomUUID(), player.getUniqueId()));
                                     } else {
-                                        theMancer.setEquippedAbility(slot - 1, Objects.requireNonNull(Registries.abilityRegistry.getAbility(abilityType, UUID.randomUUID(), player.getUniqueId())));
+                                        theMancer.setEquippedAbility(slot - 1,  abilityFactory.createAbility(UUID.randomUUID(), player.getUniqueId()));
                                     }
                                     player.sendMessage(Component.text("Set " + abilityType.toUpperCase() + " in slot " + slot, NamedTextColor.GREEN));
                                 }

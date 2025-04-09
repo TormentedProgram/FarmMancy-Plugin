@@ -2,6 +2,7 @@ package me.tormented.farmmancy.abilities.implementations;
 
 import me.tormented.farmmancy.FarmConfig;
 import me.tormented.farmmancy.FarmMancy;
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
@@ -30,8 +31,8 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInt
         return Pig.class;
     }
 
-    public PigAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public PigAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     private final float healingValue = FarmConfig.getInstance().getPigHealingAmount();

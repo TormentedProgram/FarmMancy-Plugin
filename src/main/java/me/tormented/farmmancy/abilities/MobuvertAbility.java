@@ -17,8 +17,8 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
 
     protected AbilityHeadDisplay headDisplay;
 
-    protected MobuvertAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    protected MobuvertAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     @Override

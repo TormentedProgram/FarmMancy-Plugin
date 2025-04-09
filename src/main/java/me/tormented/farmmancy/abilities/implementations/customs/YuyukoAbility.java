@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.abilities.implementations.customs;
 
+import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.WandUtils;
@@ -22,8 +23,8 @@ public class YuyukoAbility extends MobunitionAbility<Entity> {
         return null;
     }
 
-    public YuyukoAbility(@NotNull UUID id, @NotNull UUID owner) {
-        super(id, owner);
+    public YuyukoAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+        super(abilityFactory, id, owner);
     }
 
     public static final HeadProvider headProvider = new HeadProvider("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTg4MTM4ZGFlMmYwZmM2NmMwNjU0ZTkyNWJhMWM3MWJhMjNkNjk3NGVjNWExMzA1NWUzYmQ5ODcyNzNmYTc3NCJ9fX0=");
