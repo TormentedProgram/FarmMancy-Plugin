@@ -22,7 +22,17 @@ public class FarmAbilityCommand {
                 .withArguments(new EntitySelectorArgument.ManyPlayers("Players", false))
                 .withArguments(new StringArgument("abilityType").replaceSuggestions(
                         ArgumentSuggestions.strings(info ->
-                                getPlayerAbilitiesNames(info.sender())
+                                {
+                                    if (info.sender() instanceof Player player) {
+                                        if (FarmMancerManager.getInstance().farmMancerMap.containsKey(player)) {
+                                            FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
+                                            if (farmMancer != null) {
+                                                return farmMancer.getUnlockedAbilitiesOfDoom().keySet().toArray(new String[0]);
+                                            }
+                                        }
+                                    }
+                                    return new String[0];
+                                }
                         )))
                 .withArguments(new IntegerArgument("slot", 1, 4))
                 .executes((sender, args) -> {
@@ -36,10 +46,18 @@ public class FarmAbilityCommand {
                         case "set" -> {
                             if (players != null && slotObject instanceof Integer slot && abilityType != null) {
                                 for (Player player : players) {
-                                    player.sendMessage(Component.text("Setting ability " + abilityType + " to slot " + slot).color(NamedTextColor.GREEN));
-                                    FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
-                                    Map<String, Ability> unlockedAbilities = getPlayerAbilities(sender);
-                                    farmMancer.setEquippedAbility(slot-1, unlockedAbilities.get(abilityType));
+                                    if (FarmMancerManager.getInstance().farmMancerMap.containsKey(player)) {
+                                        FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
+                                        Map<String, Ability> unlockedAbilities = getPlayerAbilities(sender);
+                                        if (unlockedAbilities.containsKey(abilityType)) {
+                                            farmMancer.setEquippedAbility(slot - 1, unlockedAbilities.get(abilityType));
+                                            player.sendMessage(Component.text("Setting ability " + abilityType + " to slot " + slot).color(NamedTextColor.GREEN));
+                                        } else {
+                                            player.sendMessage(Component.text("You do not have this ability unlocked or doesn't exist!").color(NamedTextColor.RED));
+                                        }
+                                    } else {
+                                        player.sendMessage(Component.text("You are not a FarmMancer...").color(NamedTextColor.RED));
+                                    }
                                 }
                             }
                         }
@@ -48,18 +66,6 @@ public class FarmAbilityCommand {
                     }
                 })
                 .register();
-    }
-
-    public String[] getPlayerAbilitiesNames(CommandSender sender) {
-        if (sender instanceof Player player) {
-            if (FarmMancerManager.getInstance().farmMancerMap.containsKey(player)) {
-                FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
-                if (farmMancer != null) {
-                    return farmMancer.getUnlockedAbilitiesOfDoom().keySet().toArray(new String[0]);
-                }
-            }
-        }
-        return new String[0];
     }
 
     public Map<String, Ability> getPlayerAbilities(CommandSender sender) {

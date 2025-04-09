@@ -13,6 +13,7 @@ public class Commands {
     public ReloadConfigCommand reloadConfigCommand;
     public ChangeMenuCommand changeMenuCommand;
     public FarmAbilityCommand farmAbilityCommand;
+    public FarmUnlockCommand farmUnlockCommand;
 
     private Commands() {
     }
@@ -24,5 +25,6 @@ public class Commands {
         reloadConfigCommand = new ReloadConfigCommand();
         changeMenuCommand = new ChangeMenuCommand();
         farmAbilityCommand = new FarmAbilityCommand();
+        farmUnlockCommand = new FarmUnlockCommand();
     }
 }

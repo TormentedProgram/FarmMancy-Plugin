@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingWand;
+
 public class EventDistributor implements Listener {
 
     private static final EventDistributor instance = new EventDistributor();
@@ -148,9 +150,8 @@ public class EventDistributor implements Listener {
         }
 
         if (playerAbilityMap.get(event.getPlayer().getUniqueId()) instanceof FarmMancer farmMancer) {
-
             Entity entity = event.getRightClicked();
-            if (Registries.abilityRegistry.getFactory(entity.getType().getKey().asString()) instanceof AbilityFactory abilityFactory) {
+            if (!isHoldingWand(event.getPlayer()) && Registries.abilityRegistry.getFactory(entity.getType().getKey().asString()) instanceof AbilityFactory abilityFactory) {
                 if (!farmMancer.isAbilityUnlocked(abilityFactory)) {
                     switch (farmMancer.unlockAbility(abilityFactory)) {
                         case MobunitionAbility<?> mobunitionAbility -> {

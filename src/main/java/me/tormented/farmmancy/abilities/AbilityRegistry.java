@@ -19,6 +19,10 @@ public class AbilityRegistry {
         return abilitySuppliers.get(key);
     }
 
+    public Map<String, AbilityFactory> getRegistry() {
+        return abilitySuppliers;
+    }
+
     public @NotNull Set<String> getAllKeys() {
         return abilitySuppliers.keySet();
     }

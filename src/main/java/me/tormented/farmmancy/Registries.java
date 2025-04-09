@@ -17,10 +17,10 @@ public class Registries {
         abilityRegistry.register("minecraft:blaze", new AbilityFactory(BlazeAbility::new));
         abilityRegistry.register("minecraft:warden", new AbilityFactory(WardenAbility::new));
         abilityRegistry.register("minecraft:strider", new AbilityFactory(StriderAbility::new));
-        abilityRegistry.register("custom/dio", new AbilityFactory(DioAbility::new));
+        abilityRegistry.register("custom:dio", new AbilityFactory(DioAbility::new));
         abilityRegistry.register("minecraft:enderman", new AbilityFactory(EndermanAbility::new));
         abilityRegistry.register("minecraft:evoker", new AbilityFactory(EvokerAbility::new));
-        abilityRegistry.register("custom/yuyuko", new AbilityFactory(YuyukoAbility::new));
-        abilityRegistry.register("custom/reisen", new AbilityFactory(ReisenAbility::new));
+        abilityRegistry.register("custom:yuyuko", new AbilityFactory(YuyukoAbility::new));
+        abilityRegistry.register("custom:reisen", new AbilityFactory(ReisenAbility::new));
     }
 }

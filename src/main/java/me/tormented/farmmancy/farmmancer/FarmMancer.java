@@ -1,5 +1,6 @@
 package me.tormented.farmmancy.farmmancer;
 
+import me.tormented.farmmancy.Registries;
 import me.tormented.farmmancy.abilities.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -111,10 +112,19 @@ public class FarmMancer {
 
     public Map<String, Ability> getUnlockedAbilitiesOfDoom() {
         Map<String, Ability> abilityMap = new HashMap<>();
+        Map<String, AbilityFactory> AbilityNames = Registries.abilityRegistry.getRegistry();
 
         for (Ability ability : unlockedAbilities) {
-            String abilityName = ability.getName().content().replace(" ", "_");
-            abilityMap.put(abilityName, ability);
+            String abilityName = null;
+            for (Map.Entry<String, AbilityFactory> entry : AbilityNames.entrySet()) {
+                if (entry.getValue().equals(ability.getAbilityFactory())) {
+                    abilityName = entry.getKey().split(":", 2)[1].trim();
+                    break;
+                }
+            }
+            if (abilityName != null) {
+                abilityMap.put(abilityName, ability);
+            }
         }
 
         return abilityMap;
