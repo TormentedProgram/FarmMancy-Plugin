@@ -6,6 +6,10 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -35,6 +39,13 @@ public class EvokerAbility extends MobunitionAbility<Evoker> implements Hook.Wan
     public @NotNull ItemStack getHeadItem(Evoker entity) {
         return headProvider.getHeadItem();
     }
+
+    @Override
+    public @NotNull TextComponent getName() {
+        return Component.text("EVOKER ABILITY")
+                .color(NamedTextColor.DARK_GREEN)
+                .decoration(TextDecoration.ITALIC, false);
+    };
 
     @Override
     public void onSelected(@NotNull Wand wand) {

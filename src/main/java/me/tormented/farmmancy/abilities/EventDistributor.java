@@ -3,6 +3,7 @@ package me.tormented.farmmancy.abilities;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.farmmancer.FarmMancer;
+import me.tormented.farmmancy.farmmancer.FarmMancerManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -112,6 +113,7 @@ public class EventDistributor implements Listener {
     public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
+        FarmMancerManager.getInstance().FarmMancerToUnload.remove(farmMancer);
         for (Ability ability : farmMancer.getEquippedAbilities()) {
             if (ability != null) {
                 if (ability instanceof Hook.PlayerJoining playerJoining) playerJoining.processPlayerJoin(event);
@@ -123,6 +125,7 @@ public class EventDistributor implements Listener {
     public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer != null) {
+            FarmMancerManager.getInstance().FarmMancerToUnload.add(farmMancer);
             for (Ability ability : farmMancer.getEquippedAbilities()) {
                 if (ability != null) {
                     if (ability instanceof Hook.PlayerJoining playerJoining) playerJoining.processPlayerQuit(event);

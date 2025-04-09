@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingWand;
-
 public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.EntityInteractedByPlayer {
 
     protected final List<AbilityHeadDisplay> headDisplays = new ArrayList<>();
@@ -46,7 +44,6 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
 
     @Override
     public boolean isBeingLookedAt() {
-
         if (isHeadRingVisible() && getOwnerPlayer() instanceof Player player) {
 
             double eyeHeight = player.getEyeHeight();

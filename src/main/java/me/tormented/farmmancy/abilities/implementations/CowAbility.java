@@ -8,6 +8,10 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -25,6 +29,13 @@ import java.util.UUID;
 public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMoved, Hook.WandSelectable {
     private final float CowExplosionRadius = FarmConfig.getInstance().getCowExplosionRadius();
     private final float CowShootVelocity = FarmConfig.getInstance().getCowShootVelocity();
+
+    @Override
+    public @NotNull TextComponent getName() {
+        return Component.text("COW ABILITY")
+                .color(NamedTextColor.GOLD)
+                .decoration(TextDecoration.ITALIC, false);
+    };
 
     @Override
     public Class<Cow> getEntityClass() {

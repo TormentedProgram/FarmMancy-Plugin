@@ -6,6 +6,10 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -37,6 +41,13 @@ public class WardenAbility extends MobunitionAbility<Warden> implements Hook.Wan
     public @NotNull ItemStack getHeadItem(Warden entity) {
         return headProvider.getHeadItem();
     }
+
+    @Override
+    public @NotNull TextComponent getName() {
+        return Component.text("WARDEN ABILITY")
+                .color(NamedTextColor.DARK_AQUA)
+                .decoration(TextDecoration.ITALIC, false);
+    };
 
     @Override
     public void onSelected(@NotNull Wand wand) {
@@ -84,7 +95,6 @@ public class WardenAbility extends MobunitionAbility<Warden> implements Hook.Wan
                     if (entity instanceof LivingEntity mob) {
                         if (mob.getLocation().distance(particleLocation) < 3.0 && !mob.equals(player)) {
                             mob.damage(damage);
-                            cancel();
                         }
                     }
                 }

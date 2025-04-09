@@ -13,6 +13,8 @@ public class FarmMancerManager {
     public static FarmMancerManager getInstance() {
         return instance;
     }
+    
+    public final HashSet<FarmMancer> FarmMancerToUnload = new HashSet<>();
 
     public final Set<FarmMancer> farmMancers = new HashSet<>();
     public final HashMap<Player, FarmMancer> farmMancerMap = new HashMap<>();

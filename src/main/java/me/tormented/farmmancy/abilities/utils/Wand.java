@@ -29,7 +29,9 @@ public class Wand {
         this.item = item;
     }
 
-    public @NotNull ItemStack getItem() { return item; }
+    public @NotNull ItemStack getItem() {
+        return item;
+    }
 
     public boolean isWand() {
         return isWand(item);
@@ -58,10 +60,6 @@ public class Wand {
         String formattedName = formattedNameBuilder.toString().trim();
 
         if (itemMeta != null) {
-            itemMeta.lore(List.of(
-                    Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
-                    Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)));
-
             itemMeta.setEnchantmentGlintOverride(true);
 
             Component displayName = itemMeta.displayName(); // Adventure API
@@ -72,11 +70,30 @@ public class Wand {
             itemMeta.getPersistentDataContainer().set(wandKey, PersistentDataType.BYTE, (byte) 1);
 
             item.setItemMeta(itemMeta);
+            updateLoreAndName();
         }
     }
 
     public void updateLoreAndName() {
-
+        ItemMeta itemMeta = item.getItemMeta();
+        if (getBoundAbility() instanceof Ability ability) {
+            itemMeta.lore(List.of(
+                    Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
+                    Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
+                    Component.text(""),
+                    Component.text("Bound Ability: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                    ability.getName()));
+        } else {
+            if (itemMeta != null) {
+                itemMeta.lore(List.of(
+                        Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
+                        Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
+                        Component.text(""),
+                        Component.text("Bound Ability: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                        Component.text("RIGHT-CLICK a row to bind an ability", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false)));
+            }
+        }
+        item.setItemMeta(itemMeta);
     }
 
     public void setBoundAbility(Ability ability) {
@@ -110,7 +127,7 @@ public class Wand {
 
     public boolean clearBoundAbility() {
 
-        if (getBoundAbility() instanceof Hook.WandSelectable wandSelectable ) {
+        if (getBoundAbility() instanceof Hook.WandSelectable wandSelectable) {
             wandSelectable.onDeselected(this);
         }
 

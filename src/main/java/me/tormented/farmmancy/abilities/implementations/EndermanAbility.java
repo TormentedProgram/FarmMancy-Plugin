@@ -5,6 +5,10 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Enderman;
@@ -27,6 +31,13 @@ public class EndermanAbility extends MobunitionAbility<Enderman> implements Hook
     }
 
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/9689c200980e4c54adcfbbdad492c1d2edbd92366aabf89724ed19930cb5b6e2");
+
+    @Override
+    public @NotNull TextComponent getName() {
+        return Component.text("ENDERMAN ABILITY")
+                .color(NamedTextColor.LIGHT_PURPLE)
+                .decoration(TextDecoration.ITALIC, false);
+    };
 
     @Override
     public @NotNull ItemStack getHeadItem(Enderman entity) {
