@@ -8,10 +8,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class FarmMancer {
     public final Player _player;
@@ -21,7 +18,8 @@ public class FarmMancer {
     private final Set<Ability> unlockedAbilities = new HashSet<>();
 
     public void setEquippedAbility(int index, @Nullable Ability ability) {
-        if (index < 0 || index > equippedAbilities.length) throw new IllegalArgumentException("Slot index is out of bounds");
+        if (index < 0 || index > equippedAbilities.length)
+            throw new IllegalArgumentException("Slot index is out of bounds");
 
         Ability oldAbility = index == equippedAbilities.length ? specialEquippedAbility : equippedAbilities[index];
 
@@ -111,4 +109,14 @@ public class FarmMancer {
         return unlockedAbilities.iterator();
     }
 
+    public Map<String, Ability> getUnlockedAbilitiesOfDoom() {
+        Map<String, Ability> abilityMap = new HashMap<>();
+
+        for (Ability ability : unlockedAbilities) {
+            String abilityName = ability.getName().content().replace(" ", "_");
+            abilityMap.put(abilityName, ability);
+        }
+
+        return abilityMap;
+    }
 }
