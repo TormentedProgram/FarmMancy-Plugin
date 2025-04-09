@@ -1,6 +1,8 @@
 package me.tormented.farmmancy.utils;
 
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -12,7 +14,8 @@ public final class MathUtils {
         return a + (b - a) * t;
     }
 
-    public static Vector lerp(Vector a, Vector b, double t) {
+    @Contract("_, _, _ -> new")
+    public static @NotNull Vector lerp(@NotNull Vector a, @NotNull Vector b, double t) {
         return new Vector(
                 lerp(a.getX(), b.getX(), t),
                 lerp(a.getY(), b.getY(), t),

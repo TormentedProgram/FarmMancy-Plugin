@@ -34,7 +34,7 @@ public class MenuCommand {
                 boolean isBaby = false;
 
                 @Override
-                public void tick(Menu menu) {
+                public void tick(@NotNull Menu menu) {
                     MenuItem FungusButton = new MenuItem(ItemStack.of(Material.NETHERITE_HOE),
                             Component.text("Become a FarmMancer", NamedTextColor.YELLOW)
                                     .decoration(TextDecoration.ITALIC, false))
@@ -52,7 +52,7 @@ public class MenuCommand {
                                             theMancer = FarmMancerManager.getInstance().setFarmMancer(menuInstance.getPlayer());
                                         }
                                         theMancer.activateAll(amountToSpawn, isBaby);
-                                        WandUtils.giveCowWand(menu.getPlayer());
+                                        WandUtils.giveWandIfMissing(menu.getPlayer());
                                         menu.getPlayer().playSound(menu.getPlayer(), Sound.BLOCK_ANVIL_USE, 1.0f, 1.0f);
                                         return new ClickResponse.CloseMenu();
                                     }

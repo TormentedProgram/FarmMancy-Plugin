@@ -6,13 +6,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.metadata.MetadataValue;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class GuiListener implements Listener {
 
     @EventHandler
-    public void onClick(InventoryClickEvent event) {
+    public void onClick(@NotNull InventoryClickEvent event) {
 
         if (event.isCancelled()) return;
 
@@ -25,7 +26,7 @@ public class GuiListener implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClosed(InventoryCloseEvent event) {
+    public void onInventoryClosed(@NotNull InventoryCloseEvent event) {
 
         Player player = (Player) event.getPlayer();
 

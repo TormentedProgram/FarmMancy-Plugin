@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
+import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingWand;
 
 public abstract class MobunitionAbility<EntityType extends Entity> extends MobAbility<EntityType> implements Hook.EntityInteractedByPlayer {
 
@@ -67,7 +67,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     }
 
     @Override
-    public void onTick(CallerSource callerSource) {
+    public void onTick(@NotNull CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
             if (player.isSneaking()) {
                 for (AbilityHeadDisplay headDisplay : headDisplays) {
@@ -75,7 +75,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
                 }
             } else {
                 ItemStack item = player.getInventory().getItemInMainHand();
-                if (isActive() && isHoldingCowWand(player)) {
+                if (isActive() && WandUtils.isHoldingWand(player)) {
                     boolean beingLookedAt = isBeingLookedAt();
                     for (AbilityHeadDisplay headDisplay : headDisplays) {
                         headDisplay.spawn(player.getLocation());
@@ -86,7 +86,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
                 }
             }
             if (!player.isSneaking()) {
-                if (isActive() && WandUtils.isHoldingCowWand(player)) {
+                if (isActive() && WandUtils.isHoldingWand(player)) {
                     for (AbilityHeadDisplay headDisplay : headDisplays) {
                         headDisplay.spawn(player.getLocation());
                     }
@@ -158,7 +158,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
         if (getOwnerPlayer() instanceof Player player) {
             ItemStack item = player.getInventory().getItemInMainHand();
             ItemMeta meta = item.getItemMeta();
-            if (isActive() && isHoldingCowWand(player)) {
+            if (isActive() && WandUtils.isHoldingWand(player)) {
                 for (AbilityHeadDisplay headDisplay : headDisplays) {
                     headDisplay.spawn(player.getLocation());
                 }
@@ -167,9 +167,9 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
     }
 
     @Override
-    public void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource) {
+    public void processPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event, CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER) {
-            if (WandUtils.isHoldingCowWand(Objects.requireNonNull(getOwnerPlayer()))) return;
+            if (WandUtils.isHoldingWand(Objects.requireNonNull(getOwnerPlayer()))) return;
             if (event.getRightClicked().hasMetadata("FarmMancy_Projectile")) return;
             if (event.getRightClicked() instanceof LivingEntity entity) {
                 Player player = event.getPlayer();

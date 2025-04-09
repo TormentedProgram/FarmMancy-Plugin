@@ -24,7 +24,7 @@ public class ChangeMenuCommand {
 
             static class FungusTracker implements MenuTicker {
                 @Override
-                public void tick(Menu menu) {
+                public void tick(@NotNull Menu menu) {
                     MenuItem slot1 = new MenuItem(ItemStack.of(Material.CREEPER_HEAD),
                             Component.text("Placeholder Entity", NamedTextColor.AQUA)
                                     .decoration(TextDecoration.ITALIC, false))

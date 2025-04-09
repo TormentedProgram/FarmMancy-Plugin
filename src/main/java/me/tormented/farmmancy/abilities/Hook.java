@@ -6,6 +6,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
+import org.jetbrains.annotations.NotNull;
 
 public sealed interface Hook {
 
@@ -15,49 +16,49 @@ public sealed interface Hook {
     }
 
     non-sealed interface EntityDamaged extends Hook {
-        void processEntityDamage(EntityDamageEvent event);
+        void processEntityDamage(@NotNull EntityDamageEvent event);
     }
 
     non-sealed interface EntityDamagedByEntity extends Hook {
-        void processEntityDamagedByEntity(EntityDamageByEntityEvent event);
+        void processEntityDamagedByEntity(@NotNull EntityDamageByEntityEvent event);
     }
 
     non-sealed interface playerMove extends Hook {
-        void processPlayerMove(PlayerMoveEvent event);
+        void processPlayerMove(@NotNull PlayerMoveEvent event);
     }
 
     non-sealed interface EntityInteractedByPlayer extends Hook {
-        void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource);
+        void processPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event, CallerSource callerSource);
     }
 
     non-sealed interface PlayerInteraction extends Hook {
-        void processPlayerInteract(PlayerInteractEvent event);
+        void processPlayerInteract(@NotNull PlayerInteractEvent event);
     }
 
     non-sealed interface PlayerSneak extends Hook {
-        void processSneakToggle(PlayerToggleSneakEvent event);
+        void processSneakToggle(@NotNull PlayerToggleSneakEvent event);
     }
 
     non-sealed interface PlayerSwapItem extends Hook {
-        void processSwapItem(PlayerItemHeldEvent event);
+        void processSwapItem(@NotNull PlayerItemHeldEvent event);
     }
 
     non-sealed interface PlayerJoining extends Hook {
-        void processPlayerJoin(PlayerJoinEvent event);
+        void processPlayerJoin(@NotNull PlayerJoinEvent event);
 
-        void processPlayerQuit(PlayerQuitEvent event);
+        void processPlayerQuit(@NotNull PlayerQuitEvent event);
     }
 
     non-sealed interface EntityMoved extends Hook {
-        void processEntityMove(EntityMoveEvent event);
+        void processEntityMove(@NotNull EntityMoveEvent event);
     }
 
     non-sealed interface EntityDeath extends Hook {
-        void processEntityDeath(EntityDeathEvent event);
+        void processEntityDeath(@NotNull EntityDeathEvent event);
     }
 
     non-sealed interface Ticking extends Hook {
-        void onTick(CallerSource callerSource);
+        void onTick(@NotNull CallerSource callerSource);
     }
 
     non-sealed interface Activation extends Hook {
@@ -69,7 +70,7 @@ public sealed interface Hook {
     }
 
     non-sealed interface PlayerDroppingItem extends Hook {
-        void processPlayerDropItem(PlayerDropItemEvent event);
+        void processPlayerDropItem(@NotNull PlayerDropItemEvent event);
     }
 
 
@@ -106,10 +107,10 @@ public sealed interface Hook {
 
     non-sealed interface WandSelectable extends Hook {
 
-        void onSelected(Wand wand);
-        void onDeselected(Wand wand);
+        void onSelected(@NotNull Wand wand);
+        void onDeselected(@NotNull Wand wand);
 
-        void onWandUse(Wand wand, PlayerInteractEvent event);
+        void onWandUse(@NotNull Wand wand, @NotNull PlayerInteractEvent event);
 
     }
 

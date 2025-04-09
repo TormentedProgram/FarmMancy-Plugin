@@ -7,7 +7,7 @@ public class TickingTask implements Runnable {
     public static TickingTask getInstance() {
         return instance;
     }
-    private TickingTask() {};
+    private TickingTask() {}
 
     @Override
     public void run() {

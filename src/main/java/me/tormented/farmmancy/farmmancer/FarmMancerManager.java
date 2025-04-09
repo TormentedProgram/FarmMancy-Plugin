@@ -14,8 +14,8 @@ public class FarmMancerManager {
         return instance;
     }
 
-    public Set<FarmMancer> farmMancers = new HashSet<>();
-    public HashMap<Player, FarmMancer> farmMancerMap = new HashMap<>();
+    public final Set<FarmMancer> farmMancers = new HashSet<>();
+    public final HashMap<Player, FarmMancer> farmMancerMap = new HashMap<>();
 
     public FarmMancer setFarmMancer(Player player) {
         for (FarmMancer farmMancer : farmMancers) {

@@ -43,7 +43,7 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
     }
 
     @Override
-    public void processEntityMove(EntityMoveEvent event) {
+    public void processEntityMove(@NotNull EntityMoveEvent event) {
         if (!event.getEntity().hasMetadata("FarmMancy_Projectile")) return;
         if (event.getEntity().isDead()) return;
         Block currentBlock = event.getEntity().getLocation().getBlock();
@@ -61,7 +61,7 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
         }
     }
 
-    private void explodeEntity(LivingEntity entity) {
+    private void explodeEntity(@NotNull LivingEntity entity) {
         Location location = entity.getLocation();
         World world = location.getWorld();
         world.createExplosion(location, CowExplosionRadius);
@@ -70,15 +70,15 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
     }
 
     @Override
-    public void onSelected(Wand wand) {
+    public void onSelected(@NotNull Wand wand) {
     }
 
     @Override
-    public void onDeselected(Wand wand) {
+    public void onDeselected(@NotNull Wand wand) {
     }
 
     @Override
-    public void onWandUse(Wand wand, PlayerInteractEvent event) {
+    public void onWandUse(@NotNull Wand wand, @NotNull PlayerInteractEvent event) {
         if (event.getAction().isLeftClick() && getOwnerPlayer() instanceof Player player && !headDisplays.isEmpty()) {
             Location loc = player.getLocation();
             Vector direction = loc.getDirection();

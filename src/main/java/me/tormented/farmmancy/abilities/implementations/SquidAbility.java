@@ -34,7 +34,7 @@ public class SquidAbility extends MobuvertAbility<Squid> implements Hook.PlayerI
 
 
     @Override
-    public void processPlayerInteract(PlayerInteractEvent event) {
+    public void processPlayerInteract(@NotNull PlayerInteractEvent event) {
         super.processPlayerInteract(event);
 
         if (event.getAction().isRightClick() && isBeingLookedAt()) {

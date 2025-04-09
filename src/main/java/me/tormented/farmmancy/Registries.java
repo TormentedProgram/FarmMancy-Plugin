@@ -5,7 +5,7 @@ import me.tormented.farmmancy.abilities.implementations.*;
 import me.tormented.farmmancy.abilities.implementations.customs.*;
 
 public class Registries {
-    public static AbilityRegistry abilityRegistry = new AbilityRegistry();
+    public static final AbilityRegistry abilityRegistry = new AbilityRegistry();
 
     static {
         abilityRegistry.register("cow", CowAbility::new);

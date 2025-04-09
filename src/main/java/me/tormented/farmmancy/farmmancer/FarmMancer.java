@@ -8,21 +8,23 @@ import me.tormented.farmmancy.abilities.implementations.PigAbility;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 public class FarmMancer {
-    public Player _player;
+    public final Player _player;
 
     private final Ability[] equippedAbilities = new Ability[3];
     private Ability specialEquippedAbility;
     private final Set<Ability> unlockedAbilities = new HashSet<>();
 
-    public void setEquippedAbility(int index, Ability ability) {
+    public void setEquippedAbility(int index, @Nullable Ability ability) {
         this.equippedAbilities[index] = ability;
-        ability.slot = index;
+        if (ability != null)
+            ability.slot = index;
     }
 
     public void setSpecialEquippedAbility(Ability ability) {

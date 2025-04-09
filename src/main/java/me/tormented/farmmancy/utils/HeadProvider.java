@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerTextures;
+import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,9 +19,9 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.UUID;
 
-public record HeadProvider(String textureUrl) {
+public record HeadProvider(@NotNull String textureUrl) {
 
-    public static PlayerProfile getProfile(String texture) {
+    public static @NotNull PlayerProfile getProfile(@NotNull String texture)  {
         if (isBase64(texture)) {
             byte[] decodedBytes = Base64.getDecoder().decode(texture);
             String jsonString = new String(decodedBytes);
@@ -34,8 +35,6 @@ public record HeadProvider(String textureUrl) {
                 FarmMancy.getInstance().getLogger().warning("Failed to parse base64 texture: " + error.getMessage());
             }
         }
-        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = (SkullMeta) head.getItemMeta();
 
         PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID()); // Get a new player profile
         PlayerTextures textures = profile.getTextures();
@@ -51,7 +50,7 @@ public record HeadProvider(String textureUrl) {
         return profile;
     }
 
-    public ItemStack getHeadItem() {
+    public @NotNull ItemStack getHeadItem() {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta meta = (SkullMeta) head.getItemMeta();

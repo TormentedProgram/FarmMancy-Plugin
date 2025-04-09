@@ -44,10 +44,10 @@ public class ReisenAbility extends MobunitionAbility<Entity> {
     }
 
     @Override
-    public void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource) {
+    public void processPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event, CallerSource callerSource) {
         super.processPlayerInteractEntity(event, callerSource);
 
-        if (callerSource == CallerSource.PLAYER && WandUtils.isHoldingCowWand(event.getPlayer())) {
+        if (callerSource == CallerSource.PLAYER && WandUtils.isHoldingWand(event.getPlayer())) {
             if (event.getRightClicked() instanceof LivingEntity entity && !entity.isDead() && entity.getNoDamageTicks() <= 0 && pullMob() instanceof AbilityHeadDisplay headDisplay) {
                 headDisplay.remove();
                 if (entity instanceof Player player) {
@@ -59,7 +59,7 @@ public class ReisenAbility extends MobunitionAbility<Entity> {
 
     }
 
-    public static Vector getFungusVector(LivingEntity player) {
+    public static @NotNull Vector getFungusVector(LivingEntity player) {
         Random random = new Random();
 
         double x = random.nextDouble() * 2 - 1;

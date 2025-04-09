@@ -21,7 +21,7 @@ public class AbilityRegistry {
         return abilitySuppliers.get(key);
     }
 
-    public @Nullable Ability getAbility(@NotNull String key, UUID id, UUID owner) {
+    public @Nullable Ability getAbility(@NotNull String key, @NotNull UUID id, @NotNull UUID owner) {
         if (getFunction(key) instanceof BiFunction<UUID, UUID, Ability> biFunction) {
             return biFunction.apply(id, owner);
         }

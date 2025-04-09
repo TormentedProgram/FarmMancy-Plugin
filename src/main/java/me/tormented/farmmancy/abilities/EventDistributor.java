@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,11 +27,11 @@ public class EventDistributor implements Listener {
     private EventDistributor() {
     }
 
-    public Map<Entity, MobAbility<? extends Entity>> entityMobunitionAbilityMap = new HashMap<>();
-    public Map<UUID, FarmMancer> playerAbilityMap = new HashMap<>();
+    public final Map<Entity, MobAbility<? extends Entity>> entityMobunitionAbilityMap = new HashMap<>();
+    public final Map<UUID, FarmMancer> playerAbilityMap = new HashMap<>();
 
     @EventHandler
-    public void onEntityDamage(EntityDamageEvent event) {
+    public void onEntityDamage(@NotNull EntityDamageEvent event) {
         MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
         if (mobAbility != null) {
             if (mobAbility instanceof Hook.EntityDamaged entityDamaged) entityDamaged.processEntityDamage(event);
@@ -38,7 +39,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void playerMove(PlayerMoveEvent event) {
+    public void playerMove(@NotNull PlayerMoveEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {
@@ -49,7 +50,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onEntityDamagedByEntity(EntityDamageByEntityEvent event) {
+    public void onEntityDamagedByEntity(@NotNull EntityDamageByEntityEvent event) {
         MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
         if (mobAbility != null) {
             if (mobAbility instanceof Hook.EntityDamagedByEntity entityDamaged)
@@ -58,7 +59,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent event) {
+    public void onEntityDeath(@NotNull EntityDeathEvent event) {
         MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
         if (mobAbility != null) {
             if (mobAbility instanceof Hook.EntityDeath entityDeath) entityDeath.processEntityDeath(event);
@@ -66,7 +67,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onSneak(PlayerToggleSneakEvent event) {
+    public void onSneak(@NotNull PlayerToggleSneakEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {
@@ -77,7 +78,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onSwapItem(PlayerItemHeldEvent event) {
+    public void onSwapItem(@NotNull PlayerItemHeldEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {
@@ -88,7 +89,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onEntityMove(EntityMoveEvent event) {
+    public void onEntityMove(@NotNull EntityMoveEvent event) {
         MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
         if (mobAbility != null) {
             if (mobAbility instanceof Hook.EntityMoved entityMoved) entityMoved.processEntityMove(event);
@@ -96,7 +97,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteraction(PlayerInteractEvent event) {
+    public void onPlayerInteraction(@NotNull PlayerInteractEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {
@@ -108,7 +109,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
         for (Ability ability : farmMancer.getEquippedAbilities()) {
@@ -119,7 +120,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer != null) {
             for (Ability ability : farmMancer.getEquippedAbilities()) {
@@ -131,7 +132,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onPlayerInteractWithEntity(PlayerInteractEntityEvent event) {
+    public void onPlayerInteractWithEntity(@NotNull PlayerInteractEntityEvent event) {
         if (event.isCancelled()) return;
 
         if (entityMobunitionAbilityMap.get(event.getRightClicked()) instanceof MobAbility<? extends Entity> mobAbility && mobAbility instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer) {
@@ -148,7 +149,7 @@ public class EventDistributor implements Listener {
     }
 
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
+    public void onPlayerDropItem(@NotNull PlayerDropItemEvent event) {
         if (playerAbilityMap.get(event.getPlayer().getUniqueId()) instanceof FarmMancer farmMancer) {
             for (Ability ability : farmMancer.getEquippedAbilities()) {
                 if (ability instanceof Hook.PlayerDroppingItem playerDroppingItem) {

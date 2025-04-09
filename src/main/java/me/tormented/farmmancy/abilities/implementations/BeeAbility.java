@@ -35,7 +35,7 @@ public class BeeAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
 
 
     @Override
-    public void processPlayerInteract(PlayerInteractEvent event) {
+    public void processPlayerInteract(@NotNull PlayerInteractEvent event) {
         super.processPlayerInteract(event);
 
         if (event.getAction().isRightClick() && isBeingLookedAt()) {

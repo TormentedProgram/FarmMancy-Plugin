@@ -34,15 +34,15 @@ public class EndermanAbility extends MobunitionAbility<Enderman> implements Hook
     }
 
     @Override
-    public void onSelected(Wand wand) {
+    public void onSelected(@NotNull Wand wand) {
     }
 
     @Override
-    public void onDeselected(Wand wand) {
+    public void onDeselected(@NotNull Wand wand) {
     }
 
     @Override
-    public void onWandUse(Wand wand, PlayerInteractEvent event) {
+    public void onWandUse(@NotNull Wand wand, @NotNull PlayerInteractEvent event) {
         if (event.getAction().isLeftClick() && getOwnerPlayer() instanceof Player player && !headDisplays.isEmpty()) {
             Location loc = player.getLocation();
             Vector direction = loc.getDirection();

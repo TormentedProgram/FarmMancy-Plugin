@@ -13,8 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
-
 public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbility<EntityType> {
 
     protected AbilityHeadDisplay headDisplay;
@@ -41,13 +39,13 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
     }
 
     @Override
-    public void onTick(CallerSource callerSource) {
+    public void onTick(@NotNull CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
             if (player.isSneaking()) {
                 headDisplay.remove();
             } else {
                 ItemStack item = player.getInventory().getItemInMainHand();
-                if (isActive() && isHoldingCowWand(player)) {
+                if (isActive() && WandUtils.isHoldingWand(player)) {
                     headDisplay.spawn(player.getLocation());
                     if (headDisplay.getItemDisplay() instanceof ItemDisplay itemDisplay) {
                         itemDisplay.setGlowing(isBeingLookedAt());
@@ -55,7 +53,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
                 }
             }
             if (!player.isSneaking()) {
-                if (isActive() && WandUtils.isHoldingCowWand(player)) {
+                if (isActive() && WandUtils.isHoldingWand(player)) {
                     headDisplay.spawn(player.getLocation());
                 } else {
                     if (headDisplay != null) headDisplay.remove();
@@ -77,7 +75,7 @@ public abstract class MobuvertAbility<EntityType extends Entity> extends MobAbil
         if (getOwnerPlayer() instanceof Player player) {
             ItemStack item = player.getInventory().getItemInMainHand();
             ItemMeta meta = item.getItemMeta();
-            if (isActive() && isHoldingCowWand(player)) {
+            if (isActive() && WandUtils.isHoldingWand(player)) {
                 headDisplay.spawn(player.getLocation());
             }
         }

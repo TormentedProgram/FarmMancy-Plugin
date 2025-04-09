@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Ticking implements Runnable {
 
-    private static Ticking instance = new Ticking();
+    private static final Ticking instance = new Ticking();
 
     public static Ticking getInstance() {
         return instance;

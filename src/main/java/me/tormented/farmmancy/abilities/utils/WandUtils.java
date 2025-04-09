@@ -1,39 +1,33 @@
 package me.tormented.farmmancy.abilities.utils;
 
-import me.tormented.farmmancy.FarmMancy;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class WandUtils {
-    public static NamespacedKey magic_hoe_key = new NamespacedKey(FarmMancy.getInstance(), "magical_hoe");
 
-    public static boolean isHoldingCowWand(@NotNull Player player) {
+    public static boolean isHoldingWand(@NotNull Player player) {
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getItemMeta() == null) return false;
         return Wand.isWand(item);
     }
 
-    public static boolean isHoldingCowWand(@NotNull Player player, int slotIndex) {
+    public static boolean isHoldingWand(@NotNull Player player, int slotIndex) {
         ItemStack item = player.getInventory().getItem(slotIndex);
         if (item == null || item.getItemMeta() == null) return false;
         return Wand.isWand(item);
     }
 
-    public static void giveCowWand(Player player) {
+    public static void giveWandIfMissing(@NotNull Player player) {
         for (ItemStack item : player.getInventory().getContents()) {
-            if (item != null && item.hasItemMeta()) {
-                ItemMeta meta = item.getItemMeta();
-                if (meta.getPersistentDataContainer().has(magic_hoe_key, PersistentDataType.BYTE)) {
-                    return;
-                }
-            }
+            if (item != null && Wand.isWand(item)) return;
         }
 
+        giveWand(player);
+    }
+
+    public static void giveWand(@NotNull Player player) {
         Wand wand = new Wand(new ItemStack(Material.NETHERITE_HOE, 1));
         wand.convert();
         player.give(wand.getItem());

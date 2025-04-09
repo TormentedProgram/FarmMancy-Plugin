@@ -3,6 +3,7 @@ package me.tormented.farmmancy.abilities;
 
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.utils.Wand;
+import me.tormented.farmmancy.abilities.utils.WandUtils;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
@@ -16,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
-
-import static me.tormented.farmmancy.abilities.utils.WandUtils.isHoldingCowWand;
 
 public abstract class MobAbility<EntityType extends Entity> extends Ability implements Hook.Activation, Hook.Ticking, Hook.EntityDamaged, Hook.EntityDeath, Hook.PlayerInteraction {
 
@@ -35,7 +34,7 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
     }
 
     @Override
-    public void processEntityDamage(EntityDamageEvent event) {
+    public void processEntityDamage(@NotNull EntityDamageEvent event) {
         if (event.getEntity().hasMetadata("FarmMancy_Projectile")) return;
         if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK
                 && event.getCause() != EntityDamageEvent.DamageCause.KILL) {
@@ -64,20 +63,20 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
     public abstract boolean isHeadRingVisible();
 
     @Override
-    public abstract void onTick(CallerSource callerSource);
+    public abstract void onTick(@NotNull CallerSource callerSource);
 
     @Override
-    public void processEntityDeath(EntityDeathEvent event) {
+    public void processEntityDeath(@NotNull EntityDeathEvent event) {
         event.getDrops().clear();
     }
 
-    public EntityType spawnEntity(Location location) {
+    public EntityType spawnEntity(@NotNull Location location) {
         return location.getWorld().spawn(location, getEntityClass());
     }
 
     public abstract @NotNull ItemStack getHeadItem(@Nullable EntityType entity);
 
-    public void applySpawnVariant(EntityType entity, AbilityHeadDisplay headDisplay) {
+    public void applySpawnVariant(@NotNull EntityType entity, @NotNull AbilityHeadDisplay headDisplay) {
     }
 
     protected @Nullable AbilityHeadDisplay registerAddedEntity(@Nullable Entity entity) {
@@ -95,7 +94,7 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
         }
 
         if (getOwnerPlayer() instanceof Player player) {
-            if (!isHoldingCowWand(player)) {
+            if (!WandUtils.isHoldingWand(player)) {
                 return headDisplay;
             }
         }
@@ -123,7 +122,7 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
     public abstract boolean isBeingLookedAt();
 
     @Override
-    public void processPlayerInteract(PlayerInteractEvent event) {
+    public void processPlayerInteract(@NotNull PlayerInteractEvent event) {
         if (this instanceof Hook.WandSelectable wandSelectable && event.getItem() != null) {
             Wand checkingWand = new Wand(event.getItem());
             if (checkingWand.isWand()) {

@@ -42,7 +42,7 @@ public class StriderAbility extends MobunitionAbility<Strider> implements Hook.P
     }
 
     @Override
-    public void processPlayerMove(PlayerMoveEvent event) {
+    public void processPlayerMove(@NotNull PlayerMoveEvent event) {
         Player player = event.getPlayer();
         Location loc = player.getLocation();
         Block blockUnder = loc.clone().subtract(0.0D, 0.5D, 0.0D).getBlock();
@@ -58,7 +58,7 @@ public class StriderAbility extends MobunitionAbility<Strider> implements Hook.P
     }
 
     @Override
-    public void processPlayerInteract(PlayerInteractEvent event) {
+    public void processPlayerInteract(@NotNull PlayerInteractEvent event) {
         super.processPlayerInteract(event);
 
         if (event.getAction().isRightClick() && isBeingLookedAt()) {

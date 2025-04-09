@@ -48,7 +48,7 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInt
     }
 
     @Override
-    public void onTick(CallerSource callerSource) {
+    public void onTick(@NotNull CallerSource callerSource) {
         super.onTick(callerSource);
 
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {
@@ -67,7 +67,7 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInt
     }
 
     @Override
-    public void processPlayerJoin(PlayerJoinEvent event) {
+    public void processPlayerJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
         AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
         if (attribute != null) {
@@ -76,12 +76,12 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInt
     }
 
     @Override
-    public void processPlayerQuit(PlayerQuitEvent event) {
+    public void processPlayerQuit(@NotNull PlayerQuitEvent event) {
 
     }
 
     @Override
-    public void processPlayerInteract(PlayerInteractEvent event) {
+    public void processPlayerInteract(@NotNull PlayerInteractEvent event) {
         super.processPlayerInteract(event);
 
         if (event.getAction().isRightClick() && isBeingLookedAt()) {

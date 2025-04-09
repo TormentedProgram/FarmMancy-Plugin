@@ -34,10 +34,10 @@ public class YuyukoAbility extends MobunitionAbility<Entity> {
     }
 
     @Override
-    public void processPlayerInteractEntity(PlayerInteractEntityEvent event, CallerSource callerSource) {
+    public void processPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event, CallerSource callerSource) {
         super.processPlayerInteractEntity(event, callerSource);
 
-        if (callerSource == CallerSource.PLAYER && WandUtils.isHoldingCowWand(event.getPlayer())) {
+        if (callerSource == CallerSource.PLAYER && WandUtils.isHoldingWand(event.getPlayer())) {
             if (event.getRightClicked() instanceof LivingEntity targetEntity && !targetEntity.isDead() && targetEntity.getNoDamageTicks() <= 0 && pullMob() instanceof AbilityHeadDisplay headDisplay) {
                 headDisplay.remove();
                 targetEntity.getWorld().spawnParticle(Particle.CHERRY_LEAVES, targetEntity.getLocation().add(0.0, 1.0, 0.0), 100, 1.0, 1.0, 1.0, null);
