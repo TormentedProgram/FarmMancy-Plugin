@@ -1,9 +1,13 @@
 package me.tormented.farmmancy.abilities;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
+import me.tormented.farmmancy.Registries;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.farmmancer.FarmMancer;
 import me.tormented.farmmancy.farmmancer.FarmMancerManager;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +18,7 @@ import org.bukkit.event.player.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -143,7 +148,27 @@ public class EventDistributor implements Listener {
         }
 
         if (playerAbilityMap.get(event.getPlayer().getUniqueId()) instanceof FarmMancer farmMancer) {
-            for (Ability ability : farmMancer.getEquippedAbilities()) {
+
+            Entity entity = event.getRightClicked();
+            if (Registries.abilityRegistry.getFactory(entity.getType().getKey().asString()) instanceof AbilityFactory abilityFactory) {
+                if (!farmMancer.isAbilityUnlocked(abilityFactory)) {
+                    switch (farmMancer.unlockAbility(abilityFactory)) {
+                        case MobunitionAbility<?> mobunitionAbility -> {
+                            mobunitionAbility.addMob(entity);
+                        }
+                        case MobuvertAbility<?> mobuvertAbility -> {
+                            mobuvertAbility.setMob(entity);
+                        }
+                        case null, default -> {}
+                    }
+                    entity.remove();
+                    return;
+                }
+            }
+
+            Iterator<Ability> unlockedAbilities = farmMancer.getUnlockedAbilities();
+            while (unlockedAbilities.hasNext()) {
+                Ability ability = unlockedAbilities.next();
                 if (ability instanceof Hook.EntityInteractedByPlayer entityInteractedByPlayer) {
                     entityInteractedByPlayer.processPlayerInteractEntity(event, Hook.CallerSource.PLAYER);
                 }
@@ -163,6 +188,8 @@ public class EventDistributor implements Listener {
 
         Wand checkingWand = new Wand(event.getItemDrop().getItemStack());
         if (checkingWand.isWand() && checkingWand.clearBoundAbility()) {
+            event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_ANVIL_LAND, 1.0f, 2.0f);
+            event.getPlayer().sendMessage(Component.text("Wand ability unbounded", NamedTextColor.YELLOW));
             event.setCancelled(true);
         }
     }

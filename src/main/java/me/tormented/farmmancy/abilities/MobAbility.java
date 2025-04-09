@@ -4,8 +4,11 @@ package me.tormented.farmmancy.abilities;
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.abilities.utils.WandUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -127,8 +130,15 @@ public abstract class MobAbility<EntityType extends Entity> extends Ability impl
             Wand checkingWand = new Wand(event.getItem());
             if (checkingWand.isWand()) {
                 Ability checkingAbility = checkingWand.getBoundAbility();
-                if (isBeingLookedAt() && checkingAbility == null) {
+                if (event.getAction().isRightClick() && isBeingLookedAt() && checkingAbility == null) {
                     checkingWand.setBoundAbility(this);
+                    if (getOwnerPlayer() instanceof Player player) {
+                        player.playSound(player, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1.0f, 2.0f);
+                        player.sendMessage(Component.text("Wand bound to ability: ", NamedTextColor.GREEN)
+                                .append(getName())
+                        );
+                    }
+
                 } else if (checkingAbility == this) {
                     wandSelectable.onWandUse(checkingWand, event);
                 }

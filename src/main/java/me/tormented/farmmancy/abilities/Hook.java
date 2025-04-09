@@ -114,5 +114,10 @@ public sealed interface Hook {
 
     }
 
+    non-sealed interface Equipping extends Hook {
+        void onEquipped();
+        void onUnequipped();
+    }
+
 
 }

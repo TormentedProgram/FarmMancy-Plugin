@@ -1,11 +1,17 @@
 package me.tormented.farmmancy.farmmancer;
 
 import me.tormented.farmmancy.abilities.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.UUID;
 
 public class FarmMancer {
     public final Player _player;
@@ -15,11 +21,29 @@ public class FarmMancer {
     private final Set<Ability> unlockedAbilities = new HashSet<>();
 
     public void setEquippedAbility(int index, @Nullable Ability ability) {
-        this.equippedAbilities[index] = ability;
-        if (ability != null)
+        if (index < 0 || index > equippedAbilities.length) throw new IllegalArgumentException("Slot index is out of bounds");
+
+        Ability oldAbility = index == equippedAbilities.length ? specialEquippedAbility : equippedAbilities[index];
+
+        if (oldAbility instanceof Hook.Equipping oldEquippingAbility) {
+            oldEquippingAbility.onUnequipped();
+        }
+
+        if (index == equippedAbilities.length)
+            specialEquippedAbility = ability;
+        else
+            equippedAbilities[index] = ability;
+
+        if (ability != null) {
             ability.slot = index;
+
+            if (ability instanceof Hook.Equipping equippingAbility) {
+                equippingAbility.onEquipped();
+            }
+        }
     }
 
+    @Deprecated
     public void setSpecialEquippedAbility(Ability ability) {
         this.specialEquippedAbility = ability;
     }
@@ -61,6 +85,30 @@ public class FarmMancer {
         for (Ability ability : getEquippedAbilities()) {
             if (ability instanceof Hook.Ticking ticking) ticking.onTick(Hook.CallerSource.PLAYER);
         }
+    }
+
+    public boolean isAbilityUnlocked(@NotNull AbilityFactory abilityFactory) {
+        for (Ability unlockedAbility : unlockedAbilities) {
+            if (unlockedAbility.getAbilityFactory().equals(abilityFactory)) return true;
+        }
+
+        return false;
+    }
+
+    public Ability unlockAbility(@NotNull AbilityFactory abilityFactory) {
+        Ability unlockedAbility = abilityFactory.createAbility(UUID.randomUUID(), _player.getUniqueId());
+        unlockedAbilities.add(unlockedAbility);
+
+        _player.playSound(_player, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+        _player.sendMessage(Component.text("Ability unlocked: ", NamedTextColor.GREEN)
+                .append(unlockedAbility.getName())
+        );
+
+        return unlockedAbility;
+    }
+
+    public Iterator<Ability> getUnlockedAbilities() {
+        return unlockedAbilities.iterator();
     }
 
 }

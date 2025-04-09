@@ -40,7 +40,7 @@ public abstract class Ability {
     public final @NotNull UUID id;
     public final @NotNull UUID owner;
 
-    public int slot;
+    public int slot = -1;
 
     private final @NotNull AbilityFactory abilityFactory;
     public @NotNull AbilityFactory getAbilityFactory() { return abilityFactory; }
@@ -65,5 +65,7 @@ public abstract class Ability {
     public @Nullable Player getOwnerPlayer() {
         return getOwnerPlayer(false);
     }
+
+    public boolean isEquipped() { return slot > 0; }
 
 }
