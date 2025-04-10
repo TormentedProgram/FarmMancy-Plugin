@@ -8,7 +8,6 @@ import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
@@ -44,11 +43,9 @@ public class WardenAbility extends MobunitionAbility<Warden> implements Hook.Wan
     }
 
     @Override
-    public @NotNull TextComponent getName() {
-        return Component.text("WARDEN ABILITY")
-                .color(NamedTextColor.DARK_AQUA)
-                .decoration(TextDecoration.ITALIC, false);
-    };
+    public @NotNull Component getName() {
+        return Component.text("Warden Ability", NamedTextColor.DARK_AQUA).decoration(TextDecoration.ITALIC, false);
+    }
 
     @Override
     public void onSelected(@NotNull Wand wand) {

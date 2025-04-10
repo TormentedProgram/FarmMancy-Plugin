@@ -12,39 +12,42 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.entity.Blaze;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Ghast;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class BlazeAbility extends MobunitionAbility<Blaze> implements Hook.WandSelectable {
-    @Override
-    public Class<Blaze> getEntityClass() {
-        return Blaze.class;
-    }
-
-    public BlazeAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+public class GhastAbility extends MobunitionAbility<Ghast> implements Hook.WandSelectable {
+    public GhastAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
         super(abilityFactory, id, owner);
     }
 
-    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/b20657e24b56e1b2f8fc219da1de788c0c24f36388b1a409d0cd2d8dba44aa3b");
+    @Override
+    public Class<Ghast> getEntityClass() {
+        return Ghast.class;
+    }
+
+    public static final HeadProvider headProvider = new HeadProvider("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzUzZGUzMWEyZDAwNDFhNmVmNzViZjdhNmM4NDY4NDY0ZGIxYWFhNjIwMWViYjFhNjAxM2VkYjIyNDVjNzYwNyJ9fX0=");
 
     @Override
-    public @NotNull ItemStack getHeadItem(Blaze entity) {
+    public @NotNull ItemStack getHeadItem(@Nullable Ghast entity) {
         return headProvider.getHeadItem();
     }
 
     @Override
     public void onSelected(@NotNull Wand wand) {
+
     }
 
     @Override
     public void onDeselected(@NotNull Wand wand) {
+
     }
 
     @Override
@@ -57,21 +60,16 @@ public class BlazeAbility extends MobunitionAbility<Blaze> implements Hook.WandS
             if (pullMob() instanceof AbilityHeadDisplay headDisplay) {
                 headDisplay.remove();
 
-                loc.getWorld().playSound(player, Sound.ENTITY_BLAZE_SHOOT, 1.0f, 1.0f);
+                loc.getWorld().playSound(player, Sound.ENTITY_GHAST_SHOOT, 1.0f, 1.0f);
 
-                for (int i = -1; i < 2; i++) {
-
-                    Vector targetDirection = player.getEyeLocation().getDirection().rotateAroundY(Math.toRadians(i * 20.0f));
-                    targetDirection.multiply(1.0f);
-                    player.launchProjectile(SmallFireball.class, targetDirection);
-                }
+                Fireball fireball = player.launchProjectile(Fireball.class);
+                fireball.setYield(3.5f);
             }
         }
     }
 
     @Override
     public @NotNull Component getName() {
-        return Component.text("Blaze Ability", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false);
+        return Component.text("Ghast Ability", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false);
     }
-
 }

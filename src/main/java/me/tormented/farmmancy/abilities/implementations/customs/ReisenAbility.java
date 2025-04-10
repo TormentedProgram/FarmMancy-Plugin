@@ -33,9 +33,14 @@ public class ReisenAbility extends MobunitionAbility<Entity> {
         return null;
     }
 
+    public @NotNull Component getName() {
+        return Component.text("Reisen Ability", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false);
+    }
+
     public ReisenAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
         super(abilityFactory, id, owner);
     }
+
 
     public static final HeadProvider headProvider = new HeadProvider("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmU3MjhhOGFmZDU4ZDFkM2M2NWUxY2Y4ZGUxMDVkNzA5Mjg4ZGIyMWJkOTE4MzczODYzNDZjZTE2M2VkNTM4MiJ9fX0=");
 

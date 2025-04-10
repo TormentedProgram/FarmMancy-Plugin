@@ -5,7 +5,10 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Squid;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -54,5 +57,11 @@ public class SquidAbility extends MobuvertAbility<Squid> implements Hook.PlayerI
             player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 500, 1));
         }
     }
+
+    @Override
+    public @NotNull Component getName() {
+        return Component.text("Squid Ability", TextColor.color(43, 45, 48)).decoration(TextDecoration.ITALIC, false);
+    }
+
 }
 

@@ -34,11 +34,9 @@ public class EndermanAbility extends MobunitionAbility<Enderman> implements Hook
     public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/9689c200980e4c54adcfbbdad492c1d2edbd92366aabf89724ed19930cb5b6e2");
 
     @Override
-    public @NotNull TextComponent getName() {
-        return Component.text("ENDERMAN ABILITY")
-                .color(NamedTextColor.LIGHT_PURPLE)
-                .decoration(TextDecoration.ITALIC, false);
-    };
+    public @NotNull Component getName() {
+        return Component.text("Enderman Ability", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false);
+    }
 
     @Override
     public @NotNull ItemStack getHeadItem(Enderman entity) {

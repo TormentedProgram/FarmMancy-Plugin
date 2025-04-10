@@ -6,6 +6,10 @@ import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.LivingEntity;
@@ -61,6 +65,11 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.P
                 player.setVelocity(velocityVector);
             }
         }
+    }
+
+    @Override
+    public @NotNull Component getName() {
+        return Component.text("Chicken Ability", NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false);
     }
 
 }

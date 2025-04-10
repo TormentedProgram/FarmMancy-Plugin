@@ -42,11 +42,9 @@ public class EvokerAbility extends MobunitionAbility<Evoker> implements Hook.Wan
     }
 
     @Override
-    public @NotNull TextComponent getName() {
-        return Component.text("EVOKER ABILITY")
-                .color(NamedTextColor.DARK_GREEN)
-                .decoration(TextDecoration.ITALIC, false);
-    };
+    public @NotNull Component getName() {
+        return Component.text("Evoker Ability", NamedTextColor.DARK_GREEN).decoration(TextDecoration.ITALIC, false);
+    }
 
     @Override
     public void onSelected(@NotNull Wand wand) {

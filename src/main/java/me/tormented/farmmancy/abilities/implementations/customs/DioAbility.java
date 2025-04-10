@@ -29,6 +29,11 @@ public class DioAbility extends MobuvertAbility<Entity> implements Hook.PlayerIn
         return null;
     }
 
+    @Override
+    public @NotNull Component getName() {
+        return Component.text("Dio Ability", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false);
+    }
+
     public DioAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
         super(abilityFactory, id, owner);
     }

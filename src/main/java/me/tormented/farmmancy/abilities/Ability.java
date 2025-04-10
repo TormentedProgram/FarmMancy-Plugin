@@ -2,9 +2,6 @@ package me.tormented.farmmancy.abilities;
 
 import me.tormented.farmmancy.FarmMancy;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,11 +19,7 @@ public abstract class Ability {
         return abilities.get(id);
     }
 
-    public @NotNull TextComponent getName() {
-        return Component.text("UNNAMED ABILITY")
-                .color(NamedTextColor.RED)
-                .decoration(TextDecoration.ITALIC, false);
-    };
+    public abstract @NotNull Component getName();
 
     public static @NotNull Iterator<Ability> getAllAbilityInstances() {
         return abilities.values().iterator();

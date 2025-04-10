@@ -5,7 +5,9 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -57,6 +59,11 @@ public class BeeAbility extends MobuvertAbility<Bee> implements Hook.PlayerInter
             player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 240, 1));
             player.setVelocity(velocityVector);
         }
+    }
+
+    @Override
+    public @NotNull Component getName() {
+        return Component.text("Bee Ability", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false);
     }
 }
 

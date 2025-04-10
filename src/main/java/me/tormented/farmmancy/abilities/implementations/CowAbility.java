@@ -32,11 +32,9 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
     private final float CowShootVelocity = FarmConfig.getInstance().getCowShootVelocity();
 
     @Override
-    public @NotNull TextComponent getName() {
-        return Component.text("COW ABILITY")
-                .color(NamedTextColor.GOLD)
-                .decoration(TextDecoration.ITALIC, false);
-    };
+    public @NotNull Component getName() {
+        return Component.text("Cow Ability", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false);
+    }
 
     @Override
     public Class<Cow> getEntityClass() {
@@ -110,7 +108,5 @@ public class CowAbility extends MobunitionAbility<Cow> implements Hook.EntityMov
                 // Not enough ammo
             }
         }
-
-
     }
 }
