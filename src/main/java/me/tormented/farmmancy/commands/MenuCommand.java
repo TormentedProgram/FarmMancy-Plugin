@@ -201,7 +201,7 @@ public class MenuCommand {
                             @Override
                             public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
                                 for (FarmMancer farmMancer : FarmMancerManager.getInstance().farmMancers) {
-                                    if (farmMancer._player == menu.getPlayer()) {
+                                    if (farmMancer.getPlayer() == menu.getPlayer()) {
                                         farmMancer.deactivateAll(true);
                                         menu.getPlayer().playSound(menu.getPlayer(), Sound.BLOCK_ANVIL_USE, 1.0f, 0.7f);
                                     }

@@ -25,10 +25,10 @@ public class DatabaseAutosave implements Runnable {
                         Ability.unloadAbility(ability.id);
                     }
                 }
-                FarmMancerManager.getInstance().farmMancerMap.remove(farmMancer._player);
+                FarmMancerManager.getInstance().farmMancerMap.remove(farmMancer.getPlayer());
                 FarmMancerManager.getInstance().farmMancers.remove(farmMancer);
-                EventDistributor.getInstance().playerAbilityMap.remove(farmMancer._player.getUniqueId());
-                FarmMancy.getInstance().getLogger().info("Successfully unloaded " + farmMancer._player.getName() + "'s FarmMancer.");
+                EventDistributor.getInstance().playerAbilityMap.remove(farmMancer.getPlayer().getUniqueId());
+                FarmMancy.getInstance().getLogger().info("Successfully unloaded " + farmMancer.getPlayer().getName() + "'s FarmMancer.");
             }
         }
     }

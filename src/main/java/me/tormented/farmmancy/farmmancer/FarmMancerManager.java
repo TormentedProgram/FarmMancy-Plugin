@@ -21,7 +21,7 @@ public class FarmMancerManager {
 
     public FarmMancer setFarmMancer(Player player) {
         for (FarmMancer farmMancer : farmMancers) {
-            if (farmMancer._player == player) {
+            if (farmMancer.getPlayer() == player) {
                 return farmMancer;
             }
         }
@@ -34,7 +34,7 @@ public class FarmMancerManager {
 
     public void removeFarmMancer(Player player) {
         for (FarmMancer farmMancer : farmMancers) {
-            if (farmMancer._player == player) {
+            if (farmMancer.getPlayer() == player) {
                 farmMancer.deactivateAll(true);
                 farmMancerMap.remove(player);
                 farmMancers.remove(farmMancer);

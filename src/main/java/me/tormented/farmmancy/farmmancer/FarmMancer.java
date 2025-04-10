@@ -12,11 +12,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class FarmMancer {
-    public final Player _player;
+    private Player farmMancerPlayer;
 
     private final Ability[] equippedAbilities = new Ability[3];
     private Ability specialEquippedAbility;
     private final Set<Ability> unlockedAbilities = new HashSet<>();
+
+    public Player getPlayer() {
+        return farmMancerPlayer;
+    }
 
     public void setEquippedAbility(int index, @Nullable Ability ability) {
         if (index < 0 || index > equippedAbilities.length)
@@ -55,7 +59,7 @@ public class FarmMancer {
     }
 
     public FarmMancer(Player player) {
-        _player = player;
+        farmMancerPlayer = player;
     }
 
     public void deactivateAll(boolean kill) {
@@ -95,11 +99,11 @@ public class FarmMancer {
     }
 
     public Ability unlockAbility(@NotNull AbilityFactory abilityFactory) {
-        Ability unlockedAbility = abilityFactory.createAbility(UUID.randomUUID(), _player.getUniqueId());
+        Ability unlockedAbility = abilityFactory.createAbility(UUID.randomUUID(), farmMancerPlayer.getUniqueId());
         unlockedAbilities.add(unlockedAbility);
 
-        _player.playSound(_player, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-        _player.sendMessage(Component.text("Ability unlocked: ", NamedTextColor.GREEN)
+        farmMancerPlayer.playSound(farmMancerPlayer, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+        farmMancerPlayer.sendMessage(Component.text("Ability unlocked: ", NamedTextColor.GREEN)
                 .append(unlockedAbility.getName())
         );
 
