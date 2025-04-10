@@ -114,7 +114,7 @@ public class FarmMancer {
         return unlockedAbilities.iterator();
     }
 
-    public Map<String, Ability> getUnlockedAbilitiesOfDoom() {
+    public Map<String, Ability> getMappedUnlockedAbilities() {
         Map<String, Ability> abilityMap = new HashMap<>();
         Map<String, AbilityFactory> AbilityNames = Registries.abilityRegistry.getRegistry();
 
@@ -122,7 +122,7 @@ public class FarmMancer {
             String abilityName = null;
             for (Map.Entry<String, AbilityFactory> entry : AbilityNames.entrySet()) {
                 if (entry.getValue().equals(ability.getAbilityFactory())) {
-                    abilityName = entry.getKey().split(":", 2)[1].trim();
+                    abilityName = entry.getKey().trim();
                     break;
                 }
             }

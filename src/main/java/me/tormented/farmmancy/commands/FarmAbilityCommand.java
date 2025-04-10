@@ -10,6 +10,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -20,21 +21,21 @@ public class FarmAbilityCommand {
                 .withPermission("CommandPermission.OP")
                 .withArguments(new MultiLiteralArgument("doing", "set"))
                 .withArguments(new EntitySelectorArgument.ManyPlayers("Players", false))
-                .withArguments(new StringArgument("abilityType").replaceSuggestions(
-                        ArgumentSuggestions.strings(info ->
+                .withArguments(new IntegerArgument("slot", 1, 4))
+                .withArguments(new GreedyStringArgument("abilityType").replaceSuggestions(
+                        ArgumentSuggestions.stringCollection(info ->
                                 {
                                     if (info.sender() instanceof Player player) {
                                         if (FarmMancerManager.getInstance().farmMancerMap.containsKey(player)) {
                                             FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
                                             if (farmMancer != null) {
-                                                return farmMancer.getUnlockedAbilitiesOfDoom().keySet().toArray(new String[0]);
+                                                return new ArrayList<>(farmMancer.getMappedUnlockedAbilities().keySet());
                                             }
                                         }
                                     }
-                                    return new String[0];
+                                    return Collections.emptyList();
                                 }
                         )))
-                .withArguments(new IntegerArgument("slot", 1, 4))
                 .executes((sender, args) -> {
                     String doing = (String) args.get("doing");
                     Object slotObject = args.get("slot");
@@ -73,7 +74,7 @@ public class FarmAbilityCommand {
             if (FarmMancerManager.getInstance().farmMancerMap.containsKey(player)) {
                 FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
                 if (farmMancer != null) {
-                    return farmMancer.getUnlockedAbilitiesOfDoom();
+                    return farmMancer.getMappedUnlockedAbilities();
                 }
             }
         }
