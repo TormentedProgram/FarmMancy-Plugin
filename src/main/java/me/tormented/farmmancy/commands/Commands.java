@@ -7,24 +7,26 @@ public class Commands {
         return instance;
     }
 
-    public MenuCommand menuCommand;
+    public MenuSpawnCommand menuSpawnCommand;
     public ImbueCowCommand imbueCowCommand;
-    public FarmMancerCommand farmMancerCommand;
+    public FarmMancyCommand farmMancyCommand;
     public ReloadConfigCommand reloadConfigCommand;
     public ChangeMenuCommand changeMenuCommand;
     public FarmAbilityCommand farmAbilityCommand;
     public FarmUnlockCommand farmUnlockCommand;
+    public FarmMancerCommand farmMancerCommand;
 
     private Commands() {
     }
 
     public void load() {
-        menuCommand = new MenuCommand();
+        menuSpawnCommand = new MenuSpawnCommand();
         imbueCowCommand = new ImbueCowCommand();
-        farmMancerCommand = new FarmMancerCommand();
+        farmMancyCommand = new FarmMancyCommand();
         reloadConfigCommand = new ReloadConfigCommand();
         changeMenuCommand = new ChangeMenuCommand();
         farmAbilityCommand = new FarmAbilityCommand();
         farmUnlockCommand = new FarmUnlockCommand();
+        farmMancerCommand = new FarmMancerCommand();
     }
 }

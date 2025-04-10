@@ -10,16 +10,18 @@ public class ImbueCowCommand {
     private final boolean enabled = FarmConfig.getInstance().getAllowedImbuement();
 
     public ImbueCowCommand() {
-        new CommandAPICommand("imbueCowMagic")
-                .withPermission("CommandPermission.OP")
-                .executesPlayer((player, args) -> {
-                    if (enabled) {
-                        Wand wand = new Wand(player.getInventory().getItemInMainHand());
-                        wand.convert();
-                    } else {
-                        player.sendMessage(Component.text("Sorry, this has been disabled in the config.", NamedTextColor.RED));
-                    }
-                })
-                .register();
+        new CommandAPICommand("farmmancy")
+                .withSubcommand(
+                new CommandAPICommand("imbue")
+                    .withPermission("farmmancy.imbue.wand")
+                    .executesPlayer((player, args) -> {
+                        if (enabled) {
+                            Wand wand = new Wand(player.getInventory().getItemInMainHand());
+                            wand.convert();
+                        } else {
+                            player.sendMessage(Component.text("Sorry, this has been disabled in the config.", NamedTextColor.RED));
+                        }
+                    }))
+                    .register();
     }
 }

@@ -18,12 +18,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class MenuCommand {
+public class MenuSpawnCommand {
     private final MenuFactory menuFactory;
     private static final int maxMobCap = FarmConfig.getInstance().getMaxMobCap();
 
-    public MenuCommand() {
-        menuFactory = new MenuFactory(5, Component.text("FarmMancy Station"));
+    public MenuSpawnCommand() {
+        menuFactory = new MenuFactory(5, Component.text("FarmMancy Spawner"));
 
         menuFactory.addMenuFiller(new Fillers.FillAll(new MenuItem(ItemStack.of(Material.BLACK_STAINED_GLASS_PANE), false)));
 
@@ -215,11 +215,15 @@ public class MenuCommand {
             }
         });
 
-        new CommandAPICommand("farmmenu")
-                .withPermission("CommandPermission.OP")
-                .executesPlayer((player, args) -> {
-                    menuFactory.sendToPlayer(player);
-                })
-                .register();
+        new CommandAPICommand("farmmancy")
+            .withSubcommand(
+                new CommandAPICommand("menu")
+                    .withSubcommand(
+                        new CommandAPICommand("spawn")
+                            .withPermission("farmmancy.menu.spawn")
+                            .executesPlayer((player, args) -> {
+                                menuFactory.sendToPlayer(player);
+                            }))
+                            ).register();
     }
 }

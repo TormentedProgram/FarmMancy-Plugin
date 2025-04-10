@@ -1,6 +1,5 @@
 package me.tormented.farmmancy.commands;
 
-import dev.jorel.commandapi.CommandAPICommand;
 import me.tormented.farmmancy.inventoryMenu.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -64,11 +63,14 @@ public class ChangeMenuCommand {
             }
         });
 
+        /*
+        //unfinished
         new CommandAPICommand("testMenu")
                 .withPermission("CommandPermission.OP")
                 .executesPlayer((player, args) -> {
                     menuFactory.sendToPlayer(player);
                 })
                 .register();
+        */
     }
 }
