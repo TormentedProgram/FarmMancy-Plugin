@@ -7,7 +7,6 @@ import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.utils.HeadProvider;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
@@ -59,9 +58,18 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.P
                 livingEntity.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
                 livingEntity.setHealth(0f);
 
+                int previousDuration = 0;
                 Vector velocityVector = player.getVelocity();
                 velocityVector.setY(0.6f);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 80, 1));
+                if (player.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
+                    PotionEffect potion = player.getPotionEffect(PotionEffectType.SLOW_FALLING);
+                    if (potion != null) {
+                        previousDuration = potion.getDuration();
+                        player.removePotionEffect(PotionEffectType.SLOW_FALLING);
+                    }
+
+                }
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, previousDuration + 80, 1));
                 player.setVelocity(velocityVector);
             }
         }
