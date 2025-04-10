@@ -28,7 +28,7 @@ public class WandUtils {
     }
 
     public static void giveWand(@NotNull Player player) {
-        Wand wand = new Wand(new ItemStack(Material.NETHERITE_HOE, 1));
+        Wand wand = new Wand(new ItemStack(Material.WOODEN_HOE, 1));
         wand.convert();
         player.give(wand.getItem());
     }

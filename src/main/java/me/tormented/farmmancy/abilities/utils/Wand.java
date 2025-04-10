@@ -7,6 +7,8 @@ import me.tormented.farmmancy.utils.UUIDDataType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -65,7 +67,9 @@ public class Wand {
             Component displayName = itemMeta.displayName(); // Adventure API
             String funnyName = (displayName != null) ? displayName.toString() : formattedName;
 
-            itemMeta.customName(Component.text("Magical " + funnyName + " of Destruction", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
+            Component customName = MiniMessage.miniMessage().deserialize("<!italic><light_purple>Magical</light_purple> <name> <light_purple>of Farm</light_purple> <dark_purple>Manipulation</dark_purple></!italic>", Placeholder.parsed("name", "<aqua>" + funnyName + "</aqua>"));
+
+            itemMeta.customName(customName);
 
             itemMeta.getPersistentDataContainer().set(wandKey, PersistentDataType.BYTE, (byte) 1);
 
