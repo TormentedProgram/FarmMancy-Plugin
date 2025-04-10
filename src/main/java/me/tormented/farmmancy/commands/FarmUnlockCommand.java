@@ -30,18 +30,14 @@ public class FarmUnlockCommand {
                         case "set" -> {
                             if (players != null && abilityType != null) {
                                 for (Player player : players) {
-                                    if (FarmMancerManager.getInstance().farmMancerMap.containsKey(player)) {
-                                        player.sendMessage(Component.text("Force unlocked ability: ")
-                                                .append(Component.text(abilityType)
-                                                        .color(NamedTextColor.AQUA))
-                                                .color(NamedTextColor.GREEN));
-                                        FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
-                                        AbilityFactory factory = Registries.abilityRegistry.getFactory(abilityType);
-                                        if (factory != null) {
-                                            farmMancer.unlockAbility(factory);
-                                        }
-                                    } else {
-                                        player.sendMessage(Component.text("You are not a FarmMancer...").color(NamedTextColor.RED));
+                                    FarmMancer farmMancer = FarmMancerManager.getInstance().setFarmMancer(player);
+                                    player.sendMessage(Component.text("Force unlocked ability: ")
+                                            .append(Component.text(abilityType)
+                                                    .color(NamedTextColor.AQUA))
+                                            .color(NamedTextColor.GREEN));
+                                    AbilityFactory factory = Registries.abilityRegistry.getFactory(abilityType);
+                                    if (factory != null) {
+                                        farmMancer.unlockAbility(factory);
                                     }
                                 }
                             }

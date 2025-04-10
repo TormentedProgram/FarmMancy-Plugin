@@ -47,17 +47,16 @@ public class FarmAbilityCommand {
                         case "set" -> {
                             if (players != null && slotObject instanceof Integer slot && abilityType != null) {
                                 for (Player player : players) {
-                                    if (FarmMancerManager.getInstance().farmMancerMap.containsKey(player)) {
-                                        FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
-                                        Map<String, Ability> unlockedAbilities = getPlayerAbilities(sender);
-                                        if (unlockedAbilities.containsKey(abilityType)) {
-                                            farmMancer.setEquippedAbility(slot - 1, unlockedAbilities.get(abilityType));
-                                            player.sendMessage(Component.text("Setting ability " + abilityType + " to slot " + slot).color(NamedTextColor.GREEN));
-                                        } else {
-                                            player.sendMessage(Component.text("You do not have this ability unlocked or doesn't exist!").color(NamedTextColor.RED));
-                                        }
+                                    FarmMancer farmMancer = FarmMancerManager.getInstance().setFarmMancer(player);
+                                    Map<String, Ability> unlockedAbilities = getPlayerAbilities(sender);
+                                    if (unlockedAbilities.containsKey(abilityType)) {
+                                        farmMancer.setEquippedAbility(slot - 1, unlockedAbilities.get(abilityType));
+                                        player.sendMessage(Component.text("Setting ability ").color(NamedTextColor.GREEN)
+                                                .append(Component.text(abilityType).color(NamedTextColor.AQUA))
+                                                .append(Component.text(" to slot ").color(NamedTextColor.GREEN))
+                                                .append(Component.text(slot).color(NamedTextColor.YELLOW)));
                                     } else {
-                                        player.sendMessage(Component.text("You are not a FarmMancer...").color(NamedTextColor.RED));
+                                        player.sendMessage(Component.text("You do not have this ability unlocked or it doesn't exist!").color(NamedTextColor.RED));
                                     }
                                 }
                             }

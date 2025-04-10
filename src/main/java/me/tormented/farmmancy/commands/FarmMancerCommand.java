@@ -6,6 +6,7 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import me.tormented.farmmancy.FarmConfig;
+import me.tormented.farmmancy.abilities.utils.WandUtils;
 import me.tormented.farmmancy.farmmancer.FarmMancer;
 import me.tormented.farmmancy.farmmancer.FarmMancerManager;
 import net.kyori.adventure.text.Component;
@@ -37,6 +38,7 @@ public class FarmMancerCommand {
                         if (Players != null) {
                             for (Player player : Players) {
                                 FarmMancer theMancer = FarmMancerManager.getInstance().setFarmMancer(player);
+                                WandUtils.giveWandIfMissing(player);
                                 theMancer.activateAll(amountToSpawn, isBaby);
                             }
                             sender.sendMessage(Component.text("Granted FarmMancy to " + Players.size() + " player(s) successfully.", NamedTextColor.GREEN));
