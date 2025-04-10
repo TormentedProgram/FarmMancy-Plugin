@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
@@ -20,12 +19,12 @@ public class FarmAbilityCommand {
         new CommandAPICommand("farmability")
                 .withPermission("CommandPermission.OP")
                 .withArguments(new MultiLiteralArgument("doing", "set"))
-                .withArguments(new EntitySelectorArgument.ManyPlayers("Players", false))
+                .withArguments(new EntitySelectorArgument.OnePlayer("Player"))
                 .withArguments(new IntegerArgument("slot", 1, 4))
                 .withArguments(new GreedyStringArgument("abilityType").replaceSuggestions(
                         ArgumentSuggestions.stringCollection(info ->
                                 {
-                                    if (info.sender() instanceof Player player) {
+                                    if (info.previousArgs().get("Player") instanceof Player player) {
                                         if (FarmMancerManager.getInstance().farmMancerMap.containsKey(player)) {
                                             FarmMancer farmMancer = FarmMancerManager.getInstance().farmMancerMap.get(player);
                                             if (farmMancer != null) {
@@ -41,23 +40,21 @@ public class FarmAbilityCommand {
                     Object slotObject = args.get("slot");
                     String abilityType = (String) args.get("abilityType");
                     @SuppressWarnings("unchecked")
-                    Collection<Player> players = (Collection<Player>) args.get("Players");
+                    Player player = (Player) args.get("Player");
 
                     switch (doing) {
                         case "set" -> {
-                            if (players != null && slotObject instanceof Integer slot && abilityType != null) {
-                                for (Player player : players) {
-                                    FarmMancer farmMancer = FarmMancerManager.getInstance().setFarmMancer(player);
-                                    Map<String, Ability> unlockedAbilities = getPlayerAbilities(sender);
-                                    if (unlockedAbilities.containsKey(abilityType)) {
-                                        farmMancer.setEquippedAbility(slot - 1, unlockedAbilities.get(abilityType));
-                                        player.sendMessage(Component.text("Setting ability ").color(NamedTextColor.GREEN)
-                                                .append(Component.text(abilityType).color(NamedTextColor.AQUA))
-                                                .append(Component.text(" to slot ").color(NamedTextColor.GREEN))
-                                                .append(Component.text(slot).color(NamedTextColor.YELLOW)));
-                                    } else {
-                                        player.sendMessage(Component.text("You do not have this ability unlocked or it doesn't exist!").color(NamedTextColor.RED));
-                                    }
+                            if (player != null && slotObject instanceof Integer slot && abilityType != null) {
+                                FarmMancer farmMancer = FarmMancerManager.getInstance().setFarmMancer(player);
+                                Map<String, Ability> unlockedAbilities = getPlayerAbilities(sender);
+                                if (unlockedAbilities.containsKey(abilityType)) {
+                                    farmMancer.setEquippedAbility(slot - 1, unlockedAbilities.get(abilityType));
+                                    player.sendMessage(Component.text("Setting ability ").color(NamedTextColor.GREEN)
+                                            .append(Component.text(abilityType).color(NamedTextColor.AQUA))
+                                            .append(Component.text(" to slot ").color(NamedTextColor.GREEN))
+                                            .append(Component.text(slot).color(NamedTextColor.YELLOW)));
+                                } else {
+                                    player.sendMessage(Component.text("You do not have this ability unlocked or it doesn't exist!").color(NamedTextColor.RED));
                                 }
                             }
                         }

@@ -1,25 +1,31 @@
 package me.tormented.farmmancy.abilities.implementations.customs;
 
+import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
+import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
-import me.tormented.farmmancy.abilities.utils.WandUtils;
+import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class YuyukoAbility extends MobunitionAbility<Entity> {
+public class YuyukoAbility extends MobunitionAbility<Entity> implements Hook.WandSelectable {
     @Override
     public Class<Entity> getEntityClass() {
         return null;
@@ -41,22 +47,60 @@ public class YuyukoAbility extends MobunitionAbility<Entity> {
         return headProvider.getHeadItem();
     }
 
+
     @Override
-    public void processPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event, CallerSource callerSource) {
-        super.processPlayerInteractEntity(event, callerSource);
+    public void onSelected(@NotNull Wand wand) {
 
-        if (callerSource == CallerSource.PLAYER && WandUtils.isHoldingWand(event.getPlayer())) {
-            if (event.getRightClicked() instanceof LivingEntity targetEntity && !targetEntity.isDead() && targetEntity.getNoDamageTicks() <= 0 && pullMob() instanceof AbilityHeadDisplay headDisplay) {
-                headDisplay.remove();
-                targetEntity.getWorld().spawnParticle(Particle.CHERRY_LEAVES, targetEntity.getLocation().add(0.0, 1.0, 0.0), 100, 1.0, 1.0, 1.0, null);
-                targetEntity.damage(Float.MAX_VALUE, DamageSource.builder(DamageType.PLAYER_ATTACK)
-                        .withCausingEntity(event.getPlayer())
-                        .withDirectEntity(event.getPlayer())
-                        .build()
-                );
-            }
+    }
+
+    @Override
+    public void onDeselected(@NotNull Wand wand) {
+
+    }
+
+    @Override
+    public void onWandUse(@NotNull Wand wand, @NotNull PlayerInteractEvent event) {
+        if (pullMob() instanceof AbilityHeadDisplay headDisplay) {
+            headDisplay.remove();
+            yuyukoThing(event.getPlayer());
         }
+    }
 
+    public void yuyukoThing(Player player) {
+        Location location = player.getLocation();
+        double distance = 20.0;
+
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1.0f, 0.8f);
+        new BukkitRunnable() {
+            double traveled = 0;
+
+            @Override
+            public void run() {
+                if (traveled >= distance) {
+                    cancel();
+                    return;
+                }
+
+                Location particleLocation = location.clone().add(location.getDirection().multiply(traveled)).add(0.0, 1.0, 0.0);
+                player.getWorld().spawnParticle(Particle.CHERRY_LEAVES, particleLocation, 1, 0.0, 0.0, 0.0);
+
+                for (Entity entity : player.getWorld().getEntities()) {
+                    if (entity instanceof LivingEntity mob && !mob.isDead() && mob.getNoDamageTicks() <= 0) {
+                        if (mob.getLocation().distance(particleLocation) < 3.0 && !mob.equals(player)) {
+                            mob.getWorld().spawnParticle(Particle.CHERRY_LEAVES, entity.getLocation().add(0.0, 1.0, 0.0), 100, 1.0, 1.0, 1.0, null);
+                            mob.damage(Float.MAX_VALUE, DamageSource.builder(DamageType.PLAYER_ATTACK)
+                                    .withCausingEntity(entity)
+                                    .withDirectEntity(entity)
+                                    .build()
+                            );
+                            cancel();
+                        }
+                    }
+                }
+
+                traveled += 1;
+            }
+        }.runTaskTimer(FarmMancy.getInstance(), 0, 1);
     }
 }
 

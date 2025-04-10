@@ -3,19 +3,22 @@ package me.tormented.farmmancy.abilities.implementations.customs;
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
+import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
-import me.tormented.farmmancy.abilities.utils.WandUtils;
+import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.utils.HeadProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -27,14 +30,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 import java.util.UUID;
 
-public class ReisenAbility extends MobunitionAbility<Entity> {
+public class ReisenAbility extends MobunitionAbility<Entity> implements Hook.WandSelectable {
     @Override
     public Class<Entity> getEntityClass() {
         return null;
     }
 
+    @Override
     public @NotNull Component getName() {
-        return Component.text("Reisen Ability", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false);
+        return MiniMessage.miniMessage().deserialize("<gradient:light_purple:red>Reisen Ability</gradient>");
     }
 
     public ReisenAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
@@ -50,19 +54,21 @@ public class ReisenAbility extends MobunitionAbility<Entity> {
     }
 
     @Override
-    public void processPlayerInteractEntity(@NotNull PlayerInteractEntityEvent event, CallerSource callerSource) {
-        super.processPlayerInteractEntity(event, callerSource);
+    public void onSelected(@NotNull Wand wand) {
 
-        if (callerSource == CallerSource.PLAYER && WandUtils.isHoldingWand(event.getPlayer())) {
-            if (event.getRightClicked() instanceof LivingEntity entity && !entity.isDead() && entity.getNoDamageTicks() <= 0 && pullMob() instanceof AbilityHeadDisplay headDisplay) {
-                headDisplay.remove();
-                if (entity instanceof Player player) {
-                    player.playSound(player, Sound.ENTITY_CREEPER_PRIMED, 1f, 1f);
-                }
-                startRepeatingTask(entity);
-            }
+    }
+
+    @Override
+    public void onDeselected(@NotNull Wand wand) {
+
+    }
+
+    @Override
+    public void onWandUse(@NotNull Wand wand, @NotNull PlayerInteractEvent event) {
+        if (pullMob() instanceof AbilityHeadDisplay headDisplay) {
+            headDisplay.remove();
+            insanity(event.getPlayer());
         }
-
     }
 
     public static @NotNull Vector getFungusVector(LivingEntity player) {
@@ -77,6 +83,40 @@ public class ReisenAbility extends MobunitionAbility<Entity> {
         randomVector.normalize();
 
         return randomVector;
+    }
+
+    public void insanity(Player player) {
+        Location location = player.getLocation();
+        double distance = 20.0;
+        new BukkitRunnable() {
+            double traveled = 0;
+
+            @Override
+            public void run() {
+                if (traveled >= distance) {
+                    cancel();
+                    return;
+                }
+
+                Location particleLocation = location.clone().add(location.getDirection().multiply(traveled)).add(0.0, 1.0, 0.0);
+                player.getWorld().spawnParticle(Particle.DUST, particleLocation, 1, 0.0, 0.0, 0.0, new Particle.DustOptions(Color.RED, 0.75f));
+
+                for (Entity entity : player.getWorld().getEntities()) {
+                    if (entity instanceof LivingEntity mob && !mob.isDead() && mob.getNoDamageTicks() <= 0) {
+                        if (mob.getLocation().distance(particleLocation) < 3.0 && !mob.equals(player)) {
+                            if (mob instanceof Player player) {
+                                player.playSound(player, Sound.ENTITY_CREEPER_PRIMED, 1f, 1f);
+                            }
+                            mob.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 600, 4, false, false));
+                            startRepeatingTask(mob);
+                            cancel();
+                        }
+                    }
+                }
+
+                traveled += 1;
+            }
+        }.runTaskTimer(FarmMancy.getInstance(), 0, 1);
     }
 
     private void startRepeatingTask(LivingEntity entity) {

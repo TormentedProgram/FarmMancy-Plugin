@@ -106,7 +106,6 @@ public sealed interface Hook {
     }
 
     non-sealed interface WandSelectable extends Hook {
-
         void onSelected(@NotNull Wand wand);
         void onDeselected(@NotNull Wand wand);
 

@@ -8,6 +8,7 @@ import me.tormented.farmmancy.utils.HeadProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
@@ -31,7 +32,7 @@ public class DioAbility extends MobuvertAbility<Entity> implements Hook.PlayerIn
 
     @Override
     public @NotNull Component getName() {
-        return Component.text("Dio Ability", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false);
+        return MiniMessage.miniMessage().deserialize("<gradient:yellow:green>Dio Ability</gradient>");
     }
 
     public DioAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
