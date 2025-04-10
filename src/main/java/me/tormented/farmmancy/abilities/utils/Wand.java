@@ -86,7 +86,9 @@ public class Wand {
                     Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
                     Component.text(""),
                     Component.text("Bound Ability: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
-                    ability.getName()));
+                    ability.getName(),
+                    Component.text("(Drop Item to unbind current ability)", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)
+            ));
         } else {
             if (itemMeta != null) {
                 itemMeta.lore(List.of(
