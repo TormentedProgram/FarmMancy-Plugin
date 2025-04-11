@@ -19,7 +19,9 @@ public abstract class Ability {
         return abilities.get(id);
     }
 
-    public abstract @NotNull Component getName();
+    public @NotNull Component getName() {
+        return getAbilityFactory().getName();
+    };
 
     public static @NotNull Iterator<Ability> getAllAbilityInstances() {
         return abilities.values().iterator();
