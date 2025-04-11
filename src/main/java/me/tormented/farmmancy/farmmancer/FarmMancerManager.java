@@ -35,6 +35,7 @@ public class FarmMancerManager {
     public void removeFarmMancer(Player player) {
         for (FarmMancer farmMancer : farmMancers) {
             if (farmMancer.getPlayer() == player) {
+                EventDistributor.getInstance().playerAbilityMap.remove(player.getUniqueId());
                 farmMancer.deactivateAll(true);
                 farmMancerMap.remove(player);
                 farmMancers.remove(farmMancer);
