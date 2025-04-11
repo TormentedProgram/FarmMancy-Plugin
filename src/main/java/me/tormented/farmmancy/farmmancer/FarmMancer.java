@@ -14,12 +14,22 @@ import java.util.*;
 public class FarmMancer {
     private Player farmMancerPlayer;
 
-    private final Ability[] equippedAbilities = new Ability[3];
+    private Ability[] equippedAbilities = new Ability[3];
     private Ability specialEquippedAbility;
     private final Set<Ability> unlockedAbilities = new HashSet<>();
 
     public Player getPlayer() {
         return farmMancerPlayer;
+    }
+
+    public void clearEquippedAbilities() {
+        for (Ability ability : getEquippedAbilities()) {
+            if (ability instanceof Hook.Equipping equippingAbility) {
+                equippingAbility.onUnequipped();
+            }
+            specialEquippedAbility = null;
+            equippedAbilities = null;
+        }
     }
 
     public void setEquippedAbility(int index, @Nullable Ability ability) {

@@ -94,7 +94,13 @@ public class ChangeMenuCommand {
                     @Override
                     public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
                         if (event.getClick() == ClickType.LEFT) {
-                            System.out.println("Clicked on equipped #" + slotIndex);
+                            if (equippingAbility != null) {
+                                farmMancer.setEquippedAbility(slotIndex, equippingAbility);
+                                equippedAbilities = farmMancer.getEquippedAbilities();
+                                equippingAbility = null;
+                                menuUpdateEquippedAbilities();
+                                menuUpdateUnlockedAbilities();
+                            }
                         }
                         return new ClickResponse.Nothing();
                     }
