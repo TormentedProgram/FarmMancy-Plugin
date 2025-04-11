@@ -33,6 +33,8 @@ public class FarmMancer {
     }
 
     public void setEquippedAbility(int index, @Nullable Ability ability) {
+        index = (2 - index); //apparently it needs to be reversed??
+
         if (index < 0 || index > equippedAbilities.length)
             throw new IllegalArgumentException("Slot index is out of bounds");
 
@@ -62,10 +64,14 @@ public class FarmMancer {
     }
 
     public Ability[] getEquippedAbilities() {
-        Ability[] newEquippedAbilities = new Ability[equippedAbilities.length + 1];
-        System.arraycopy(equippedAbilities, 0, newEquippedAbilities, 0, equippedAbilities.length);
-        newEquippedAbilities[equippedAbilities.length] = specialEquippedAbility;
-        return newEquippedAbilities;
+        Ability[] reversed = new Ability[equippedAbilities.length + 1];
+
+        for (int i = 0; i < equippedAbilities.length; i++) {
+            reversed[i] = equippedAbilities[equippedAbilities.length - 1 - i];
+        }
+
+        reversed[equippedAbilities.length] = specialEquippedAbility;
+        return reversed;
     }
 
     public FarmMancer(Player player) {
@@ -90,6 +96,12 @@ public class FarmMancer {
                     mobuvertAbility.setMob(null);
                 }
             }
+            if (ability instanceof Hook.Activation activation) activation.onActivate(true);
+        }
+    }
+
+    public void activateAll() {
+        for (Ability ability : getEquippedAbilities()) {
             if (ability instanceof Hook.Activation activation) activation.onActivate(true);
         }
     }

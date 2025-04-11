@@ -85,7 +85,8 @@ public class ChangeMenuCommand {
                 menuItem.setClickHandler(new ClickHandler() {
 
                     final AbilityChangeMenuInstance abilityChangeMenuInstance;
-                    final int slotIndex;
+                    int slotIndex;
+
                     {
                         abilityChangeMenuInstance = ChangeMenuCommand.AbilityChangeMenuInstance.this;
                         slotIndex = finalSlotIndex;
@@ -100,6 +101,8 @@ public class ChangeMenuCommand {
                                 equippingAbility = null;
                                 menuUpdateEquippedAbilities();
                                 menuUpdateUnlockedAbilities();
+                                farmMancer.activateAll();
+                                menuInstance.getPlayer().playSound(menuInstance.getPlayer(), Sound.BLOCK_DISPENSER_DISPENSE, 1.0f, 2.0f);
                             }
                         }
                         return new ClickResponse.Nothing();
@@ -123,7 +126,6 @@ public class ChangeMenuCommand {
                     Ability slotAbility = sortedAbilities.get(slotIndex);
 
 
-
                     if (slotAbility == equippingAbility) {
                         menuItem = new MenuItem(
                                 slotAbility.getAbilityFactory().getIcon(),
@@ -145,7 +147,7 @@ public class ChangeMenuCommand {
                 } else {
                     menuItem = new MenuItem(ItemStack.of(Material.AIR));
                 }
-                menu.setItem( (slotIndex % 5) + 4, (slotIndex / 5) + 2, menuItem);
+                menu.setItem((slotIndex % 5) + 4, (slotIndex / 5) + 2, menuItem);
             }
         }
 
@@ -162,7 +164,8 @@ public class ChangeMenuCommand {
             menuUpdateUnlockedAbilities();
         }
 
-        record UnlockedSlotAbility(Ability ability, AbilityChangeMenuInstance abilityChangeMenuInstance) implements ClickHandler {
+        record UnlockedSlotAbility(Ability ability,
+                                   AbilityChangeMenuInstance abilityChangeMenuInstance) implements ClickHandler {
 
             @Override
             public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
@@ -202,17 +205,17 @@ public class ChangeMenuCommand {
         });
 
         new CommandAPICommand("farmmancy")
-            .withSubcommand(
-                new CommandAPICommand("menu")
-                    .withSubcommand(
-                        new CommandAPICommand("change")
-                            .withPermission("farmmancy.menu.change")
-                            .executesPlayer((player, args) -> {
-                            menuFactory.sendToPlayer(player);
-                        }
-                    )
-                )
-            ).register();
+                .withSubcommand(
+                        new CommandAPICommand("menu")
+                                .withSubcommand(
+                                        new CommandAPICommand("change")
+                                                .withPermission("farmmancy.menu.change")
+                                                .executesPlayer((player, args) -> {
+                                                            menuFactory.sendToPlayer(player);
+                                                        }
+                                                )
+                                )
+                ).register();
     }
 
 }
