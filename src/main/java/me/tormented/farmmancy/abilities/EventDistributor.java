@@ -162,6 +162,10 @@ public class EventDistributor implements Listener {
     }
 
     public void showMobHealthBar(Player player, LivingEntity mob) {
+        //I know it should be its own class but its 4 am
+        if (!playerAbilityMap.containsKey(player.getUniqueId())) {
+            return;
+        }
         if (DamagedBossbars.containsKey(player)) {
             BossBar bossBarInstance = DamagedBossbars.get(player);
             if (DamagedBossbarTimer.containsKey(bossBarInstance)) {
