@@ -81,13 +81,17 @@ public class Wand {
     public void updateLoreAndName() {
         ItemMeta itemMeta = item.getItemMeta();
         if (getBoundAbility() instanceof Ability ability) {
+            String owningPlayerName = (ability.getOwnerPlayer() != null) ? ability.getOwnerPlayer().getName() : "Unknown";
             itemMeta.lore(List.of(
                     Component.text("As Legends foretold..", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
                     Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
                     Component.text(""),
                     Component.text("Bound Ability: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                     ability.getName(),
-                    Component.text("(Drop Item to unbind current ability)", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)
+                    Component.text("(Drop Item to unbind current ability)", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
+                    Component.text(""),
+                    Component.text("Ability soul-bounded to", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false)
+                            .append(Component.text(" " + owningPlayerName, NamedTextColor.AQUA).decoration(TextDecoration.ITALIC, false))
             ));
         } else {
             if (itemMeta != null) {
@@ -96,7 +100,8 @@ public class Wand {
                         Component.text("A powerful mage wielded this to vanquish the demon lord.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
                         Component.text(""),
                         Component.text("Bound Ability: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
-                        Component.text("RIGHT-CLICK a row to bind an ability", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false)));
+                        Component.text("RIGHT-CLICK a row to bind an ability", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false)
+                ));
             }
         }
         item.setItemMeta(itemMeta);

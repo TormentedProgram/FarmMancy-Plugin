@@ -126,6 +126,7 @@ public class ReisenAbility extends MobunitionAbility<Entity> implements Hook.Wan
             @Override
             public void run() {
                 if (count < 75) {
+                    if (entity.isDead()) this.cancel();
                     entity.setVelocity(getFungusVector(entity).multiply(0.2));
                     Random random = new Random();
                     float rotationX = random.nextFloat() * 360;
