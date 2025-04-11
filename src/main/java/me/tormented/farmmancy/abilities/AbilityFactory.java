@@ -27,7 +27,7 @@ public class AbilityFactory {
     }
 
     public ItemStack getIcon() {
-        return icon;
+        return icon.clone();
     }
 
     public AbilityFactory setIcon(@NotNull ItemStack icon) {

@@ -125,7 +125,7 @@ public class ChangeMenuCommand {
                                 List.of(
                                         MiniMessage.miniMessage().deserialize("<!italic><bold><green>SELECTED</green></bold><dark_green> for equipping</dark_green></!italic>")
                                 )
-                        );
+                        ).setClickHandler(new UnlockedSlotAbility(slotAbility, this));
                     } else {
                         menuItem = new MenuItem(
                                 slotAbility.getAbilityFactory().getIcon(),
@@ -143,7 +143,15 @@ public class ChangeMenuCommand {
             }
         }
 
-        public void selectedAbilityForEquipping(Ability ability) {
+        public void toggledAbility(Ability ability) {
+            if (equippingAbility == ability) {
+                equippingAbility = null;
+                menuUpdateUnlockedAbilities();
+                return;
+            }
+            if (equippingAbility != null) {
+                equippingAbility = null;
+            }
             equippingAbility = ability;
             menuUpdateUnlockedAbilities();
         }
@@ -152,8 +160,10 @@ public class ChangeMenuCommand {
 
             @Override
             public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
-                abilityChangeMenuInstance.selectedAbilityForEquipping(ability);
-                menuInstance.getPlayer().playSound(menuInstance.getPlayer(), Sound.BLOCK_DISPENSER_DISPENSE, 0.5f, 2.0f);
+                if (event.getClick() == ClickType.LEFT) {
+                    abilityChangeMenuInstance.toggledAbility(ability);
+                    menuInstance.getPlayer().playSound(menuInstance.getPlayer(), Sound.BLOCK_DISPENSER_DISPENSE, 0.5f, 2.0f);
+                }
                 return new ClickResponse.Nothing();
             }
         }
