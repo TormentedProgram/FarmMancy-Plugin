@@ -45,8 +45,8 @@ public class MenuSpawnCommand {
                                 public @NotNull ClickResponse onClicked(@NotNull Menu menuInstance, @NotNull MenuItem menuItem, @NotNull InventoryClickEvent event) {
                                     if (event.getClick() == ClickType.LEFT) {
                                         FarmMancer theMancer;
-                                        if (FarmMancerManager.getInstance().farmMancerMap.containsKey(menu.getPlayer())) {
-                                            theMancer = FarmMancerManager.getInstance().farmMancerMap.get(menu.getPlayer());
+                                        if (FarmMancerManager.getInstance().farmMancerMap.containsKey(menu.getPlayer().getUniqueId())) {
+                                            theMancer = FarmMancerManager.getInstance().farmMancerMap.get(menu.getPlayer().getUniqueId());
                                             theMancer.deactivateAll(true);
                                         } else {
                                             theMancer = FarmMancerManager.getInstance().setFarmMancer(menuInstance.getPlayer());

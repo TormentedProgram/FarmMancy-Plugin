@@ -1,5 +1,8 @@
 global:
   max-mob-cap: 256
+  database:
+    enabled: true
+    interval: 5
 
 items:
   allow-imbuement: true

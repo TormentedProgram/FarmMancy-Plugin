@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class FarmMancerManager {
     private static final FarmMancerManager instance = new FarmMancerManager();
@@ -17,7 +18,7 @@ public class FarmMancerManager {
     public final HashSet<FarmMancer> FarmMancerToUnload = new HashSet<>();
 
     public final Set<FarmMancer> farmMancers = new HashSet<>();
-    public final HashMap<Player, FarmMancer> farmMancerMap = new HashMap<>();
+    public final HashMap<UUID, FarmMancer> farmMancerMap = new HashMap<>();
 
     public FarmMancer setFarmMancer(Player player) {
         for (FarmMancer farmMancer : farmMancers) {
@@ -28,7 +29,7 @@ public class FarmMancerManager {
         FarmMancer farmMancer = new FarmMancer(player);
         EventDistributor.getInstance().playerAbilityMap.put(player.getUniqueId(), farmMancer);
         farmMancers.add(farmMancer);
-        farmMancerMap.put(player, farmMancer);
+        farmMancerMap.put(player.getUniqueId(), farmMancer);
         return farmMancer;
     }
 
@@ -37,7 +38,7 @@ public class FarmMancerManager {
             if (farmMancer.getPlayer() == player) {
                 EventDistributor.getInstance().playerAbilityMap.remove(player.getUniqueId());
                 farmMancer.deactivateAll(true);
-                farmMancerMap.remove(player);
+                farmMancerMap.remove(player.getUniqueId());
                 farmMancers.remove(farmMancer);
             }
         }

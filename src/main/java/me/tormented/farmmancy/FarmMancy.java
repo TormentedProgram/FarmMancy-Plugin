@@ -67,7 +67,7 @@ public final class FarmMancy extends JavaPlugin {
 
         for (FarmMancer farmMancer : FarmMancerManager.getInstance().farmMancers) {
             farmMancer.deactivateAll(false);
-            FarmMancerManager.getInstance().farmMancerMap.remove(farmMancer.getPlayer());
+            FarmMancerManager.getInstance().farmMancerMap.remove(farmMancer.getPlayer().getUniqueId());
             FarmMancerManager.getInstance().farmMancers.remove(farmMancer);
             EventDistributor.getInstance().playerAbilityMap.remove(farmMancer.getPlayer().getUniqueId());
         }

@@ -12,7 +12,9 @@ public class DatabaseAutosave implements Runnable {
     public static DatabaseAutosave getInstance() {
         return instance;
     }
-    private DatabaseAutosave() {}
+
+    private DatabaseAutosave() {
+    }
 
     @Override
     public void run() {
@@ -25,7 +27,7 @@ public class DatabaseAutosave implements Runnable {
                         Ability.unloadAbility(ability.id);
                     }
                 }
-                FarmMancerManager.getInstance().farmMancerMap.remove(farmMancer.getPlayer());
+                FarmMancerManager.getInstance().farmMancerMap.remove(farmMancer.getPlayer().getUniqueId());
                 FarmMancerManager.getInstance().farmMancers.remove(farmMancer);
                 EventDistributor.getInstance().playerAbilityMap.remove(farmMancer.getPlayer().getUniqueId());
                 FarmMancy.getInstance().getLogger().info("Successfully unloaded " + farmMancer.getPlayer().getName() + "'s FarmMancer.");

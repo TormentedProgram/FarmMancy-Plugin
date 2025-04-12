@@ -192,7 +192,7 @@ public class ChangeMenuCommand {
             @Override
             public void fillMenu(@NotNull Menu menu) {
 
-                if (FarmMancerManager.getInstance().farmMancerMap.get(menu.getPlayer()) instanceof FarmMancer farmMancer) {
+                if (FarmMancerManager.getInstance().farmMancerMap.get(menu.getPlayer().getUniqueId()) instanceof FarmMancer farmMancer) {
                     new AbilityChangeMenuInstance(menu, farmMancer);
                 } else {
                     menu.setItem(5, 3, new MenuItem(

@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -177,7 +178,7 @@ public class EventDistributor implements Listener {
                 if (entity instanceof LivingEntity livingEntity && livingEntity.getAttribute(Attribute.MAX_HEALTH) != null) {
                     AttributeInstance maxHealthAttribute = livingEntity.getAttribute(Attribute.MAX_HEALTH);
                     if (maxHealthAttribute != null) {
-                        if (livingEntity.getHealth() < (maxHealthAttribute.getValue() / 3)) {
+                        if (livingEntity.getHealth() < (maxHealthAttribute.getValue() / 2) && !livingEntity.isDead()) {
                             if (!farmMancer.isAbilityUnlocked(abilityFactory)) {
                                 switch (farmMancer.unlockAbility(abilityFactory)) {
                                     case MobunitionAbility<?> mobunitionAbility -> {
@@ -193,9 +194,10 @@ public class EventDistributor implements Listener {
                                 return;
                             }
                         } else {
-                            event.getPlayer().sendMessage(Component.text("This mob is too powerful to be captured, try weakening it!").color(NamedTextColor.RED));
-                            //being called twice????
-                            return;
+                            if (event.getHand() == EquipmentSlot.HAND) {
+                                event.getPlayer().sendMessage(Component.text("This mob is too powerful to be captured, try weakening it!").color(NamedTextColor.RED));
+                                return;
+                            }
                         }
                     }
                 }

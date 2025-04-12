@@ -4,6 +4,8 @@ import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.utils.WandUtils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
@@ -104,7 +106,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
                 AbilityHeadDisplay headDisplay = headDisplays.get(i);
 
                 if (slot % 2 == 1) {
-                    headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(-rotation) + 180.0f, 0f - (lifetime * 10)).add(
+                    headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(-rotation) + 180.0f, 0f).add(
                             Math.cos(rotation) * slotRadii[slot] + mobCenterOffset.getX(),
                             mobCenterOffset.getY() + slotPositions[slot],
                             Math.sin(-rotation) * slotRadii[slot] + mobCenterOffset.getZ()
@@ -169,9 +171,14 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
             if (WandUtils.isHoldingWand(Objects.requireNonNull(getOwnerPlayer()))) return;
             if (event.getRightClicked().hasMetadata("FarmMancy_Projectile")) return;
             if (event.getRightClicked() instanceof LivingEntity entity) {
-                Player player = event.getPlayer();
-                if (addMob(entity)) {
-                    player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);
+                AttributeInstance maxHealthAttribute = entity.getAttribute(Attribute.MAX_HEALTH);
+                if (maxHealthAttribute != null && !entity.isDead()) {
+                    if (entity.getHealth() < (maxHealthAttribute.getValue() / 2)) {
+                        Player player = event.getPlayer();
+                        if (addMob(entity)) {
+                            player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);
+                        }
+                    }
                 }
             }
         }
