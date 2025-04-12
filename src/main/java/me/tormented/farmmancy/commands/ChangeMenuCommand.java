@@ -20,7 +20,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class ChangeMenuCommand {
-    private final MenuFactory menuFactory;
+    private static MenuFactory menuFactory = null;
+
+    public static MenuFactory getMenuFactory() {
+        return menuFactory;
+    }
 
     private static class AbilityChangeMenuInstance {
 
@@ -88,7 +92,7 @@ public class ChangeMenuCommand {
                     int slotIndex;
 
                     {
-                        abilityChangeMenuInstance = ChangeMenuCommand.AbilityChangeMenuInstance.this;
+                        abilityChangeMenuInstance = AbilityChangeMenuInstance.this;
                         slotIndex = finalSlotIndex;
                     }
 

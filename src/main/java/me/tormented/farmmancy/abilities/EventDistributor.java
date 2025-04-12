@@ -1,21 +1,19 @@
 package me.tormented.farmmancy.abilities;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.Registries;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.abilities.utils.WandUtils;
+import me.tormented.farmmancy.commands.ChangeMenuCommand;
 import me.tormented.farmmancy.farmmancer.FarmMancer;
 import me.tormented.farmmancy.farmmancer.FarmMancerManager;
+import me.tormented.farmmancy.farmmancer.HealthBossBar;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,8 +23,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -43,9 +39,6 @@ public class EventDistributor implements Listener {
     public static EventDistributor getInstance() {
         return instance;
     }
-
-    private Map<Player, BossBar> DamagedBossbars = new HashMap<>();
-    private Map<BossBar, BukkitTask> DamagedBossbarTimer = new HashMap<>();
 
     private EventDistributor() {
     }
@@ -76,7 +69,7 @@ public class EventDistributor implements Listener {
     public void onEntityDamagedByEntity(@NotNull EntityDamageByEntityEvent event) {
         MobAbility<? extends Entity> mobAbility = entityMobunitionAbilityMap.get(event.getEntity());
         if (event.getDamager() instanceof Player player && event.getEntity() instanceof LivingEntity livingEntity) {
-            showMobHealthBar(player, livingEntity);
+            HealthBossBar.showMobHealthBar(player, livingEntity);
         }
         if (mobAbility != null) {
             if (mobAbility instanceof Hook.EntityDamagedByEntity entityDamaged)
@@ -126,6 +119,14 @@ public class EventDistributor implements Listener {
     public void onPlayerInteraction(@NotNull PlayerInteractEvent event) {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.CRAFTING_TABLE) {
+            if (event.getPlayer().isSneaking()) {
+                event.setCancelled(true);
+                if (ChangeMenuCommand.getMenuFactory() != null) {
+                    ChangeMenuCommand.getMenuFactory().sendToPlayer(event.getPlayer());
+                }
+            }
+        }
         for (Ability ability : farmMancer.getEquippedAbilities()) {
             if (ability != null) {
                 if (ability instanceof Hook.PlayerInteraction playerInteraction)
@@ -161,44 +162,6 @@ public class EventDistributor implements Listener {
         }
     }
 
-    public void showMobHealthBar(Player player, LivingEntity mob) {
-        //I know it should be its own class but its 4 am
-        if (!playerAbilityMap.containsKey(player.getUniqueId())) {
-            return;
-        }
-        if (DamagedBossbars.containsKey(player)) {
-            BossBar bossBarInstance = DamagedBossbars.get(player);
-            if (DamagedBossbarTimer.containsKey(bossBarInstance)) {
-                BukkitTask task = DamagedBossbarTimer.get(bossBarInstance);
-                if (task != null) {
-                    task.cancel();
-                }
-            }
-            bossBarInstance.removeAll();
-            DamagedBossbarTimer.remove(bossBarInstance);
-            DamagedBossbars.remove(player);
-        }
-
-        double health = mob.getHealth();
-        double maxHealth = mob.getAttribute(Attribute.MAX_HEALTH).getValue();
-        double progress = Math.max(0.0, Math.min(1.0, health / maxHealth));
-
-        BossBar bossBar = Bukkit.createBossBar("Mob HP: " + (int) health + " / " + (int) maxHealth,
-                BarColor.RED, BarStyle.SOLID);
-        DamagedBossbars.put(player, bossBar);
-        bossBar.setProgress(progress);
-        bossBar.addPlayer(player);
-        bossBar.setVisible(true);
-
-        // Remove after 2 seconds (40 ticks)
-        DamagedBossbarTimer.put(bossBar, new BukkitRunnable() {
-            @Override
-            public void run() {
-                bossBar.removeAll();
-                DamagedBossbars.remove(player);
-            }
-        }.runTaskLater(FarmMancy.getInstance(), 40L));
-    }
 
     @EventHandler
     public void onPlayerInteractWithEntity(@NotNull PlayerInteractEntityEvent event) {

@@ -104,7 +104,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
                 AbilityHeadDisplay headDisplay = headDisplays.get(i);
 
                 if (slot % 2 == 1) {
-                    headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(-rotation) + 180.0f, 0f).add(
+                    headDisplay.setLocation(player.getLocation().setRotation((float) Math.toDegrees(-rotation) + 180.0f, 0f - (lifetime * 10)).add(
                             Math.cos(rotation) * slotRadii[slot] + mobCenterOffset.getX(),
                             mobCenterOffset.getY() + slotPositions[slot],
                             Math.sin(-rotation) * slotRadii[slot] + mobCenterOffset.getZ()
