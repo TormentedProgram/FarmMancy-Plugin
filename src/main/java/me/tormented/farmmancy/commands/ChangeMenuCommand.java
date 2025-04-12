@@ -107,6 +107,15 @@ public class ChangeMenuCommand {
                                 menuUpdateUnlockedAbilities();
                                 farmMancer.activateAll();
                                 menuInstance.getPlayer().playSound(menuInstance.getPlayer(), Sound.BLOCK_DISPENSER_DISPENSE, 1.0f, 2.0f);
+                            } else {
+                                if (slotAbility != null) {
+                                    farmMancer.deactivateAll(true);
+                                    farmMancer.setEquippedAbility(slotIndex, null);
+                                    menuInstance.getPlayer().playSound(menuInstance.getPlayer(), Sound.ENTITY_VILLAGER_DEATH, 1.0f, 0.7f);
+                                    equippedAbilities = farmMancer.getEquippedAbilities();
+                                    menuUpdateEquippedAbilities();
+                                    menuUpdateUnlockedAbilities();
+                                }
                             }
                         }
                         return new ClickResponse.Nothing();

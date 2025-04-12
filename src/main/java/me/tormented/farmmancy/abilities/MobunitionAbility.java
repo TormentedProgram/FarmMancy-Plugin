@@ -41,7 +41,9 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
         for (AbilityHeadDisplay headDisplay : headDisplays) {
             headDisplay.remove();
         }
-        headDisplays.clear();
+
+        if (!visual)
+            headDisplays.clear();
     }
 
     @Override
