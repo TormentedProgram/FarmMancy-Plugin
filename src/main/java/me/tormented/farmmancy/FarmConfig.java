@@ -20,6 +20,9 @@ public class FarmConfig {
     //pig
     private float pig_healing_amount;
 
+    //database
+    private int database_interval;
+
     private FarmConfig() {
     }
 
@@ -41,11 +44,13 @@ public class FarmConfig {
 
         //below is loading the config
         allow_imbuement = config.getBoolean("items.allow-imbuement");
-        max_mob_cap = config.getInt("global.max-mob-cap");
+        max_mob_cap = config.getInt("mobs.max-mob-cap");
 
         cow_explosion_radius = (float) config.getInt("mobs.cow.explosion-radius");
         cow_shoot_velocity = (float) config.getInt("mobs.cow.shoot-velocity");
         pig_healing_amount = (float) config.getInt("mobs.pig.healing-amount");
+
+        database_interval = config.getInt("database.interval");
     }
 
     public void save() {
@@ -82,16 +87,8 @@ public class FarmConfig {
         return pig_healing_amount;
     }
 
-    @SuppressWarnings("unused")
-    public void setAllowedImbuement(boolean value) {
-        this.allow_imbuement = value;
-        set("items.allow-imbuement", value);
-    }
-
-    @SuppressWarnings("unused")
-    public void setMaxMobCap(int value) {
-        this.max_mob_cap = value;
-        set("global.max-mob-cap", value);
+    public int getDatabaseInterval() {
+        return database_interval;
     }
 
     public static FarmConfig getInstance() {

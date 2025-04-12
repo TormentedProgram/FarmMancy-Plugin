@@ -138,12 +138,11 @@ public class EventDistributor implements Listener {
 
     @EventHandler
     public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+        if (playerAbilityMap.get(event.getPlayer().getUniqueId()) != null) return;
         FarmMancer theMancer = FarmMancerManager.getInstance().setFarmMancer(event.getPlayer());
         WandUtils.giveWandIfMissing(event.getPlayer());
-        FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
-        if (farmMancer == null) return;
-        FarmMancerManager.getInstance().FarmMancerToUnload.remove(farmMancer);
-        for (Ability ability : farmMancer.getEquippedAbilities()) {
+        FarmMancerManager.getInstance().FarmMancerToUnload.remove(theMancer);
+        for (Ability ability : theMancer.getEquippedAbilities()) {
             if (ability != null) {
                 if (ability instanceof Hook.PlayerJoining playerJoining) playerJoining.processPlayerJoin(event);
             }
@@ -175,10 +174,10 @@ public class EventDistributor implements Listener {
         if (playerAbilityMap.get(event.getPlayer().getUniqueId()) instanceof FarmMancer farmMancer) {
             Entity entity = event.getRightClicked();
             if (!isHoldingWand(event.getPlayer()) && Registries.abilityRegistry.getFactory(entity.getType().getKey().asString()) instanceof AbilityFactory abilityFactory) {
-                if (entity instanceof LivingEntity livingEntity && livingEntity.getAttribute(Attribute.MAX_HEALTH) != null) {
+                if (entity instanceof LivingEntity livingEntity && livingEntity.getAttribute(Attribute.MAX_HEALTH) != null && !livingEntity.isDead()) {
                     AttributeInstance maxHealthAttribute = livingEntity.getAttribute(Attribute.MAX_HEALTH);
                     if (maxHealthAttribute != null) {
-                        if (livingEntity.getHealth() < (maxHealthAttribute.getValue() / 2) && !livingEntity.isDead()) {
+                        if (livingEntity.getHealth() <= (maxHealthAttribute.getValue() / 2)) {
                             if (!farmMancer.isAbilityUnlocked(abilityFactory)) {
                                 switch (farmMancer.unlockAbility(abilityFactory)) {
                                     case MobunitionAbility<?> mobunitionAbility -> {

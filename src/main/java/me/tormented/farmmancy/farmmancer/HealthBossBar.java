@@ -45,8 +45,13 @@ public class HealthBossBar {
         }
         double progress = Math.max(0.0, Math.min(1.0, health / maxHealth));
 
+        BarColor barColor = BarColor.RED;
+        if (health <= (maxHealth / 2)) {
+            barColor = BarColor.GREEN;
+        }
+
         BossBar bossBar = Bukkit.createBossBar("Mob HP: " + (int) health + " / " + (int) maxHealth,
-                BarColor.RED, BarStyle.SEGMENTED_20);
+                barColor, BarStyle.SOLID);
         DamagedBossBars.put(player, bossBar);
         bossBar.setProgress(progress);
         bossBar.addPlayer(player);

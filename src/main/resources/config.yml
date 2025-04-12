@@ -1,13 +1,11 @@
-global:
-  max-mob-cap: 256
-  database:
-    enabled: true
-    interval: 5
+database:
+  interval: 30
 
 items:
   allow-imbuement: true
 
 mobs:
+  max-mob-cap: 256
   cow:
     explosion-radius: 4
     shoot-velocity: 1

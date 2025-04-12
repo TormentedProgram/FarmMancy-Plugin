@@ -20,6 +20,8 @@ public final class FarmMancy extends JavaPlugin {
     private BukkitTask abilityTick;
     private BukkitTask DatabaseTick;
 
+    private int databaseInterval = FarmConfig.getInstance().getDatabaseInterval();
+
     public static @NotNull FarmMancy getInstance() {
         return getPlugin(FarmMancy.class);
     }
@@ -41,9 +43,13 @@ public final class FarmMancy extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GuiListener(), this);
         getServer().getPluginManager().registerEvents(EventDistributor.getInstance(), this);
 
+        databaseInterval = (databaseInterval * 20); //make to ticks
+        if (databaseInterval > 0) {
+            DatabaseTick = getServer().getScheduler().runTaskTimer(this, DatabaseAutosave.getInstance(), 0, databaseInterval);
+        }
+
         taskMenuTick = getServer().getScheduler().runTaskTimer(this, Ticking.getInstance(), 0, 1);
         CowTick = getServer().getScheduler().runTaskTimer(this, TickingAbilities.getInstance(), 0, 1);
-        DatabaseTick = getServer().getScheduler().runTaskTimer(this, DatabaseAutosave.getInstance(), 0, 600);
         abilityTick = getServer().getScheduler().runTaskTimer(this, TickingTask.getInstance(), 0, 1);
     }
 
