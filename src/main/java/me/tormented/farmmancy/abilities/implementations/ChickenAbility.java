@@ -5,7 +5,7 @@ import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
-import me.tormented.farmmancy.utils.HeadProvider;
+import me.tormented.farmmancy.abilities.utils.headProviders.CustomHeadProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -35,11 +35,11 @@ public class ChickenAbility extends MobunitionAbility<Chicken> implements Hook.P
         super(abilityFactory, id, owner);
     }
 
-    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/42af6e5847eea099e1b0ab8c20a9e5f3c7190158bda54e28133d9b271ec0cb4b");
+    public static final CustomHeadProvider CUSTOM_HEAD_PROVIDER = new CustomHeadProvider("http://textures.minecraft.net/texture/42af6e5847eea099e1b0ab8c20a9e5f3c7190158bda54e28133d9b271ec0cb4b");
 
     @Override
     public @NotNull ItemStack getHeadItem(@Nullable Chicken entity) {
-        return headProvider.getHeadItem();
+        return CUSTOM_HEAD_PROVIDER.getHeadItem();
     }
 
     @Override

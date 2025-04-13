@@ -1,4 +1,4 @@
-package me.tormented.farmmancy.utils;
+package me.tormented.farmmancy.abilities.utils.headProviders;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import me.tormented.farmmancy.FarmMancy;
@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.UUID;
 
-public record HeadProvider(@NotNull String textureUrl) {
+public record CustomHeadProvider(@NotNull String textureUrl) {
 
     public static @NotNull PlayerProfile getProfile(@NotNull String texture)  {
         if (isBase64(texture)) {

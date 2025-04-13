@@ -3,9 +3,8 @@ package me.tormented.farmmancy.abilities.implementations;
 import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
-import me.tormented.farmmancy.utils.HeadProvider;
+import me.tormented.farmmancy.abilities.utils.headProviders.CustomHeadProvider;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -31,11 +30,11 @@ public class SquidAbility extends MobuvertAbility<Squid> implements Hook.PlayerI
         super(abilityFactory, id, owner);
     }
 
-    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/49c2c9ce67eb5971cc5958463e6c9abab8e599adc295f4d4249936b0095769dd");
+    public static final CustomHeadProvider CUSTOM_HEAD_PROVIDER = new CustomHeadProvider("http://textures.minecraft.net/texture/49c2c9ce67eb5971cc5958463e6c9abab8e599adc295f4d4249936b0095769dd");
 
     @Override
     public @NotNull ItemStack getHeadItem(@Nullable Squid entity) {
-        return headProvider.getHeadItem();
+        return CUSTOM_HEAD_PROVIDER.getHeadItem();
     }
 
 

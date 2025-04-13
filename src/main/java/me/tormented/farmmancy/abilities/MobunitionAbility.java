@@ -174,7 +174,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
             if (event.getRightClicked().hasMetadata("FarmMancy_Projectile")) return;
             if (event.getRightClicked() instanceof LivingEntity entity) {
                 AttributeInstance maxHealthAttribute = entity.getAttribute(Attribute.MAX_HEALTH);
-                if (maxHealthAttribute != null && !entity.isDead()) {
+                if (maxHealthAttribute != null && !entity.isDead() && !entity.hasMetadata("FarmMancy_Projectile")) {
                     if (entity.getHealth() <= (maxHealthAttribute.getValue() / 2)) {
                         Player player = event.getPlayer();
                         if (addMob(entity)) {

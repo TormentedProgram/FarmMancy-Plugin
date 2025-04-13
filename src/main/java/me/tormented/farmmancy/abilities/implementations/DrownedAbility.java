@@ -5,7 +5,7 @@ import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
-import me.tormented.farmmancy.utils.HeadProvider;
+import me.tormented.farmmancy.abilities.utils.headProviders.CustomHeadProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -33,11 +33,11 @@ public class DrownedAbility extends MobunitionAbility<Drowned> implements Hook.W
         return Drowned.class;
     }
 
-    public static final HeadProvider headProvider = new HeadProvider("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzNmN2NjZjYxZGJjM2Y5ZmU5YTYzMzNjZGUwYzBlMTQzOTllYjJlZWE3MWQzNGNmMjIzYjNhY2UyMjA1MSJ9fX0=");
+    public static final CustomHeadProvider CUSTOM_HEAD_PROVIDER = new CustomHeadProvider("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzNmN2NjZjYxZGJjM2Y5ZmU5YTYzMzNjZGUwYzBlMTQzOTllYjJlZWE3MWQzNGNmMjIzYjNhY2UyMjA1MSJ9fX0=");
 
     @Override
     public @NotNull ItemStack getHeadItem(@Nullable Drowned entity) {
-        return headProvider.getHeadItem();
+        return CUSTOM_HEAD_PROVIDER.getHeadItem();
     }
 
     @Override

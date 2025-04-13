@@ -6,7 +6,7 @@ import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
-import me.tormented.farmmancy.utils.HeadProvider;
+import me.tormented.farmmancy.abilities.utils.headProviders.CustomHeadProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -35,11 +35,11 @@ public class WardenAbility extends MobunitionAbility<Warden> implements Hook.Wan
         super(abilityFactory, id, owner);
     }
 
-    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/f8c211d66c803aac15ab86f79c7edfd6c3b2034d23355a92f6bd42e835260be0");
+    public static final CustomHeadProvider CUSTOM_HEAD_PROVIDER = new CustomHeadProvider("http://textures.minecraft.net/texture/f8c211d66c803aac15ab86f79c7edfd6c3b2034d23355a92f6bd42e835260be0");
 
     @Override
     public @NotNull ItemStack getHeadItem(Warden entity) {
-        return headProvider.getHeadItem();
+        return CUSTOM_HEAD_PROVIDER.getHeadItem();
     }
 
     @Override

@@ -4,7 +4,7 @@ import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobuvertAbility;
-import me.tormented.farmmancy.utils.HeadProvider;
+import me.tormented.farmmancy.abilities.utils.headProviders.CustomHeadProvider;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -39,11 +39,11 @@ public class DioAbility extends MobuvertAbility<Entity> implements Hook.PlayerIn
         super(abilityFactory, id, owner);
     }
 
-    public static final HeadProvider headProvider = new HeadProvider("http://textures.minecraft.net/texture/dbca394b91aae7960a3e5ebb121dcb88ab1058b5518000988801756c2b2e091c");
+    public static final CustomHeadProvider CUSTOM_HEAD_PROVIDER = new CustomHeadProvider("http://textures.minecraft.net/texture/dbca394b91aae7960a3e5ebb121dcb88ab1058b5518000988801756c2b2e091c");
 
     @Override
     public @NotNull ItemStack getHeadItem(@Nullable Entity entity) {
-        return headProvider.getHeadItem();
+        return CUSTOM_HEAD_PROVIDER.getHeadItem();
     }
 
     private boolean isTimeStopped = false;

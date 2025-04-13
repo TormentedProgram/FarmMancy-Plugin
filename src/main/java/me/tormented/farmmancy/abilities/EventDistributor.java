@@ -174,7 +174,7 @@ public class EventDistributor implements Listener {
         if (playerAbilityMap.get(event.getPlayer().getUniqueId()) instanceof FarmMancer farmMancer) {
             Entity entity = event.getRightClicked();
             if (!isHoldingWand(event.getPlayer()) && Registries.abilityRegistry.getFactory(entity.getType().getKey().asString()) instanceof AbilityFactory abilityFactory) {
-                if (entity instanceof LivingEntity livingEntity && livingEntity.getAttribute(Attribute.MAX_HEALTH) != null && !livingEntity.isDead()) {
+                if (entity instanceof LivingEntity livingEntity && livingEntity.getAttribute(Attribute.MAX_HEALTH) != null && !livingEntity.isDead() && !livingEntity.hasMetadata("FarmMancy_Projectile")) {
                     AttributeInstance maxHealthAttribute = livingEntity.getAttribute(Attribute.MAX_HEALTH);
                     if (maxHealthAttribute != null) {
                         if (livingEntity.getHealth() <= (maxHealthAttribute.getValue() / 2)) {

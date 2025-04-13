@@ -13,9 +13,9 @@ public class FarmConfig {
     private boolean allow_imbuement;
     private int max_mob_cap;
 
-    //cow
-    private float cow_explosion_radius;
-    private float cow_shoot_velocity;
+    //creeper
+    private float creeper_explosion_radius;
+    private float creeper_shoot_velocity;
 
     //pig
     private float pig_healing_amount;
@@ -46,8 +46,8 @@ public class FarmConfig {
         allow_imbuement = config.getBoolean("items.allow-imbuement");
         max_mob_cap = config.getInt("mobs.max-mob-cap");
 
-        cow_explosion_radius = (float) config.getInt("mobs.cow.explosion-radius");
-        cow_shoot_velocity = (float) config.getInt("mobs.cow.shoot-velocity");
+        creeper_explosion_radius = (float) config.getInt("mobs.creeper.explosion-radius");
+        creeper_shoot_velocity = (float) config.getInt("mobs.creeper.shoot-velocity");
         pig_healing_amount = (float) config.getInt("mobs.pig.healing-amount");
 
         database_interval = config.getInt("database.interval");
@@ -67,12 +67,12 @@ public class FarmConfig {
         save();
     }
 
-    public float getCowExplosionRadius() {
-        return cow_explosion_radius;
+    public float getCreeperExplosionRadius() {
+        return creeper_explosion_radius;
     }
 
-    public float getCowShootVelocity() {
-        return cow_shoot_velocity;
+    public float getCreeperShootVelocity() {
+        return creeper_shoot_velocity;
     }
 
     public boolean getAllowedImbuement() {

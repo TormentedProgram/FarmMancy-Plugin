@@ -7,34 +7,31 @@ import me.tormented.farmmancy.abilities.EventDistributor;
 import me.tormented.farmmancy.abilities.Hook;
 import me.tormented.farmmancy.abilities.MobunitionAbility;
 import me.tormented.farmmancy.abilities.utils.headProviders.CustomHeadProvider;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInteraction, Hook.PlayerJoining {
+public class SheepAbility extends MobunitionAbility<Sheep> implements Hook.PlayerInteraction {
 
     @Override
-    public Class<Pig> getEntityClass() {
-        return Pig.class;
+    public Class<Sheep> getEntityClass() {
+        return Sheep.class;
     }
 
-    public PigAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
+    public SheepAbility(@NotNull AbilityFactory abilityFactory, @NotNull UUID id, @NotNull UUID owner) {
         super(abilityFactory, id, owner);
     }
 
@@ -63,25 +60,11 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInt
         }
     }
 
-    public static final CustomHeadProvider CUSTOM_HEAD_PROVIDER = new CustomHeadProvider("http://textures.minecraft.net/texture/41ee7681adf00067f04bf42611c97641075a44ae2b1c0381d5ac6b3246211bfe");
+    public static final CustomHeadProvider CUSTOM_HEAD_PROVIDER = new CustomHeadProvider("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjkyZGYyMTZlY2QyNzYyNGFjNzcxYmFjZmJmZTAwNmUxZWQ4NGE3OWU5MjcwYmUwZjg4ZTljODc5MWQxZWNlNCJ9fX0=");
 
     @Override
-    public @NotNull ItemStack getHeadItem(@Nullable Pig entity) {
+    public @NotNull ItemStack getHeadItem(@Nullable Sheep entity) {
         return CUSTOM_HEAD_PROVIDER.getHeadItem();
-    }
-
-    @Override
-    public void processPlayerJoin(@NotNull PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        AttributeInstance attribute = player.getAttribute(Attribute.MAX_HEALTH);
-        if (attribute != null) {
-            attribute.setBaseValue(attribute.getDefaultValue());
-        }
-    }
-
-    @Override
-    public void processPlayerQuit(@NotNull PlayerQuitEvent event) {
-
     }
 
     @Override
@@ -91,28 +74,17 @@ public class PigAbility extends MobunitionAbility<Pig> implements Hook.PlayerInt
         if (event.getAction().isRightClick() && isBeingLookedAt()) {
             Player player = event.getPlayer();
 
-            if (player.getAttribute(Attribute.MAX_HEALTH) instanceof AttributeInstance healthAttribute) {
-                if (player.getHealth() < healthAttribute.getValue()) {
+            Location loc = player.getLocation();
+            Vector direction = loc.getDirection();
+            Location targetLoc = loc.add(direction.multiply(1));
 
-                    Location loc = player.getLocation();
-                    Vector direction = loc.getDirection();
-                    Location targetLoc = loc.add(direction.multiply(1));
+            if (pullAndSummonMob(targetLoc) instanceof LivingEntity livingEntity) {
+                EventDistributor.getInstance().entityMobunitionAbilityMap.put(livingEntity, this);
+                livingEntity.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
+                livingEntity.setHealth(0f);
 
-                    if (pullAndSummonMob(targetLoc) instanceof LivingEntity livingEntity) {
-                        EventDistributor.getInstance().entityMobunitionAbilityMap.put(livingEntity, this);
-                        livingEntity.setMetadata("FarmMancy_Projectile", new FixedMetadataValue(FarmMancy.getInstance(), this));
-                        livingEntity.setHealth(0f);
-
-                        player.heal(healingValue);
-                    }
-                }
+                player.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, 200, 1));
             }
         }
     }
-
-    @Override
-    public @NotNull Component getName() {
-        return Component.text("Pig Ability", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false);
-    }
-
 }

@@ -6,7 +6,7 @@ items:
 
 mobs:
   max-mob-cap: 256
-  cow:
+  creeper:
     explosion-radius: 4
     shoot-velocity: 1
 
