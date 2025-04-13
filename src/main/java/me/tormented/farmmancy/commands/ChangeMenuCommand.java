@@ -193,7 +193,7 @@ public class ChangeMenuCommand {
     }
 
     public ChangeMenuCommand() {
-        menuFactory = new MenuFactory(5, Component.text("FarmMancy Ability Swapper"));
+        menuFactory = new MenuFactory(5, Component.text("FarmMancification Table"));
 
         menuFactory.addMenuFiller(new Fillers.FillAll(new MenuItem(ItemStack.of(Material.BLACK_STAINED_GLASS_PANE), false)));
 

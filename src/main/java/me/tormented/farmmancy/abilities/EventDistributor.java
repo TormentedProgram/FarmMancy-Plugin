@@ -14,6 +14,9 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Candle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -121,13 +124,35 @@ public class EventDistributor implements Listener {
         FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
         if (farmMancer == null) return;
         if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.CRAFTING_TABLE) {
-            if (event.getPlayer().isSneaking()) {
+            Block clicked = event.getClickedBlock();
+            int litCandleCount = 0;
+
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    for (int dz = -1; dz <= 1; dz++) {
+                        if (dx == 0 && dy == 0 && dz == 0) continue;
+                        Block relative = clicked.getRelative(dx, dy, dz);
+                        Material type = relative.getType();
+
+                        if (type.name().endsWith("_CANDLE") || type == Material.CANDLE) {
+                            BlockData data = relative.getBlockData();
+                            if (data instanceof Candle candle) {
+                                if (candle.isLit()) {
+                                    litCandleCount++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (litCandleCount >= 8) {
                 event.setCancelled(true);
                 if (ChangeMenuCommand.getMenuFactory() != null) {
                     ChangeMenuCommand.getMenuFactory().sendToPlayer(event.getPlayer());
                 }
             }
         }
+
         for (Ability ability : farmMancer.getEquippedAbilities()) {
             if (ability != null) {
                 if (ability instanceof Hook.PlayerInteraction playerInteraction)
