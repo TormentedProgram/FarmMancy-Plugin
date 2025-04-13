@@ -175,7 +175,7 @@ public abstract class MobunitionAbility<EntityType extends Entity> extends MobAb
             if (event.getRightClicked() instanceof LivingEntity entity) {
                 AttributeInstance maxHealthAttribute = entity.getAttribute(Attribute.MAX_HEALTH);
                 if (maxHealthAttribute != null && !entity.isDead() && !entity.hasMetadata("FarmMancy_Projectile")) {
-                    if (entity.getHealth() <= (maxHealthAttribute.getValue() / 2)) {
+                    if (entity.getHealth() <= (maxHealthAttribute.getValue() / 5)) {
                         Player player = event.getPlayer();
                         if (addMob(entity)) {
                             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);

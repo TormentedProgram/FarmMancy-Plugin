@@ -3,6 +3,7 @@ package me.tormented.farmmancy.abilities.utils;
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.Ability;
 import me.tormented.farmmancy.abilities.Hook;
+import me.tormented.farmmancy.utils.StringUtils;
 import me.tormented.farmmancy.utils.UUIDDataType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -50,16 +51,7 @@ public class Wand {
     public void convert() {
         ItemMeta itemMeta = item.getItemMeta();
         String itemName = item.getType().toString();
-        String[] words = itemName.split("_");
-        StringBuilder formattedNameBuilder = new StringBuilder();
-
-        for (String word : words) {
-            formattedNameBuilder.append(word.substring(0, 1).toUpperCase())  // Capitalize first letter
-                    .append(word.substring(1).toLowerCase())  // Lowercase the rest
-                    .append(" ");
-        }
-
-        String formattedName = formattedNameBuilder.toString().trim();
+        String formattedName = StringUtils.makeIDHumanReadable(itemName);
 
         if (itemMeta != null) {
             itemMeta.setEnchantmentGlintOverride(true);

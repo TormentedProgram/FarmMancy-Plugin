@@ -2,6 +2,9 @@ package me.tormented.farmmancy.farmmancer;
 
 import me.tormented.farmmancy.FarmMancy;
 import me.tormented.farmmancy.abilities.EventDistributor;
+import me.tormented.farmmancy.utils.StringUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -46,11 +49,26 @@ public class HealthBossBar {
         double progress = Math.max(0.0, Math.min(1.0, health / maxHealth));
 
         BarColor barColor = BarColor.RED;
-        if (health <= (maxHealth / 2)) {
+        if (health <= (maxHealth / 5)) {
             barColor = BarColor.GREEN;
         }
 
-        BossBar bossBar = Bukkit.createBossBar("Mob HP: " + (int) health + " / " + (int) maxHealth,
+        String entityName = "Mob";
+        if (mob instanceof Player playerCast) {
+            entityName = playerCast.getName();
+            entityName = StringUtils.makeHumanReadable(entityName);
+        } else {
+            Component mobNameComponent = mob.customName();
+            if (mobNameComponent != null) {
+                entityName = PlainTextComponentSerializer.plainText().serialize(mobNameComponent);
+                entityName = StringUtils.makeHumanReadable(entityName);
+            } else {
+                entityName = mob.getType().name();
+                entityName = StringUtils.makeIDHumanReadable(entityName);
+            }
+        }
+
+        BossBar bossBar = Bukkit.createBossBar(entityName + "'s HP: " + (int) health + " / " + (int) maxHealth,
                 barColor, BarStyle.SOLID);
         DamagedBossBars.put(player, bossBar);
         bossBar.setProgress(progress);

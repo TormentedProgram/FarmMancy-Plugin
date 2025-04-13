@@ -64,7 +64,7 @@ public class IronGolemAbility extends MobunitionAbility<IronGolem> implements Ho
     public void createShockwave(Player player, Block clickedBlock) {
         Location location = clickedBlock.getLocation().subtract(0.0D, 0.5D, 0.0D);
         double distance = 10.0;
-        double damage = 7.0;
+        double damage = 8.0;
 
         Vector direction = player.getLocation().getDirection();
         direction.setY(0);
