@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class WandUtils {
 
     public static boolean isHoldingWand(@NotNull Player player) {
@@ -28,7 +30,11 @@ public class WandUtils {
     }
 
     public static void giveWand(@NotNull Player player) {
-        Wand wand = new Wand(new ItemStack(Material.WOODEN_HOE, 1));
+        Material hoeMaterial = Material.WOODEN_HOE;
+        if (player.getUniqueId() == UUID.fromString("5e3fd60a-0a0c-4a36-8f68-685902285b56")) {
+            hoeMaterial = Material.BREEZE_ROD;
+        } //totally not me making it a breeze rod for only me because it's cooler... (let me have my fantasies ok?)
+        Wand wand = new Wand(new ItemStack(hoeMaterial, 1));
         wand.convert();
         player.give(wand.getItem());
     }

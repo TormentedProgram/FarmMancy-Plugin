@@ -21,10 +21,8 @@ public class FarmMancerManager {
     public final HashMap<UUID, FarmMancer> farmMancerMap = new HashMap<>();
 
     public FarmMancer setFarmMancer(Player player) {
-        for (FarmMancer farmMancer : farmMancers) {
-            if (farmMancer.getPlayer() == player) {
-                return farmMancer;
-            }
+        if (farmMancerMap.containsKey(player.getUniqueId())) {
+            return farmMancerMap.get(player.getUniqueId());
         }
         FarmMancer farmMancer = new FarmMancer(player);
         EventDistributor.getInstance().playerAbilityMap.put(player.getUniqueId(), farmMancer);
@@ -34,13 +32,12 @@ public class FarmMancerManager {
     }
 
     public void removeFarmMancer(Player player) {
-        for (FarmMancer farmMancer : farmMancers) {
-            if (farmMancer.getPlayer() == player) {
-                EventDistributor.getInstance().playerAbilityMap.remove(player.getUniqueId());
-                farmMancer.deactivateAll(true);
-                farmMancerMap.remove(player.getUniqueId());
-                farmMancers.remove(farmMancer);
-            }
+        if (farmMancerMap.containsKey(player.getUniqueId())) {
+            FarmMancer farmMancer = farmMancerMap.get(player.getUniqueId());
+            farmMancer.deactivateAll(true);
+            EventDistributor.getInstance().playerAbilityMap.remove(player.getUniqueId());
+            farmMancers.remove(farmMancer);
+            farmMancerMap.remove(player.getUniqueId());
         }
     }
 }

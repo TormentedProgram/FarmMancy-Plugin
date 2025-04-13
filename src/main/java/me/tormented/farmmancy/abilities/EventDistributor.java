@@ -121,8 +121,6 @@ public class EventDistributor implements Listener {
 
     @EventHandler
     public void onPlayerInteraction(@NotNull PlayerInteractEvent event) {
-        FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
-        if (farmMancer == null) return;
         if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.CRAFTING_TABLE) {
             Block clicked = event.getClickedBlock();
             int litCandleCount = 0;
@@ -152,6 +150,9 @@ public class EventDistributor implements Listener {
                 }
             }
         }
+
+        FarmMancer farmMancer = playerAbilityMap.get(event.getPlayer().getUniqueId());
+        if (farmMancer == null) return;
 
         for (Ability ability : farmMancer.getEquippedAbilities()) {
             if (ability != null) {
