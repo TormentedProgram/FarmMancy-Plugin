@@ -24,9 +24,17 @@ public class Registries {
                 .setName(Component.text("Pig Ability", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false))
                 .setIcon(PigAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
         );
+        abilityRegistry.register("minecraft:iron_golem", new AbilityFactory(IronGolemAbility::new)
+                .setName(Component.text("Iron Golem Ability", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
+                .setIcon(IronGolemAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
+        );
         abilityRegistry.register("minecraft:sheep", new AbilityFactory(SheepAbility::new)
                 .setName(Component.text("Sheep Ability", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
                 .setIcon(SheepAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
+        );
+        abilityRegistry.register("minecraft:skeleton", new AbilityFactory(SkeletonAbility::new)
+                .setName(Component.text("Skeleton Ability", NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false))
+                .setIcon(SkeletonAbility.BLOCK_PROVIDER.getHeadItem())
         );
         abilityRegistry.register("minecraft:creeper", new AbilityFactory(CreeperAbility::new)
                 .setName(Component.text("Creeper Ability", NamedTextColor.DARK_GREEN).decoration(TextDecoration.ITALIC, false))
