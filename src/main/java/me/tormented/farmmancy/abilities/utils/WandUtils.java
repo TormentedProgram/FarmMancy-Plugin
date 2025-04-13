@@ -31,9 +31,9 @@ public class WandUtils {
 
     public static void giveWand(@NotNull Player player) {
         Material hoeMaterial = Material.WOODEN_HOE;
-        if (player.getUniqueId() == UUID.fromString("5e3fd60a-0a0c-4a36-8f68-685902285b56")) {
+        if (player.getUniqueId().equals(UUID.fromString("5e3fd60a-0a0c-4a36-8f68-685902285b56"))) {
             hoeMaterial = Material.BREEZE_ROD;
-        } //totally not me making it a breeze rod for only me because it's cooler... (let me have my fantasies ok?)
+        }
         Wand wand = new Wand(new ItemStack(hoeMaterial, 1));
         wand.convert();
         player.give(wand.getItem());
