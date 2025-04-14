@@ -32,6 +32,14 @@ public class Registries {
                 .setName(Component.text("Iron Golem Ability", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
                 .setIcon(IronGolemAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
         );
+        abilityRegistry.register("minecraft:snow_golem", new AbilityFactory(SnowGolemAbility::new)
+                .setName(Component.text("Snow Golem Ability", NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false))
+                .setIcon(SnowGolemAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
+        );
+        abilityRegistry.register("minecraft:breeze", new AbilityFactory(BreezeAbility::new)
+                .setName(Component.text("Breeze Ability", NamedTextColor.AQUA).decoration(TextDecoration.ITALIC, false))
+                .setIcon(BreezeAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
+        );
         abilityRegistry.register("minecraft:sheep", new AbilityFactory(SheepAbility::new)
                 .setName(Component.text("Sheep Ability", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false))
                 .setIcon(SheepAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
