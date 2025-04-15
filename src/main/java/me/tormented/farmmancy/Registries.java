@@ -24,6 +24,10 @@ public class Registries {
                 .setName(Component.text("Pig Ability", NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false))
                 .setIcon(PigAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
         );
+        abilityRegistry.register("test", new AbilityFactory(TestAbility::new)
+                .setName(Component.text("Test Ability", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false))
+                .setIcon(TestAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
+        );
         abilityRegistry.register("minecraft:villager", new AbilityFactory(VillagerAbility::new)
                 .setName(Component.text("Villager Ability", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false))
                 .setIcon(VillagerAbility.CUSTOM_HEAD_PROVIDER.getHeadItem())
