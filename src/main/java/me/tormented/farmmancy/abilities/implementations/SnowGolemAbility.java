@@ -3,7 +3,7 @@ package me.tormented.farmmancy.abilities.implementations;
 import me.tormented.farmmancy.abilities.AbilityFactory;
 import me.tormented.farmmancy.abilities.AbilityHeadDisplay;
 import me.tormented.farmmancy.abilities.Hook;
-import me.tormented.farmmancy.abilities.MobunitionAbility;
+import me.tormented.farmmancy.abilities.ItemunitionAbility;
 import me.tormented.farmmancy.abilities.utils.Wand;
 import me.tormented.farmmancy.abilities.utils.headProviders.BlockProvider;
 import org.bukkit.Location;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class SnowGolemAbility extends MobunitionAbility<Snowman> implements Hook.WandSelectable {
+public class SnowGolemAbility extends ItemunitionAbility<Snowman> implements Hook.WandSelectable {
     @Override
     public Class<Snowman> getEntityClass() {
         return Snowman.class;

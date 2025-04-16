@@ -16,6 +16,26 @@ public abstract class ItemunitionAbility<EntityType extends Entity> extends Mobu
         super(abilityFactory, id, owner);
     }
 
+    protected static final float itemBoxRadius = 0.5f;
+    protected static final float itemVerticalCenterOffset = 0f;
+
+    @Override
+    public boolean isBeingLookedAt() {
+        if (isHeadRingVisible() && getOwnerPlayer() instanceof Player player) {
+
+            double eyeHeight = player.getEyeHeight();
+
+            double tanPitch = Math.tan(Math.toRadians(-player.getPitch()));
+            double heightOffset = eyeHeight - slotPositions[slot] - itemVerticalCenterOffset;
+            double gInner = tanPitch * (slotRadii[slot] - itemBoxRadius) + heightOffset;
+            double gOuter = tanPitch * (slotRadii[slot] + itemBoxRadius) + heightOffset;
+
+            return (-itemBoxRadius < gInner && gInner < itemBoxRadius) || (-itemBoxRadius < gOuter && gOuter < itemBoxRadius);
+        }
+        return false;
+    }
+
+
     @Override
     public void onTick(@NotNull CallerSource callerSource) {
         if (callerSource == CallerSource.PLAYER && getOwnerPlayer() instanceof Player player) {

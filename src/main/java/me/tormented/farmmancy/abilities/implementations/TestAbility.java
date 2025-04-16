@@ -52,19 +52,35 @@ public class TestAbility extends ItemunitionAbility<Entity> implements Hook.Wand
     public void onWandUse(@NotNull Wand wand, @NotNull PlayerInteractEvent event) {
         if (event.getAction().isLeftClick() && getOwnerPlayer() instanceof Player player && !headDisplays.isEmpty()) {
             if (pullMob() instanceof AbilityHeadDisplay headDisplay) {
-                headDisplay.remove();
-                Arrow arrow = player.launchProjectile(Arrow.class);
-                AbilityHeadDisplay hedDisplay = new AbilityHeadDisplay(getHeadItem(null));
-                arrow.setVelocity(player.getLocation().getDirection().multiply(1));
-                arrow.setVisibleByDefault(false);
-                arrow.setDamage(0f);
-                hedDisplay.spawn(arrow.getLocation());
-                player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_ATTACK, 1.0f, 1.0f);
-                arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
-                arrow.setHitSound(Sound.ENTITY_IRON_GOLEM_ATTACK);
-                abilityProjectiles.put(arrow, hedDisplay);
+                flingExplosion(player, headDisplay);
             }
         }
+    }
+
+    public void flingExplosion(Player player, AbilityHeadDisplay hedddisplay) {
+        if (hedddisplay.getItemDisplay() != null) {
+            Villager placeholder = player.getWorld().spawn(hedddisplay.getItemDisplay().getLocation().setDirection(player.getLocation().getDirection()), Villager.class);
+            placeholder.setAI(false);
+            placeholder.setSilent(true);
+            placeholder.setGravity(false);
+            placeholder.setInvulnerable(true);
+            placeholder.setInvisible(true);
+            placeholder.setCollidable(false);
+
+            Arrow arrow = placeholder.launchProjectile(Arrow.class, player.getLocation().getDirection());
+
+            AbilityHeadDisplay hedDisplay = new AbilityHeadDisplay(getHeadItem(null));
+            arrow.setVelocity(player.getLocation().getDirection().multiply(1));
+            arrow.setVisibleByDefault(false);
+            arrow.setDamage(0f);
+            hedDisplay.spawn(arrow.getLocation());
+            player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_ATTACK, 1.0f, 1.0f);
+            arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+            arrow.setHitSound(Sound.ENTITY_IRON_GOLEM_ATTACK);
+            placeholder.remove();
+            abilityProjectiles.put(arrow, hedDisplay);
+        }
+        hedddisplay.remove();
     }
 
     @Override
@@ -82,9 +98,12 @@ public class TestAbility extends ItemunitionAbility<Entity> implements Hook.Wand
 
                 float rotationAngle = lifetime * 30;
                 headDisplay.setLocation(arrow.getLocation().setRotation(rotationAngle, 0f));
-                if (arrow.isOnGround()) {
-                    Location hit = arrow.getAttachedBlocks().getFirst().getLocation();
-                    hit.createExplosion(4f, true, true);
+                if (arrow.isOnGround() || arrow.isDead()) {
+                    Location hit = arrow.getLocation();
+                    if (!arrow.getAttachedBlocks().isEmpty()) {
+                        hit = arrow.getAttachedBlocks().getFirst().getLocation();
+                    }
+                    hit.createExplosion(8f, true, true);
                     arrow.remove();
                     headDisplay.remove();
                     iterator.remove();
