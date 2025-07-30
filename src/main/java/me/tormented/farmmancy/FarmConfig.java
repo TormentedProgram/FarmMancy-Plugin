@@ -13,8 +13,15 @@ public class FarmConfig {
     private boolean allow_imbuement;
     private int max_mob_cap;
 
-    private float cow_explosion_radius;
-    private float cow_shoot_velocity;
+    //creeper
+    private float creeper_explosion_radius;
+    private float creeper_shoot_velocity;
+
+    //pig
+    private float pig_healing_amount;
+
+    //database
+    private int database_interval;
 
     private FarmConfig() {
     }
@@ -37,10 +44,13 @@ public class FarmConfig {
 
         //below is loading the config
         allow_imbuement = config.getBoolean("items.allow-imbuement");
-        max_mob_cap = config.getInt("global.max-mob-cap");
+        max_mob_cap = config.getInt("mobs.max-mob-cap");
 
-        cow_explosion_radius = (float) config.getInt("mobs.cow.explosion-radius");
-        cow_shoot_velocity = (float) config.getInt("mobs.cow.shoot-velocity");
+        creeper_explosion_radius = (float) config.getInt("mobs.creeper.explosion-radius");
+        creeper_shoot_velocity = (float) config.getInt("mobs.creeper.shoot-velocity");
+        pig_healing_amount = (float) config.getInt("mobs.pig.healing-amount");
+
+        database_interval = config.getInt("database.interval");
     }
 
     public void save() {
@@ -57,12 +67,12 @@ public class FarmConfig {
         save();
     }
 
-    public float getCowExplosionRadius() {
-        return cow_explosion_radius;
+    public float getCreeperExplosionRadius() {
+        return creeper_explosion_radius;
     }
 
-    public float getCowShootVelocity() {
-        return cow_shoot_velocity;
+    public float getCreeperShootVelocity() {
+        return creeper_shoot_velocity;
     }
 
     public boolean getAllowedImbuement() {
@@ -73,16 +83,12 @@ public class FarmConfig {
         return max_mob_cap;
     }
 
-    @SuppressWarnings("unused")
-    public void setAllowedImbuement(boolean value) {
-        this.allow_imbuement = value;
-        set("items.allow-imbuement", value);
+    public float getPigHealingAmount() {
+        return pig_healing_amount;
     }
 
-    @SuppressWarnings("unused")
-    public void setMaxMobCap(int value) {
-        this.max_mob_cap = value;
-        set("global.max-mob-cap", value);
+    public int getDatabaseInterval() {
+        return database_interval;
     }
 
     public static FarmConfig getInstance() {

@@ -1,10 +1,14 @@
-global:
-  max-mob-cap: 256
+database:
+  interval: 30
 
 items:
   allow-imbuement: true
 
 mobs:
-  cow:
+  max-mob-cap: 256
+  creeper:
     explosion-radius: 4
     shoot-velocity: 1
+
+  pig:
+    healing-amount: 5

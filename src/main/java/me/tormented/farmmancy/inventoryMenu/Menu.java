@@ -29,7 +29,6 @@ public class Menu {
 
         this.rows = rows;
         this.player = player;
-        this.menuTicker = menuTicker;
         inventory = Bukkit.createInventory(player, rows * 9, title);
         menuItems = new MenuItem[rows * 9];
     }
